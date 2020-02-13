@@ -2,7 +2,7 @@
   "name": "mr-crypto",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Yurii-Itter",
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
@@ -21,11 +21,15 @@
   },
   "dependencies": {
     "@nestjs/common": "^6.7.2",
+    "@nestjs/config": "^0.2.2",
     "@nestjs/core": "^6.7.2",
     "@nestjs/platform-express": "^6.7.2",
+    "axios": "^0.19.2",
+    "envalid": "^6.0.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
-    "rxjs": "^6.5.3"
+    "rxjs": "^6.5.3",
+    "telegraf": "^3.36.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^6.9.0",
