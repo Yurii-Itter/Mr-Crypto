@@ -1,6 +1,6 @@
-import { IMessage } from '../message/i-message';
+import { MessageInterface } from '../message/interfaces/message.interface';
 
-export class BaseMessage implements IMessage {
+export class BaseMessage implements MessageInterface {
     public chatId: number;
     public lang: string;
     public text: string;
@@ -28,12 +28,12 @@ export class BaseMessage implements IMessage {
         return this.replyData;
     }
 
-    public setStatus(status: string): IMessage {
+    public setStatus(status: string): MessageInterface {
         this.replyStatus = status;
         return this;
     }
 
-    public withData(data: any): IMessage {
+    public withData(data: any): MessageInterface {
         this.replyData = data;
         return this;
     }

@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ActionService } from './actions.service';
+import { StartAction } from './start_action';
+import { CommonModule } from '../common/common.module'
 
 @Module({
-    imports: [],
-    providers: [ActionService],
-    exports: [ActionService],
+    imports: [CommonModule],
+    providers: [StartAction],
+    exports: [StartAction],
 })
 export class ActionModule { }

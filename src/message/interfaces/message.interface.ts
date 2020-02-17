@@ -1,4 +1,4 @@
-export interface IMessage {
+export interface MessageInterface {
     chatId: number;
     lang: string;
     text: string;
@@ -7,7 +7,7 @@ export interface IMessage {
     name: string;
     getReplyStatus: () => string;
     getReplyData: () => any;
-    setStatus: (status: string) => IMessage;
-    withData: (data: any) => IMessage;
+    setStatus: (status: string) => MessageInterface;
+    withData: (data: any) => MessageInterface;
     answer: (args: any) => string | void;
 }

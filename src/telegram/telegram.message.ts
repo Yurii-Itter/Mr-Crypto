@@ -1,7 +1,7 @@
 import { BaseMessage } from '../message/base.message';
-import { IMessage } from '../message/i-message';
+import { MessageInterface } from '../message/interfaces/message.interface';
 
-export class TelegramMessage extends BaseMessage implements IMessage {
+export class TelegramMessage extends BaseMessage implements MessageInterface {
     private ctx: any;
 
     constructor(ctx) {

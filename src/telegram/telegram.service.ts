@@ -23,7 +23,7 @@ export class TelegramService {
 
     private setCommandActionMapping(appEmitter: AppEmitter): Array<any> {
         return [
-            { command: 'start', action: appEmitter.TELEGRAM_START }
+            { command: 'start', event: appEmitter.TELEGRAM_START }
         ]
     }
 
