@@ -31,7 +31,7 @@ export class BaseAction {
         this.logger.log(`subscribe on "${this.event}" event`);
         this.appEmitter.on(this.event, this.handleEvent.bind(this));
     }
-    
+
     protected setEvent(): void {
         throw new Error('not implemented');
     }
@@ -48,13 +48,15 @@ export class BaseAction {
             message = await this.doAction(chatId, message);
 
             message.answer(
-                this.templateService.apply(
-                    {
-                        action: this.event,
-                        status: message.getReplyStatus(),
-                        lang: message.lang,
-                    },
-                    message.getReplyData(),
+                this.templateService.parseKeyboard(
+                    this.templateService.apply(
+                        {
+                            action: this.event,
+                            status: message.getReplyStatus(),
+                            lang: message.lang,
+                        },
+                        message.getReplyData(),
+                    )
                 ),
             );
         } catch (error) {

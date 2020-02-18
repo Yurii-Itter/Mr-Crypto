@@ -1,5 +1,8 @@
 import { BaseMessage } from '../message/base.message';
 import { MessageInterface } from '../message/interfaces/message.interface';
+import { ApplyInterface } from '../common/interfaces/apply.interface';
+
+import { Extra, Markup } from 'telegraf'
 
 export class TelegramMessage extends BaseMessage implements MessageInterface {
     private ctx: any;
@@ -11,15 +14,18 @@ export class TelegramMessage extends BaseMessage implements MessageInterface {
 
         const { message } = this.ctx.update;
         this.chatId = message.chat.id;
-        this.fullText = message.text;
+        this.text = message.text;
         this.command = this.ctx.command;
-        this.text = this.fullText.replace(`/${this.command}`, '');
         this.lang = message.from.language_code;
         this.firstName = message.from.first_name;
         this.lastName = message.from.last_name;
     }
 
-    public answer(args: any): string | void {
-        return this.ctx.replyWithHTML(args);
+    public answer({ htmlText, keyboard }: ApplyInterface): string | void {
+        if (keyboard) {
+            return this.ctx.replyWithHTML(htmlText, Extra.markup(Markup.keyboard(keyboard)));
+        } else {
+            return this.ctx.replyWithHTML(htmlText);
+        }
     }
 }

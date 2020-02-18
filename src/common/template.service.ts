@@ -5,6 +5,7 @@ import { readDirDeepSync } from 'read-dir-deep';
 import { Injectable, Logger } from '@nestjs/common';
 
 import { ParamsInterface } from './interfaces/params.interface';
+import { ApplyInterface } from './interfaces/apply.interface';
 
 
 @Injectable()
@@ -22,6 +23,7 @@ export class TemplateService {
     }
 
     public apply(params: ParamsInterface, data: any): string {
+
         this.logger.log(
             `apply template: ${params.action} ${params.status} ${params.lang}`,
         );
@@ -38,6 +40,28 @@ export class TemplateService {
         }
 
         return template(data);
+    }
+
+    public parseKeyboard(template: any): ApplyInterface {
+
+        let k = template.match(/(?:.|\n)*(<keyboard>(?:.|\n)*<\/keyboard>)/)[1].replace(/<\/?keyboard>/g, '').replace(/\s/g, '').replace(/\s/g, '');
+
+        if (k) {
+
+            let keyboard = [];
+            
+            let content = template.match(/(?:.|\n)*(<content>(?:.|\n)*<\/content>)/)[1].replace(/\s*\n?<\/?content>\n?\s*/g, '')
+
+            k.match(/(<keys>(.+?)<\/keys>)/g).forEach((keys: string) => {
+                keyboard.push(keys.match(/(<key>(.+?)<\/key>)/g).map((ks: string) => {
+                    return ks.replace(/<\/?key>/g, '')
+                }));
+            });
+
+            return { htmlText: content, keyboard: keyboard }
+        } else {
+            return { htmlText: template }
+        }
     }
 
     private getTemplate(params: ParamsInterface): (data: any) => string {

@@ -11,8 +11,6 @@ export class StartAction extends BaseAction {
     }
 
     protected async doAction(chat: number, message: MessageInterface): Promise<MessageInterface> {
-        return message.setStatus(statuses.STATUS_SUCCESS).withData({
-            date: "123",
-        });
+        return message.setStatus(statuses.STATUS_SUCCESS);
     }
 }

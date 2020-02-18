@@ -4,7 +4,6 @@ export class BaseMessage implements MessageInterface {
     public chatId: number;
     public lang: string;
     public text: string;
-    public fullText: string;
     public command: string;
 
     protected firstName: string;
