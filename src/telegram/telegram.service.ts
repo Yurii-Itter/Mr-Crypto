@@ -19,11 +19,46 @@ export class TelegramService {
                 appEmitter.emit(event, new TelegramMessage(ctx));
             });
         });
+
+        this.setKeyboardActionMapping(appEmitter);
     }
 
     private setCommandActionMapping(appEmitter: AppEmitter): Array<any> {
         return [
             { command: 'start', event: appEmitter.TELEGRAM_START }
+        ]
+    }
+
+    private setKeyboardActionMapping(appEmitter: AppEmitter): Array<any> {
+        return [
+            {
+                event: appEmitter.TELEGRAM_CRYPTOCURRENCIES,
+                keyboard: [
+                    { lang: 'en', title: 'Cryptocurrencies 💰' },
+                    { lang: 'ru', title: 'Криптовалюты 💰' },
+                ]
+            },
+            {
+                event: appEmitter.TELEGRAM_SUBSCRIPTIONS,
+                keyboard: [
+                    { lang: 'en', title: 'My Subscriptions ⭐️' },
+                    { lang: 'ru', title: 'Мои Подписки ⭐️' },
+                ]
+            },
+            {
+                event: appEmitter.TELEGRAM_ABOUT_SERVICE,
+                keyboard: [
+                    { lang: 'en', title: 'About Service 🚀' },
+                    { lang: 'ru', title: 'О Сервисе 🚀' },
+                ]
+            },
+            {
+                event: appEmitter.TELEGRAM_SETTINGS,
+                keyboard: [
+                    { lang: 'en', title: 'Settings ⚙️' },
+                    { lang: 'ru', title: 'Настройки ⚙️' },
+                ]
+            }
         ]
     }
 

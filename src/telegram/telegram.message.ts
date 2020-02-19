@@ -23,7 +23,7 @@ export class TelegramMessage extends BaseMessage implements MessageInterface {
 
     public answer({ htmlText, keyboard }: ApplyInterface): string | void {
         if (keyboard) {
-            return this.ctx.replyWithHTML(htmlText, Extra.markup(Markup.keyboard(keyboard)));
+            return this.ctx.replyWithHTML(htmlText, Extra.markup(Markup.keyboard(keyboard).resize()));
         } else {
             return this.ctx.replyWithHTML(htmlText);
         }

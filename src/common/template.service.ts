@@ -44,13 +44,13 @@ export class TemplateService {
 
     public parseKeyboard(template: any): ApplyInterface {
 
-        let k = template.match(/(?:.|\n)*(<keyboard>(?:.|\n)*<\/keyboard>)/)[1].replace(/<\/?keyboard>/g, '').replace(/\s/g, '').replace(/\s/g, '');
+        let k = template.match(/(?:.|\n)*(<keyboard>(?:.|\n)*<\/keyboard>)/)[1].replace(/<\/?keyboard>/g, '').replace(/\n/g, '').replace(/>\s+</g, '><').replace(/[^<]+/, '');
 
         if (k) {
 
             let keyboard = [];
-            
-            let content = template.match(/(?:.|\n)*(<content>(?:.|\n)*<\/content>)/)[1].replace(/\s*\n?<\/?content>\n?\s*/g, '')
+
+            let content = template.match(/(?:.|\n)*(<content>(?:.|\n)*<\/content>)/)[1].replace(/\s*\n?<\/?content>\n?\s*/g, '').replace(/(\n\s*\n)\s{2,}/g, '$1');
 
             k.match(/(<keys>(.+?)<\/keys>)/g).forEach((keys: string) => {
                 keyboard.push(keys.match(/(<key>(.+?)<\/key>)/g).map((ks: string) => {
