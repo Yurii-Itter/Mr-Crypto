@@ -7,6 +7,7 @@ import { MessageInterface } from '../message/interfaces/message.interface';
 
 @Injectable()
 export class StartAction extends BaseAction {
+
     protected setEvent(): void {
         this.event = this.appEmitter.TELEGRAM_START;
     }
@@ -16,8 +17,11 @@ export class StartAction extends BaseAction {
     }
 
     protected async doAction(chatId: number, message: MessageInterface): Promise<MessageInterface> {
-        return message.setStatus(statuses.STATUS_SUCCESS).withData({
-            keyboard: this.telegramService.getKeyboardCommandsMapping(this.appEmitter, { lang: message.lang, events: this.buttons })
-        });
+        try {
+            return message.setStatus(statuses.STATUS_SUCCESS).withData(this.telegramService.getKeyboardCommandsMapping(this.appEmitter, { lang: message.lang, events: this.buttons }));
+        } catch (error) {
+            this.logger.error(error);
+            message.answer(error.message);
+        }
     }
 }
