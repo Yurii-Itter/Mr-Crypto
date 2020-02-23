@@ -1,4 +1,5 @@
 import { Module, Logger } from '@nestjs/common';
+
 import { ConfigService } from './config.service';
 import { AppEmitter } from './event.service';
 import { TemplateService } from './template.service';

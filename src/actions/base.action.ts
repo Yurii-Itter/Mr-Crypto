@@ -1,8 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { MessageInterface } from '../message/interfaces/message.interface';
+
 import { ConfigService } from '../common/config.service';
 import { AppEmitter } from '../common/event.service';
 import { TemplateService } from '../common/template.service';
+import { TelegramService } from '../telegram/telegram.service'
+
+import { MessageInterface } from '../message/interfaces/message.interface';
 
 @Injectable()
 export class BaseAction {
@@ -11,22 +14,27 @@ export class BaseAction {
     protected logger: Logger;
 
     protected templateService: TemplateService;
+    protected telegramService: TelegramService;
 
     protected event: string;
+    protected buttons: Array<string>;
 
     constructor(
         config: ConfigService,
         appEmitter: AppEmitter,
         logger: Logger,
-        templateService: TemplateService
+        templateService: TemplateService,
+        telegramService: TelegramService
     ) {
         this.config = config;
         this.logger = logger;
 
         this.appEmitter = appEmitter;
         this.templateService = templateService;
+        this.telegramService = telegramService;
 
         this.setEvent();
+        this.setButtons();
 
         this.logger.log(`subscribe on "${this.event}" event`);
         this.appEmitter.on(this.event, this.handleEvent.bind(this));
@@ -36,7 +44,11 @@ export class BaseAction {
         throw new Error('not implemented');
     }
 
-    protected async doAction(chat: number, message: MessageInterface): Promise<MessageInterface> {
+    protected setButtons(): void {
+        throw new Error('not implemented');
+    }
+
+    protected async doAction(chatId: number, message: MessageInterface): Promise<MessageInterface> {
         throw new Error('not implemented');
     }
 
