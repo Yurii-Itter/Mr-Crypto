@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 
 export interface ChatInterface extends Document {
-    id: Number;
+    _id: Number;
     chatId: Number;
     fullName: String;
     lang: String;
