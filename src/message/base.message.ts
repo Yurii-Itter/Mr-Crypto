@@ -12,7 +12,7 @@ export class BaseMessage implements MessageInterface {
     protected replyStatus: string;
     protected replyData: any;
 
-    get name(): string {
+    get fullName(): string {
         const firstName: string = this.firstName || '';
         const lastName: string = this.lastName || '';
 

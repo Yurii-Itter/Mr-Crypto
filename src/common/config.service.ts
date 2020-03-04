@@ -7,7 +7,8 @@ export class ConfigService {
     constructor() {
         this.envConfig = envalid.cleanEnv(process.env, {
             APP_PORT: port({ default: 3000 }),
-            TELEGRAM_BOT_TOKEN: str()
+            TELEGRAM_BOT_TOKEN: str(),
+            DATABASE_URL: str()
         });
     }
 

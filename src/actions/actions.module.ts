@@ -8,9 +8,10 @@ import { SettingsAction } from './telegram_settings_action';
 
 import { CommonModule } from '../common/common.module';
 import { TelegramModule } from '../telegram/telegram.module';
+import { DatabaseModule } from '../database/database.module';
 
 @Module({
-    imports: [CommonModule, TelegramModule],
+    imports: [CommonModule, TelegramModule, DatabaseModule],
     providers: [StartAction, CryptocurrenciesAction, SubscriptionsAction, AboutServiceAction, SettingsAction],
     exports: [StartAction, CryptocurrenciesAction, SubscriptionsAction, AboutServiceAction, SettingsAction],
 })

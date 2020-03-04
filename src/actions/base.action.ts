@@ -3,9 +3,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '../common/config.service';
 import { AppEmitter } from '../common/event.service';
 import { TemplateService } from '../common/template.service';
-import { TelegramService } from '../telegram/telegram.service'
+import { TelegramService } from '../telegram/telegram.service';
+import { DatabaseService } from '../database/database.service';
 
 import { MessageInterface } from '../message/interfaces/message.interface';
+import { ChatInterface } from '../database/interfaces/chat.interface';
 
 @Injectable()
 export class BaseAction {
@@ -15,6 +17,7 @@ export class BaseAction {
 
     protected templateService: TemplateService;
     protected telegramService: TelegramService;
+    protected databaseService: DatabaseService;
 
     protected event: string;
     protected buttons: Array<string>;
@@ -24,7 +27,8 @@ export class BaseAction {
         appEmitter: AppEmitter,
         logger: Logger,
         templateService: TemplateService,
-        telegramService: TelegramService
+        telegramService: TelegramService,
+        databaseService: DatabaseService
     ) {
         this.config = config;
         this.logger = logger;
@@ -32,6 +36,7 @@ export class BaseAction {
         this.appEmitter = appEmitter;
         this.templateService = templateService;
         this.telegramService = telegramService;
+        this.databaseService = databaseService;
 
         this.setEvent();
         this.setButtons();
@@ -48,7 +53,7 @@ export class BaseAction {
         throw new Error('not implemented');
     }
 
-    protected async doAction(chatId: number, message: MessageInterface): Promise<MessageInterface> {
+    protected async doAction(chat: ChatInterface, message: MessageInterface): Promise<MessageInterface> {
         throw new Error('not implemented');
     }
 
@@ -56,8 +61,8 @@ export class BaseAction {
         try {
             this.logger.log(`"${this.event}" event received`);
 
-            const chatId: number = message.chatId;
-            message = await this.doAction(chatId, message);
+            const chat: ChatInterface = await this.databaseService.ensureChat(message);
+            message = await this.doAction(chat, message);
 
             message.answer(
                 this.templateService.parseKeyboard(

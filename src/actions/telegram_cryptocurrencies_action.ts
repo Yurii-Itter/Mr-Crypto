@@ -4,6 +4,7 @@ import * as statuses from './statuses';
 import { BaseAction } from './base.action';
 
 import { MessageInterface } from '../message/interfaces/message.interface';
+import { ChatInterface } from '../database/interfaces/chat.interface';
 
 @Injectable()
 export class CryptocurrenciesAction extends BaseAction {
@@ -16,7 +17,7 @@ export class CryptocurrenciesAction extends BaseAction {
         this.buttons = [];
     }
 
-    protected async doAction(chatId: number, message: MessageInterface): Promise<MessageInterface> {
+    protected async doAction(chat: ChatInterface, message: MessageInterface): Promise<MessageInterface> {
         try {
             return message.setStatus(statuses.STATUS_SUCCESS);
         } catch (error) {
