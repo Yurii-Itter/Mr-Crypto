@@ -6,6 +6,7 @@ import { TelegramModule } from './telegram/telegram.module';
 import { ActionModule } from './actions/actions.module';
 import { CommonModule } from './common/common.module';
 import { DatabaseModule } from './database/database.module';
+import { CryptocurrenciesModule } from './cryptocurrencies/cryptocurrencies.module';
 
 import { ConfigService } from './common/config.service';
 
@@ -18,7 +19,7 @@ import { ConfigService } from './common/config.service';
       useUnifiedTopology: true
     }),
     inject: [ConfigService],
-  }), TelegramModule, ActionModule, DatabaseModule],
+  }), TelegramModule, ActionModule, DatabaseModule, CryptocurrenciesModule],
   controllers: [],
   providers: [],
 })

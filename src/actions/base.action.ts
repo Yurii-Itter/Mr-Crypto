@@ -5,6 +5,7 @@ import { AppEmitter } from '../common/event.service';
 import { TemplateService } from '../common/template.service';
 import { TelegramService } from '../telegram/telegram.service';
 import { DatabaseService } from '../database/database.service';
+import { CryptocurrenciesService } from '../cryptocurrencies/cryptocurrencies.service';
 
 import { MessageInterface } from '../message/interfaces/message.interface';
 import { ChatInterface } from '../database/interfaces/chat.interface';
@@ -18,6 +19,7 @@ export class BaseAction {
     protected templateService: TemplateService;
     protected telegramService: TelegramService;
     protected databaseService: DatabaseService;
+    protected cryptocurrenciesService: CryptocurrenciesService;
 
     protected event: string;
     protected buttons: Array<string>;
@@ -28,7 +30,8 @@ export class BaseAction {
         logger: Logger,
         templateService: TemplateService,
         telegramService: TelegramService,
-        databaseService: DatabaseService
+        databaseService: DatabaseService,
+        cryptocurrenciesService: CryptocurrenciesService
     ) {
         this.config = config;
         this.logger = logger;
@@ -37,6 +40,7 @@ export class BaseAction {
         this.templateService = templateService;
         this.telegramService = telegramService;
         this.databaseService = databaseService;
+        this.cryptocurrenciesService = cryptocurrenciesService;
 
         this.setEvent();
         this.setButtons();

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import * as statuses from './statuses';
-import { BaseAction } from './base.action';
+import * as statuses from '../statuses';
+import { BaseAction } from '../base.action';
 
-import { MessageInterface } from '../message/interfaces/message.interface';
-import { ChatInterface } from '../database/interfaces/chat.interface';
+import { MessageInterface } from '../../message/interfaces/message.interface';
+import { ChatInterface } from '../../database/interfaces/chat.interface';
 
 @Injectable()
 export class SettingsAction extends BaseAction {

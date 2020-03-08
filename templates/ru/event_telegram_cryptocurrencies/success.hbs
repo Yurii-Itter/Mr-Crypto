@@ -1,3 +1,8 @@
 <content>
-    <strong>Криптовалюты</strong>
+    <strong>Выберите криптовалюту</strong>
 </content>
+
+<keyboard>
+    {{#cryptocurrencies}}<keys>{{#chunk}}<key>{{base}}</key>{{/chunk}}</keys>{{/cryptocurrencies}}
+    <keys><key>◀️ Назад</key></keys>
+</keyboard>
