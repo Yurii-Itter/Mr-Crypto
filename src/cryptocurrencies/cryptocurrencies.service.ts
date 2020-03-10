@@ -6,7 +6,6 @@ import { ChunkInterface } from './interfaces/chunk.interface';
 import { BaseInterface } from './interfaces/base.interface';
 import { QuoteInterface } from './interfaces/quote.interface';
 
-
 @Injectable()
 export class CryptocurrenciesService {
     private logger: Logger;
@@ -32,11 +31,11 @@ export class CryptocurrenciesService {
         return this.binanceService.getBase();
     }
 
-    public getBaseKeyboard() {
+    public getBaseKeyboard(): Array<ChunkInterface> {
         return this.chunkData(this.binanceService.getBase().map(s => { return { base: s } }), 3)
     }
 
-    public getQuoteKeyboard(base: string) {
+    public getQuoteKeyboard(base: string): Array<ChunkInterface> {
         return this.chunkData(this.binanceService.getQuote(base).map(s => { return { quote: s } }), 3);
     }
 }
