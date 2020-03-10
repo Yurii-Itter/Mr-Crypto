@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { ConfigService } from '../common/config.service';
 import { AppEmitter } from '../common/event.service';
+import { CryptocurrenciesService } from '../cryptocurrencies/cryptocurrencies.service';
 
 import { CommandInterface } from './interfaces/command.interface';
 import { KeyboardCommandInterface } from './interfaces/keyboardCommand.interface';
@@ -14,7 +15,7 @@ import { TelegramMessage } from './telegram.message';
 export class TelegramService {
     private bot: Telegraf<any>;
 
-    constructor(config: ConfigService, appEmitter: AppEmitter) {
+    constructor(config: ConfigService, cryptocurrenciesService: CryptocurrenciesService, appEmitter: AppEmitter) {
 
         const token: string = config.get('TELEGRAM_BOT_TOKEN');
         this.bot = new Telegraf(token);
@@ -25,6 +26,12 @@ export class TelegramService {
 
         this.getKeyboardCommandsMapping(appEmitter).forEach(({ trigger, event }) => {
             trigger.forEach(tgr => this.setKeyboardAction(tgr, event, appEmitter));
+        });
+
+        this.bot.use(ctx => {
+            if (cryptocurrenciesService.getRawBase().includes(ctx.message.text)) {
+                appEmitter.emit(appEmitter.TELEGRAM_CRYPTOCURRENCIES_BASE, new TelegramMessage(ctx));
+            }
         });
     }
 
