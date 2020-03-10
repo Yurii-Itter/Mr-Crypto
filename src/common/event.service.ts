@@ -6,4 +6,5 @@ export class AppEmitter extends EventEmitter {
     public readonly TELEGRAM_SUBSCRIPTIONS: string = 'event_telegram_subscriptions';
     public readonly TELEGRAM_ABOUT_SERVICE: string = 'event_telegram_about_service';
     public readonly TELEGRAM_SETTINGS: string = 'event_telegram_settings';
+    public readonly TELEGRAM_BACK_TO_MAIN_MENU: string = 'event_telegram_back_to_main_menu';
 }

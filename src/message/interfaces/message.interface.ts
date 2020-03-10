@@ -2,7 +2,6 @@ export interface MessageInterface {
     chatId: number;
     lang: string;
     text: string;
-    command: string;
     fullName: string;
     getReplyStatus: () => string;
     getReplyData: () => any;

@@ -15,7 +15,6 @@ export class TelegramMessage extends BaseMessage implements MessageInterface {
         const { message } = this.ctx.update;
         this.chatId = message.chat.id;
         this.text = message.text;
-        this.command = this.ctx.command;
         this.lang = message.from.language_code;
         this.firstName = message.from.first_name;
         this.lastName = message.from.last_name;

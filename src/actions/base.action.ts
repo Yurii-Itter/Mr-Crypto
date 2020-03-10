@@ -43,17 +43,12 @@ export class BaseAction {
         this.cryptocurrenciesService = cryptocurrenciesService;
 
         this.setEvent();
-        this.setButtons();
 
         this.logger.log(`subscribe on "${this.event}" event`);
         this.appEmitter.on(this.event, this.handleEvent.bind(this));
     }
 
     protected setEvent(): void {
-        throw new Error('not implemented');
-    }
-
-    protected setButtons(): void {
         throw new Error('not implemented');
     }
 

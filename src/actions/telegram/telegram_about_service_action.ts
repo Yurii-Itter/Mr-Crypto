@@ -13,10 +13,6 @@ export class AboutServiceAction extends BaseAction {
         this.event = this.appEmitter.TELEGRAM_ABOUT_SERVICE;
     }
 
-    protected setButtons(): void {
-        this.buttons = [];
-    }
-
     protected async doAction(chat: ChatInterface, message: MessageInterface): Promise<MessageInterface> {
         try {
             return message.setStatus(statuses.STATUS_SUCCESS);
