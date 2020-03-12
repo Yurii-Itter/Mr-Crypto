@@ -5,15 +5,25 @@ import { BinanceService } from './binance/binance.service';
 import { ChunkInterface } from './interfaces/chunk.interface';
 import { BaseInterface } from './interfaces/base.interface';
 import { QuoteInterface } from './interfaces/quote.interface';
+import { ListInterface } from './interfaces/list.interface';
 
 @Injectable()
 export class CryptocurrenciesService {
     private logger: Logger;
     private binanceService: BinanceService;
 
+    private pairs: Array<ListInterface>;
+
     constructor(binanceService: BinanceService, logger: Logger) {
         this.logger = logger;
         this.binanceService = binanceService;
+
+        this.cryptocurrenciesHandler();
+    }
+
+    //will be mixed
+    private async cryptocurrenciesHandler(): Promise<void> {
+        this.pairs = await this.binanceService.pairsHandler();
     }
 
     private chunkData(basic: Array<BaseInterface | QuoteInterface>, size: number): Array<ChunkInterface> {
@@ -26,16 +36,12 @@ export class CryptocurrenciesService {
         return chunked_arr;
     }
 
-    // will be mixed with others
-    public getRawBase(): Array<String> {
-        return this.binanceService.getBase();
+    public getBase(): Array<String> {
+        let base = this.pairs.map(s => s.base);
+        return base.filter((v, i) => base.indexOf(v) === i).sort();
     }
 
     public getBaseKeyboard(): Array<ChunkInterface> {
-        return this.chunkData(this.binanceService.getBase().map(s => { return { base: s } }), 3)
-    }
-
-    public getQuoteKeyboard(base: string): Array<ChunkInterface> {
-        return this.chunkData(this.binanceService.getQuote(base).map(s => { return { quote: s } }), 3);
+        return this.chunkData(this.getBase().map(s => { return { base: s } }), 3)
     }
 }

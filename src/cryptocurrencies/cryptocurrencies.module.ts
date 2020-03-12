@@ -1,12 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 
 import { CryptocurrenciesService } from './cryptocurrencies.service';
 
 import { CommonModule } from '../common/common.module';
 import { BinanceModule } from './binance/binance.module';
+import { TelegramModule } from '../telegram/telegram.module';
 
 @Module({
-    imports: [CommonModule, BinanceModule],
+    imports: [CommonModule, forwardRef(() => TelegramModule), BinanceModule],
     providers: [CryptocurrenciesService],
     exports: [CryptocurrenciesService]
 })

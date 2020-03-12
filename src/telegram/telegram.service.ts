@@ -29,7 +29,7 @@ export class TelegramService {
         });
 
         this.bot.use(ctx => {
-            if (cryptocurrenciesService.getRawBase().includes(ctx.message.text)) {
+            if (cryptocurrenciesService.getBase().includes(ctx.message.text)) {
                 appEmitter.emit(appEmitter.TELEGRAM_CRYPTOCURRENCIES_BASE, new TelegramMessage(ctx));
             }
         });
