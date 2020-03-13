@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Inject, Logger } from '@nestjs/common';
 
 import { ConfigService } from '../common/config.service';
 import { AppEmitter } from '../common/event.service';
@@ -17,30 +17,25 @@ export class BaseAction {
     protected logger: Logger;
 
     protected templateService: TemplateService;
-    protected telegramService: TelegramService;
     protected databaseService: DatabaseService;
-    protected cryptocurrenciesService: CryptocurrenciesService;
 
     protected event: string;
     protected buttons: Array<string>;
 
     constructor(
+        @Inject('CryptocurrenciesServiceInstance') protected cryptocurrenciesService: CryptocurrenciesService,
         config: ConfigService,
         appEmitter: AppEmitter,
         logger: Logger,
         templateService: TemplateService,
-        telegramService: TelegramService,
-        databaseService: DatabaseService,
-        cryptocurrenciesService: CryptocurrenciesService
+        databaseService: DatabaseService
     ) {
         this.config = config;
         this.logger = logger;
 
         this.appEmitter = appEmitter;
         this.templateService = templateService;
-        this.telegramService = telegramService;
         this.databaseService = databaseService;
-        this.cryptocurrenciesService = cryptocurrenciesService;
 
         this.setEvent();
 

@@ -11,11 +11,10 @@ import { CryptocurrenciesBaseAction } from './telegram/telegram_cryptocurrencies
 import { CryptocurrenciesModule } from '../cryptocurrencies/cryptocurrencies.module';
 
 import { CommonModule } from '../common/common.module';
-import { TelegramModule } from '../telegram/telegram.module';
 import { DatabaseModule } from '../database/database.module';
 
 @Module({
-    imports: [CommonModule, TelegramModule, DatabaseModule, CryptocurrenciesModule],
+    imports: [CommonModule, DatabaseModule, CryptocurrenciesModule],
     providers: [StartAction, CryptocurrenciesAction, SubscriptionsAction, AboutServiceAction, SettingsAction, BackToMainMenuAction, CryptocurrenciesBaseAction]
 })
 export class ActionModule { }
