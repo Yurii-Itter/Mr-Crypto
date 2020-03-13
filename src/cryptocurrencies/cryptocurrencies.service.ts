@@ -53,7 +53,15 @@ export class CryptocurrenciesService {
         return base.filter((v, i) => base.indexOf(v) === i).sort();
     }
 
+    public getQuote(base: string): Array<QuoteInterface> {
+        return this.pairs.filter(f => f.base === base).map(s => { return { quote: s.quote, symbol: s.symbol } });
+    }
+
     public getBaseKeyboard(): Array<ChunkInterface> {
         return this.chunkData(this.getBase().map(s => { return { base: s } }), 3)
+    }
+
+    public getQuoteKeyboard(base: string): Array<ChunkInterface> {
+        return this.chunkData(this.getQuote(base), 3)
     }
 }

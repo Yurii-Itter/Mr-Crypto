@@ -1,8 +1,8 @@
 import { BaseMessage } from '../message/base.message';
+import { Extra, Markup } from 'telegraf'
+
 import { MessageInterface } from '../message/interfaces/message.interface';
 import { ApplyInterface } from '../common/interfaces/apply.interface';
-
-import { Extra, Markup } from 'telegraf'
 
 export class TelegramMessage extends BaseMessage implements MessageInterface {
     private ctx: any;
@@ -12,7 +12,15 @@ export class TelegramMessage extends BaseMessage implements MessageInterface {
 
         this.ctx = ctx;
 
-        const { message } = this.ctx.update;
+        let message;
+
+        if (this.ctx.updateType === 'callback_query') {
+            message = this.ctx.update.callback_query.message;
+            this.data = this.ctx.update.callback_query.data;
+        } else if (this.ctx.updateType === 'message') {
+            message = this.ctx.update.message;
+        }
+
         this.chatId = message.chat.id;
         this.text = message.text;
         this.lang = message.from.language_code;
@@ -20,11 +28,32 @@ export class TelegramMessage extends BaseMessage implements MessageInterface {
         this.lastName = message.from.last_name;
     }
 
-    public answer({ htmlText, keyboard }: ApplyInterface): string | void {
+    public answer({ content, inline, keyboard }: ApplyInterface): string | void {
+
         if (keyboard) {
-            return this.ctx.replyWithHTML(htmlText, Extra.markup(Markup.keyboard(keyboard).resize()));
-        } else {
-            return this.ctx.replyWithHTML(htmlText);
+            return this.ctx.replyWithHTML(content,
+                Extra.markup(Markup.keyboard(keyboard).resize())
+            );
+        } else if (inline) {
+            return this.ctx.replyWithHTML(content,
+                Extra.markup(
+                    Markup.inlineKeyboard(
+                        (
+                            () => {
+                                let keyboard = [];
+                                inline.forEach(i => {
+                                    let k = [];
+                                    i.forEach(quote => k.push(Markup.callbackButton(quote.key, quote.action)));
+                                    keyboard.push(k);
+                                })
+                                return keyboard;
+                            }
+                        )()
+                    )
+                )
+            );
         }
+
+        return this.ctx.replyWithHTML(content);
     }
 }

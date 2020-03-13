@@ -3,7 +3,7 @@
 </content>
 
 <keyboard>
-    <keys><key>🔎 Search</key><key>◀️ Back</key></keys>
-    {{#cryptocurrencies}}<keys>{{#chunk}}<key>{{base}}</key>{{/chunk}}</keys>{{/cryptocurrencies}}
-    <keys><key>◀️ Back</key><key>🔎 Search</key></keys>
+    <line><key>🔎 Search</key><key>◀️ Back</key></line>
+    {{#cryptocurrencies}}<line>{{#chunk}}<key>{{base}}</key>{{/chunk}}</line>{{/cryptocurrencies}}
+    <line><key>◀️ Back</key><key>🔎 Search</key></line>
 </keyboard>

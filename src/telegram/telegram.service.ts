@@ -32,9 +32,10 @@ export class TelegramService {
         });
 
         this.bot.use(ctx => {
-            if (this.cryptocurrenciesService.getBase().includes(ctx.message.text)) {
+            if (ctx.updateType === 'callback_query') {
+                appEmitter.emit(appEmitter.TELEGRAM_CRYPTOCURRENCIES_QUOTE, new TelegramMessage(ctx))
+            } else if (ctx.updateType === 'message' && this.cryptocurrenciesService.getBase().includes(ctx.message.text))
                 appEmitter.emit(appEmitter.TELEGRAM_CRYPTOCURRENCIES_BASE, new TelegramMessage(ctx));
-            }
         });
     }
 

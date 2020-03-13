@@ -3,7 +3,6 @@ import { Injectable, Inject, Logger } from '@nestjs/common';
 import { ConfigService } from '../common/config.service';
 import { AppEmitter } from '../common/event.service';
 import { TemplateService } from '../common/template.service';
-import { TelegramService } from '../telegram/telegram.service';
 import { DatabaseService } from '../database/database.service';
 import { CryptocurrenciesService } from '../cryptocurrencies/cryptocurrencies.service';
 

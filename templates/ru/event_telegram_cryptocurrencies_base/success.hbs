@@ -1,3 +1,9 @@
 <content>
-    <strong>Вы выбрали вот эту криптовалюту: {{text}}</strong>
+    <strong>Вы выбрали эту криптовалюту в качестве базовой: {{chose}}</strong>
+
+    Теперь выберете ту, цена базовой к которой вас интересует
 </content>
+
+<inline>
+    {{#quotes}}<line>{{#chunk}}<key action="{{symbol}}">{{quote}}</key>{{/chunk}}</line>{{/quotes}}
+</inline>

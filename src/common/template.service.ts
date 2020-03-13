@@ -45,6 +45,7 @@ export class TemplateService {
     public parseKeyboard(template: any): ApplyInterface {
 
         let k = template.match(/(?:.|\n)*(<keyboard>(?:.|\n)*<\/keyboard>)/);
+        let i = template.match(/(?:.|\n)*(<inline>(?:.|\n)*<\/inline>)/);
 
         let content = template.match(/(?:.|\n)*(<content>(?:.|\n)*<\/content>)/)[1].replace(/\s*\n?<\/?content>\n?\s*/g, '').replace(/(\n\s*\n)\s{2,}/g, '$1');
 
@@ -52,16 +53,29 @@ export class TemplateService {
 
             let keyboard = [];
 
-            k[1].replace(/<\/?keyboard>/g, '').replace(/\n/g, '').replace(/>\s+</g, '><').replace(/[^<]+/, '').match(/(<keys>(.+?)<\/keys>)/g).forEach((keys: string) => {
-                keyboard.push(keys.match(/(<key>(.+?)<\/key>)/g).map((ks: string) => {
-                    return ks.replace(/<\/?key>/g, '')
+            k[1].replace(/<\/?keyboard>/g, '').replace(/\n/g, '').replace(/>\s+</g, '><').replace(/[^<]+/, '').match(/(<line>(.+?)<\/line>)/g).forEach((line: string) => {
+                keyboard.push(line.match(/<key.+?<\/key>/g).map(k => {
+                    return k.replace(/<\/?key[^>]*>/g, '');
                 }));
             });
 
-            return { htmlText: content, keyboard: keyboard }
-        } else {
-            return { htmlText: content }
+            return { content, keyboard };
+
+        } else if (i) {
+
+            let inline = [];
+
+            i[1].replace(/<\/?inline>/g, '').replace(/\n/g, '').replace(/>\s+</g, '><').replace(/[^<]+/, '').match(/(<line>(.+?)<\/line>)/g).forEach((line: string) => {
+                inline.push(line.match(/<key.+?<\/key>/g).map(k => {
+                    return { action: k.replace(/.+action="/g, '').replace(/".+/, ''), key: k.replace(/<\/?key[^>]*>/g, '') }
+                }));
+            });
+
+            return { content, inline };
+
         }
+
+        return { content };
     }
 
     private getTemplate(params: ParamsInterface): (data: any) => string {

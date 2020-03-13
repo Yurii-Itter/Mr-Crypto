@@ -1,3 +1,4 @@
 export interface QuoteInterface {
-    quote: String
+    quote: String,
+    symbol: String
 }

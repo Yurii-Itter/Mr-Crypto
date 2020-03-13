@@ -3,6 +3,7 @@ export interface MessageInterface {
     lang: string;
     text: string;
     fullName: string;
+    data: string;
     getReplyStatus: () => string;
     getReplyData: () => any;
     setStatus: (status: string) => MessageInterface;
