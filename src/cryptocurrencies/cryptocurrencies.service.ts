@@ -54,7 +54,11 @@ export class CryptocurrenciesService {
     }
 
     public getQuote(base: string): Array<QuoteInterface> {
-        return this.pairs.filter(f => f.base === base).map(s => { return { quote: s.quote, symbol: s.symbol } });
+        return this.pairs.filter(f => f.base === base).map(s => { return { quote: s.quote, symbol: s.symbol } }).sort((a, b) => {
+            if (a.quote < b.quote) return -1;
+            if (a.quote > b.quote) return 1;
+            return 0;
+        });
     }
 
     public getBaseKeyboard(): Array<ChunkInterface> {
