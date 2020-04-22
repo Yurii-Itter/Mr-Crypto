@@ -16,7 +16,6 @@ export class CryptocurrenciesQuoteAction extends BaseAction {
 
     protected async doAction(chat: ChatInterface, message: MessageInterface): Promise<MessageInterface> {
         try {
-            console.log(message);
             return message.setStatus(statuses.STATUS_SUCCESS);
         } catch (error) {
             this.logger.error(error);

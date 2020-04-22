@@ -5,21 +5,17 @@ import { MessageInterface } from '../message/interfaces/message.interface';
 import { ApplyInterface } from '../common/interfaces/apply.interface';
 
 export class TelegramMessage extends BaseMessage implements MessageInterface {
+    
     private ctx: any;
 
-    constructor(ctx) {
+    constructor(ctx: any) {
         super();
 
         this.ctx = ctx;
 
-        let message;
-
-        if (this.ctx.updateType === 'callback_query') {
-            message = this.ctx.update.callback_query.message;
-            this.data = this.ctx.update.callback_query.data;
-        } else if (this.ctx.updateType === 'message') {
-            message = this.ctx.update.message;
-        }
+        const message = this.ctx.updateType === 'callback_query' ?
+            this.ctx.update.callback_query.message :
+            this.ctx.update.message;
 
         this.chatId = message.chat.id;
         this.text = message.text;
@@ -28,22 +24,29 @@ export class TelegramMessage extends BaseMessage implements MessageInterface {
         this.lastName = message.from.last_name;
     }
 
-    public answer({ content, inline, keyboard }: ApplyInterface): string | void {
-
+    public answer({ content, inline, keyboard }: ApplyInterface): string {
         if (keyboard) {
-            return this.ctx.replyWithHTML(content,
-                Extra.markup(Markup.keyboard(keyboard).resize())
+            return this.ctx.replyWithHTML(
+                content,
+                Extra.markup(
+                    Markup.keyboard(keyboard).resize()
+                )
             );
         } else if (inline) {
-            return this.ctx.replyWithHTML(content,
-                Extra.markup(
-                    Markup.inlineKeyboard(
+            return this.ctx.replyWithHTML(
+                content,
+                Extra.markup(Markup.inlineKeyboard
+                    (
                         (
                             () => {
                                 let keyboard = [];
                                 inline.forEach(i => {
                                     let k = [];
-                                    i.forEach(quote => k.push(Markup.callbackButton(quote.key, quote.action)));
+                                    i.forEach(
+                                        quote => k.push(
+                                            Markup.callbackButton(quote.key, quote.action)
+                                        )
+                                    );
                                     keyboard.push(k);
                                 })
                                 return keyboard;
@@ -53,7 +56,6 @@ export class TelegramMessage extends BaseMessage implements MessageInterface {
                 )
             );
         }
-
         return this.ctx.replyWithHTML(content);
     }
 }

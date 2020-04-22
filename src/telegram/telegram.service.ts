@@ -33,9 +33,17 @@ export class TelegramService {
 
         this.bot.use(ctx => {
             if (ctx.updateType === 'callback_query') {
-                appEmitter.emit(appEmitter.TELEGRAM_CRYPTOCURRENCIES_QUOTE, new TelegramMessage(ctx))
-            } else if (ctx.updateType === 'message' && this.cryptocurrenciesService.getBase().includes(ctx.message.text))
-                appEmitter.emit(appEmitter.TELEGRAM_CRYPTOCURRENCIES_BASE, new TelegramMessage(ctx));
+                appEmitter.emit(
+                    appEmitter.TELEGRAM_CRYPTOCURRENCIES_QUOTE,
+                    new TelegramMessage(ctx)
+                );
+                ctx.telegram.answerCbQuery(ctx.callbackQuery.id);
+            } else if (ctx.updateType === 'message' && this.cryptocurrenciesService.getBase().includes(ctx.message.text)) {
+                appEmitter.emit(
+                    appEmitter.TELEGRAM_CRYPTOCURRENCIES_BASE,
+                    new TelegramMessage(ctx)
+                );
+            }
         });
     }
 
@@ -70,12 +78,20 @@ export class TelegramService {
         ];
     }
 
-    private setKeyboardAction(trigger: string, event: string, appEmitter: AppEmitter) {
-        this.bot.hears(trigger, ctx => appEmitter.emit(event, new TelegramMessage(ctx)));
+    private setKeyboardAction(trigger: string, event: string, appEmitter: AppEmitter): void {
+        this.bot.hears(
+            trigger, ctx => appEmitter.emit(
+                event, new TelegramMessage(ctx)
+            )
+        );
     }
 
-    private setCommandAction(trigger: string, event: string, appEmitter: AppEmitter) {
-        this.bot.command(trigger, ctx => appEmitter.emit(event, new TelegramMessage(ctx)));
+    private setCommandAction(trigger: string, event: string, appEmitter: AppEmitter): void {
+        this.bot.command(
+            trigger, ctx => appEmitter.emit(
+                event, new TelegramMessage(ctx)
+            )
+        );
     }
 
     public launch(): void {
