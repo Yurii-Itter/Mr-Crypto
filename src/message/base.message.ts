@@ -1,10 +1,13 @@
 import { MessageInterface } from '../message/interfaces/message.interface';
+import { EditInterface } from '../common/interfaces/edit.interface';
 
 export class BaseMessage implements MessageInterface {
     public chatId: number;
+    public messageId: number;
     public lang: string;
     public text: string;
     public data: string;
+    public edit: EditInterface;
 
     protected firstName: string;
     protected lastName: string;
@@ -37,7 +40,12 @@ export class BaseMessage implements MessageInterface {
         return this;
     }
 
-    public answer(args: any): string | void {
+    public withEdit(options: EditInterface): MessageInterface {
+        this.edit = options;
+        return this;
+    }
+
+    public answer(args: any, edit: EditInterface): string | void {
         throw new Error('not implemented');
     }
 }

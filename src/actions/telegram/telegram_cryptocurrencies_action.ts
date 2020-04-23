@@ -18,7 +18,6 @@ export class CryptocurrenciesAction extends BaseAction {
             return message.setStatus(statuses.STATUS_SUCCESS).withData({ cryptocurrencies: this.cryptocurrenciesService.getBaseKeyboard() });
         } catch (error) {
             this.logger.error(error);
-            message.answer(error.message);
         }
     }
 }

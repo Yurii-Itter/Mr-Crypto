@@ -50,12 +50,12 @@ export class BaseAction {
         throw new Error('not implemented');
     }
 
-    private async handleEvent(message: MessageInterface) {
+    private async handleEvent(msg: any) {
         try {
             this.logger.log(`"${this.event}" event received`);
 
-            const chat: ChatInterface = await this.databaseService.ensureChat(message);
-            message = await this.doAction(chat, message);
+            const chat: ChatInterface = await this.databaseService.ensureChat(msg);
+            const message: MessageInterface = await this.doAction(chat, msg);
 
             message.answer(
                 this.templateService.parseKeyboard(
@@ -67,11 +67,10 @@ export class BaseAction {
                         },
                         message.getReplyData(),
                     )
-                ),
+                ), message.edit
             );
         } catch (error) {
             this.logger.error(error);
-            message.answer(error.message);
         }
     }
 }

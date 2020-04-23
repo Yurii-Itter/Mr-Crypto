@@ -1,7 +1,7 @@
-import { QuoteInterface } from './quote.interface';
+import { InlineInterface } from './inline.interface';
 
 export interface ApplyInterface {
     content: any,
     keyboard?: Array<Array<string>>,
-    inline?: Array<Array<QuoteInterface>>
+    inline?: Array<Array<InlineInterface>>
 }

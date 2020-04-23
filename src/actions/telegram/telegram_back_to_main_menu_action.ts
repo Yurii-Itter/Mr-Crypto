@@ -19,7 +19,6 @@ export class BackToMainMenuAction extends BaseAction {
             return message.setStatus(statuses.STATUS_SUCCESS);
         } catch (error) {
             this.logger.error(error);
-            message.answer(error.message);
         }
     }
 }

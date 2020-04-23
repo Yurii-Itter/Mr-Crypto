@@ -22,7 +22,6 @@ export class CryptocurrenciesBaseAction extends BaseAction {
             });
         } catch (error) {
             this.logger.error(error);
-            message.answer(error.message);
         }
     }
 }
