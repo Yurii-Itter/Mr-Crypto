@@ -14,9 +14,9 @@ export class BackToMainMenuAction extends BaseAction {
         this.event = this.appEmitter.TELEGRAM_BACK_TO_MAIN_MENU;
     }
 
-    protected async doAction(chat: ChatInterface, message: MessageInterface): Promise<MessageInterface> {
+    protected async doAction(chat: ChatInterface, msg: any): Promise<MessageInterface> {
         try {
-            return message.setStatus(statuses.STATUS_SUCCESS);
+            return msg.setStatus(statuses.STATUS_SUCCESS);
         } catch (error) {
             this.logger.error(error);
         }

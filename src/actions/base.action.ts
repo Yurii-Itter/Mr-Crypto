@@ -46,7 +46,7 @@ export class BaseAction {
         throw new Error('not implemented');
     }
 
-    protected async doAction(chat: ChatInterface, message: MessageInterface): Promise<MessageInterface> {
+    protected async doAction(chat: ChatInterface, msg: any): Promise<MessageInterface> {
         throw new Error('not implemented');
     }
 

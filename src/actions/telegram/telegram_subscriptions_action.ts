@@ -13,9 +13,9 @@ export class SubscriptionsAction extends BaseAction {
         this.event = this.appEmitter.TELEGRAM_SUBSCRIPTIONS;
     }
 
-    protected async doAction(chat: ChatInterface, message: MessageInterface): Promise<MessageInterface> {
+    protected async doAction(chat: ChatInterface, msg: any): Promise<MessageInterface> {
         try {
-            return message.setStatus(statuses.STATUS_SUCCESS);
+            return msg.setStatus(statuses.STATUS_SUCCESS);
         } catch (error) {
             this.logger.error(error);
         }

@@ -14,11 +14,11 @@ export class CryptocurrenciesBaseAction extends BaseAction {
         this.event = this.appEmitter.TELEGRAM_CRYPTOCURRENCIES_BASE;
     }
 
-    protected async doAction(chat: ChatInterface, message: MessageInterface): Promise<MessageInterface> {
+    protected async doAction(chat: ChatInterface, msg: any): Promise<MessageInterface> {
         try {
-            return message.setStatus(statuses.STATUS_SUCCESS).withData({
-                quotes: this.cryptocurrenciesService.getQuoteKeyboard(message.text),
-                chose: message.text
+            return msg.setStatus(statuses.STATUS_SUCCESS).withData({
+                quotes: this.cryptocurrenciesService.getQuoteKeyboard(msg.text),
+                chose: msg.text
             });
         } catch (error) {
             this.logger.error(error);
