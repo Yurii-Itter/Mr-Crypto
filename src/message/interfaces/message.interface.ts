@@ -1,5 +1,3 @@
-import { EditInterface } from '../../common/interfaces/edit.interface';
-
 export interface MessageInterface {
     chatId: number;
     messageId: number;
@@ -7,11 +5,11 @@ export interface MessageInterface {
     text: string;
     fullName: string;
     data: string;
-    edit: EditInterface;
+    edit: boolean;
     getReplyStatus: () => string;
     getReplyData: () => any;
     setStatus: (status: string) => MessageInterface;
     withData: (data: any) => MessageInterface;
-    withEdit: (options: EditInterface) => MessageInterface;
-    answer: (args: any, edit: EditInterface) => string | void;
+    withEdit: () => MessageInterface;
+    answer: (args: any, edit: boolean) => string | void;
 }

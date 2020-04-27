@@ -5,7 +5,6 @@ import { BaseMessage } from '../message/base.message';
 import { MessageInterface } from '../message/interfaces/message.interface';
 import { ApplyInterface } from '../common/interfaces/apply.interface';
 import { InlineInterface } from '../common/interfaces/inline.interface';
-import { EditInterface } from '../common/interfaces/edit.interface';
 
 export class TelegramMessage extends BaseMessage implements MessageInterface {
 
@@ -44,8 +43,7 @@ export class TelegramMessage extends BaseMessage implements MessageInterface {
 
     private editHandler(
         content: string,
-        inline: Array<Array<InlineInterface>>,
-        { chatId, messageId }: EditInterface
+        inline: Array<Array<InlineInterface>>
     ): string {
         if (inline) {
             return this.ctx.editMessageText(content, this.inlineHandler(inline));
@@ -82,9 +80,9 @@ export class TelegramMessage extends BaseMessage implements MessageInterface {
         )
     }
 
-    public answer({ content, keyboard, inline }: ApplyInterface, edit: EditInterface): string {
+    public answer({ content, keyboard, inline }: ApplyInterface, edit: boolean): string {
         if (edit) {
-            return this.editHandler(content, inline, edit);
+            return this.editHandler(content, inline);
         } else {
             return this.answerHandler(content, inline, keyboard);
         }
