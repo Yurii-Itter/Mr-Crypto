@@ -16,7 +16,9 @@ export class CryptocurrenciesQuoteAction extends BaseAction {
 
     protected async doAction(chat: ChatInterface, message: MessageInterface): Promise<MessageInterface> {
         try {
-            return message.setStatus(statuses.STATUS_SUCCESS).withEdit();
+            return message.setStatus(statuses.STATUS_SUCCESS).withData({
+                pair_info: 'Duis aliquip non laboris consectetur tempor. Irure mollit proident consectetur id proident aute commodo velit ad labore nisi. Veniam voluptate excepteur ipsum sint nisi. Pariatur aliqua cupidatat adipisicing qui laborum qui enim ea Lorem deserunt incididunt. Aliqua ut mollit non esse adipisicing deserunt exercitation. Non Lorem do reprehenderit elit nisi id voluptate elit excepteur voluptate do minim commodo laborum. Sunt exercitation voluptate aute nisi dolore Lorem occaecat laboris excepteur enim.'
+            }).withEdit();
         } catch (error) {
             this.logger.error(error);
         }
