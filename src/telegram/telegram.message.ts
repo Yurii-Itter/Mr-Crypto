@@ -19,8 +19,12 @@ export class TelegramMessage extends BaseMessage implements MessageInterface {
             this.ctx.update.callback_query.message :
             this.ctx.update.message;
 
+        this.data = this.ctx.updateType === 'callback_query' ?
+            ctx.update.callback_query.data :
+            undefined
+
         this.chatId = message.chat.id;
-        this.messageId = message.messageId;
+        this.messageId = message.message_id;
         this.text = message.text;
         this.lang = message.from.language_code;
         this.firstName = message.from.first_name;

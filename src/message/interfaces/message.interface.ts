@@ -4,7 +4,7 @@ export interface MessageInterface {
     lang: string;
     text: string;
     fullName: string;
-    data: string;
+    data: any;
     edit: boolean;
     getReplyStatus: () => string;
     getReplyData: () => any;

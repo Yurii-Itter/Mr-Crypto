@@ -13,7 +13,7 @@ export class CryptocurrenciesAction extends BaseAction {
         this.event = this.appEmitter.TELEGRAM_CRYPTOCURRENCIES;
     }
 
-    protected async doAction(chat: ChatInterface, msg: any): Promise<MessageInterface> {
+    protected async doAction(chat: ChatInterface, msg: MessageInterface): Promise<MessageInterface> {
         try {
             return msg.setStatus(statuses.STATUS_SUCCESS).withData({ cryptocurrencies: this.cryptocurrenciesService.getBaseKeyboard() });
         } catch (error) {

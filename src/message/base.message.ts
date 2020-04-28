@@ -5,7 +5,7 @@ export class BaseMessage implements MessageInterface {
     public messageId: number;
     public lang: string;
     public text: string;
-    public data: string;
+    public data: any;
     public edit: boolean;
 
     protected firstName: string;

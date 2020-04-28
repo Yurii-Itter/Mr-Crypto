@@ -14,10 +14,10 @@ export class CryptocurrenciesQuoteAction extends BaseAction {
         this.event = this.appEmitter.TELEGRAM_CRYPTOCURRENCIES_QUOTE;
     }
 
-    protected async doAction(chat: ChatInterface, msg: any): Promise<MessageInterface> {
+    protected async doAction(chat: ChatInterface, msg: MessageInterface): Promise<MessageInterface> {
         try {
             return msg.setStatus(statuses.STATUS_SUCCESS).withData({
-                symbol_info: msg.ctx.update.callback_query.data
+                symbol_info: msg.data
             }).withEdit();
         } catch (error) {
             this.logger.error(error);
