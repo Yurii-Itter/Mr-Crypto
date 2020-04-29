@@ -1,5 +1,9 @@
 export interface ListInterface {
-    symbol: String,
-    base: String,
-    quote: String
+    symbol: string,
+    base: string,
+    quote: string,
+    last?: number,
+    change?: number,
+    high?: number,
+    low?: number
 }
