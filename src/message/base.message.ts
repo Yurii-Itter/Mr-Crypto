@@ -44,7 +44,7 @@ export class BaseMessage implements MessageInterface {
         return this;
     }
 
-    public answer(args: any, edit: boolean): string | void {
+    public answer(args: any, edit: boolean): string {
         throw new Error('not implemented');
     }
 }

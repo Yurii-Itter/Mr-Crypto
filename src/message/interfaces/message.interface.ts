@@ -11,5 +11,5 @@ export interface MessageInterface {
     setStatus: (status: string) => MessageInterface;
     withData: (data: any) => MessageInterface;
     withEdit: () => MessageInterface;
-    answer: (args: any, edit: boolean) => string | void;
+    answer: (args: any, edit: boolean) => string;
 }
