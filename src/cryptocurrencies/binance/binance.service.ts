@@ -49,6 +49,7 @@ export class BinanceService extends BaseCryptocurrency {
         });
 
         this.stream.on('ping', () => {
+            this.logger.log('Binance pong was sent');
             this.stream.pong('pong');
         })
 

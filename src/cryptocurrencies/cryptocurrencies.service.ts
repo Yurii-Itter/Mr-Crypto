@@ -34,7 +34,7 @@ export class CryptocurrenciesService {
             mixed.reduce(
                 (accum, base, index, array) => {
 
-                    if (chunk.length === 3 || index === array.length - 1) { accum.push({ chunk }); chunk = [] }
+                    if (chunk.length === 3 || index === array.length - 1) { chunk.push({ base }); accum.push({ chunk }); chunk = [] }
                     else { chunk.push({ base }) }
 
                     return accum;
@@ -44,7 +44,7 @@ export class CryptocurrenciesService {
 
     }
 
-    public getQuote(base: string, keyboard?: boolean) {
+    public getQuote(base: string, keyboard?: boolean): Array<string | Array<string>> {
 
         let quotes = [...this.binanceService.symbols[base]];
         let mixed = [...new Set(quotes)];
@@ -54,12 +54,22 @@ export class CryptocurrenciesService {
             mixed.reduce(
                 (accum, quote, index, array) => {
 
-                    if (chunk.length === 3 || index === array.length - 1) { accum.push({ chunk }); chunk = [] }
+                    if (chunk.length === 3 || index === array.length - 1) { chunk.push(quote); accum.push({ chunk }); chunk = [] }
                     else { chunk.push(quote) }
 
                     return accum;
                 }, []
             ) :
             mixed;
+    }
+
+    public getList(list: string) {
+        return [
+            {
+                symbol: list.toLocaleUpperCase(),
+                source: 'Binance',
+                ...this.binanceService.list[list]
+            }
+        ]
     }
 }
