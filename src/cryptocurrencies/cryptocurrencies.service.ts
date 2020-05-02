@@ -34,7 +34,7 @@ export class CryptocurrenciesService {
             mixed.reduce(
                 (accum, base, index, array) => {
 
-                    if (chunk.length === 3 || index === array.length - 1) { chunk.push({ base }); accum.push({ chunk }); chunk = [] }
+                    if (chunk.length === 2 || index === array.length - 1) { chunk.push({ base }); accum.push({ chunk }); chunk = [] }
                     else { chunk.push({ base }) }
 
                     return accum;
@@ -54,7 +54,7 @@ export class CryptocurrenciesService {
             mixed.reduce(
                 (accum, quote, index, array) => {
 
-                    if (chunk.length === 3 || index === array.length - 1) { chunk.push(quote); accum.push({ chunk }); chunk = [] }
+                    if (chunk.length === 2 || index === array.length - 1) { chunk.push(quote); accum.push({ chunk }); chunk = [] }
                     else { chunk.push(quote) }
 
                     return accum;
