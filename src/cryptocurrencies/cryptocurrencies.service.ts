@@ -22,7 +22,6 @@ export class CryptocurrenciesService {
     private async cryptocurrenciesLauncher(): Promise<void> {
         await this.binanceService.launch();
         await this.telegramService.launch();
-        this.getQuote('BTC');
     }
 
     public getBase(keyboard?: boolean): Array<string | Array<string>> {
@@ -33,9 +32,9 @@ export class CryptocurrenciesService {
 
         return keyboard ?
             mixed.reduce(
-                (accum, base) => {
+                (accum, base, index, array) => {
 
-                    if (chunk.length === 3) { accum.push({ chunk }); chunk = [] }
+                    if (chunk.length === 3 || index === array.length - 1) { accum.push({ chunk }); chunk = [] }
                     else { chunk.push({ base }) }
 
                     return accum;
@@ -53,9 +52,9 @@ export class CryptocurrenciesService {
 
         return keyboard ?
             mixed.reduce(
-                (accum, quote) => {
+                (accum, quote, index, array) => {
 
-                    if (chunk.length === 3) { accum.push({ chunk }); chunk = [] }
+                    if (chunk.length === 3 || index === array.length - 1) { accum.push({ chunk }); chunk = [] }
                     else { chunk.push(quote) }
 
                     return accum;
