@@ -3,10 +3,6 @@ import { Injectable, Inject, forwardRef, Logger } from '@nestjs/common';
 import { BinanceService } from './binance/binance.service';
 import { TelegramService } from '../telegram/telegram.service';
 
-import { BaseInterface } from './interfaces/base.interface';
-import { QuoteInterface } from './interfaces/quote.interface';
-import { ListInterface } from './interfaces/list.interface';
-
 @Injectable()
 export class CryptocurrenciesService {
     private logger: Logger;
@@ -25,6 +21,46 @@ export class CryptocurrenciesService {
 
     private async cryptocurrenciesLauncher(): Promise<void> {
         await this.binanceService.launch();
-        // await this.telegramService.launch();
+        await this.telegramService.launch();
+        this.getQuote('BTC');
+    }
+
+    public getBase(keyboard?: boolean): Array<string | Array<string>> {
+
+        let bases = [...Object.keys(this.binanceService.symbols)];
+        let mixed = [...new Set(bases)];
+        let chunk = [];
+
+        return keyboard ?
+            mixed.reduce(
+                (accum, base) => {
+
+                    if (chunk.length === 3) { accum.push({ chunk }); chunk = [] }
+                    else { chunk.push({ base }) }
+
+                    return accum;
+                }, []
+            ) :
+            mixed;
+
+    }
+
+    public getQuote(base: string, keyboard?: boolean) {
+
+        let quotes = [...this.binanceService.symbols[base]];
+        let mixed = [...new Set(quotes)];
+        let chunk = [];
+
+        return keyboard ?
+            mixed.reduce(
+                (accum, quote) => {
+
+                    if (chunk.length === 3) { accum.push({ chunk }); chunk = [] }
+                    else { chunk.push(quote) }
+
+                    return accum;
+                }, []
+            ) :
+            mixed;
     }
 }

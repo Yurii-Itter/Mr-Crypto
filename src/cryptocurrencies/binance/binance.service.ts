@@ -31,7 +31,7 @@ export class BinanceService extends BaseCryptocurrency {
                     accum[baseAsset] = [{ quote: quoteAsset, symbol: symbol.toLowerCase() }];
 
                 return accum;
-            }
+            }, {}
         );
     }
 
