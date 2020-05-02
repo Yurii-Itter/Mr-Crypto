@@ -94,7 +94,7 @@ export class TelegramService {
         );
     }
 
-    public launch(): void {
-        this.bot.launch();
+    public async launch(): Promise<void> {
+        await this.bot.launch();
     }
 }
