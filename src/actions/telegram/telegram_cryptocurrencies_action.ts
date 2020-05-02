@@ -15,7 +15,9 @@ export class CryptocurrenciesAction extends BaseAction {
 
     protected async doAction(chat: ChatInterface, msg: MessageInterface): Promise<MessageInterface> {
         try {
-            return msg.setStatus(statuses.STATUS_SUCCESS).withData({ cryptocurrencies: this.cryptocurrenciesService.getBaseKeyboard() });
+            return msg.setStatus(statuses.STATUS_SUCCESS).withData({
+                cryptocurrencies: this.cryptocurrenciesService.getBase(true)
+            });
         } catch (error) {
             this.logger.error(error);
         }
