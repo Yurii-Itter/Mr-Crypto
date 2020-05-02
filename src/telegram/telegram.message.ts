@@ -52,7 +52,7 @@ export class TelegramMessage extends BaseMessage implements MessageInterface {
         if (inline) {
             return this.ctx.editMessageText(content, this.inlineHandler(inline));
         } else {
-            return this.ctx.editMessageText(content);
+            return this.ctx.editMessageText(content, Extra.HTML());
         }
     }
 
@@ -63,7 +63,7 @@ export class TelegramMessage extends BaseMessage implements MessageInterface {
     }
 
     private inlineHandler(inline: Array<Array<InlineInterface>>): any {
-        return Extra.markup(Markup.inlineKeyboard
+        return Extra.HTML().markup(Markup.inlineKeyboard
             (
                 (
                     () => {
