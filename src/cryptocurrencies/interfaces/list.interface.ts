@@ -1,9 +1,9 @@
 export interface ListInterface {
-    symbol: string,
-    base: string,
-    quote: string,
-    last?: number,
-    change?: number,
-    high?: number,
-    low?: number
+    [symbol: string]: {
+        last: number,
+        high: number,
+        low: number,
+        change: number,
+        percent: number
+    }
 }
