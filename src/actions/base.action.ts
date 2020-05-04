@@ -38,7 +38,7 @@ export class BaseAction {
 
         this.setEvent();
 
-        this.logger.log(`subscribe on "${this.event}" event`);
+        this.logger.log(`subscribed on ${this.event}`);
         this.appEmitter.on(this.event, this.handleEvent.bind(this));
     }
 
@@ -52,7 +52,6 @@ export class BaseAction {
 
     private async handleEvent(msg: MessageInterface) {
         try {
-            this.logger.log(`"${this.event}" event received`);
 
             const chat: ChatInterface = await this.databaseService.ensureChat(msg);
             const message: MessageInterface = await this.doAction(chat, msg);
@@ -63,7 +62,7 @@ export class BaseAction {
                         {
                             action: this.event,
                             status: message.getReplyStatus(),
-                            lang: message.lang,
+                            lang: chat.lang,
                         },
                         message.getReplyData(),
                     )
