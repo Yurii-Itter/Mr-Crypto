@@ -11,16 +11,23 @@ import { CryptocurrenciesModule } from './cryptocurrencies/cryptocurrencies.modu
 import { ConfigService } from './common/config.service';
 
 @Module({
-  imports: [ConfigModule.forRoot(), MongooseModule.forRootAsync({
-    imports: [CommonModule],
-    useFactory: async (configService: ConfigService) => ({
-      uri: configService.get('DATABASE_URL'),
-      useNewUrlParser: true,
-      useUnifiedTopology: true
+  imports: [
+    ConfigModule.forRoot(),
+    MongooseModule.forRootAsync({
+      imports: [CommonModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get('DATABASE_URL'),
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }),
+      inject: [ConfigService],
     }),
-    inject: [ConfigService],
-  }), TelegramModule, ActionModule, DatabaseModule, CryptocurrenciesModule],
+    TelegramModule,
+    ActionModule,
+    DatabaseModule,
+    CryptocurrenciesModule,
+  ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

@@ -9,18 +9,23 @@ import { BaseAction } from '../base.action';
 
 @Injectable()
 export class CryptocurrenciesQuoteAction extends BaseAction {
+  protected setEvent(): void {
+    this.event = this.appEmitter.TELEGRAM_CRYPTOCURRENCIES_QUOTE;
+  }
 
-    protected setEvent(): void {
-        this.event = this.appEmitter.TELEGRAM_CRYPTOCURRENCIES_QUOTE;
+  protected async doAction(
+    chat: ChatInterface,
+    msg: MessageInterface,
+  ): Promise<MessageInterface> {
+    try {
+      return msg
+        .setStatus(statuses.STATUS_SUCCESS)
+        .withData({
+          list: this.cryptocurrenciesService.getList(msg.data),
+        })
+        .withEdit();
+    } catch (error) {
+      this.logger.error(error);
     }
-
-    protected async doAction(chat: ChatInterface, msg: MessageInterface): Promise<MessageInterface> {
-        try {
-            return msg.setStatus(statuses.STATUS_SUCCESS).withData({
-                list: this.cryptocurrenciesService.getList(msg.data)
-            }).withEdit();
-        } catch (error) {
-            this.logger.error(error);
-        }
-    }
+  }
 }

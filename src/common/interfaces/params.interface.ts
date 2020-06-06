@@ -1,5 +1,5 @@
 export interface ParamsInterface {
-    action: string;
-    status: string;
-    lang: string;
+  action: string;
+  status: string;
+  lang: string;
 }

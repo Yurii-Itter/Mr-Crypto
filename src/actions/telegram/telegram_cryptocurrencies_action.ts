@@ -8,18 +8,20 @@ import { ChatInterface } from '../../database/interfaces/chat.interface';
 
 @Injectable()
 export class CryptocurrenciesAction extends BaseAction {
+  protected setEvent(): void {
+    this.event = this.appEmitter.TELEGRAM_CRYPTOCURRENCIES;
+  }
 
-    protected setEvent(): void {
-        this.event = this.appEmitter.TELEGRAM_CRYPTOCURRENCIES;
+  protected async doAction(
+    chat: ChatInterface,
+    msg: MessageInterface,
+  ): Promise<MessageInterface> {
+    try {
+      return msg.setStatus(statuses.STATUS_SUCCESS).withData({
+        cryptocurrencies: this.cryptocurrenciesService.getBase(true),
+      });
+    } catch (error) {
+      this.logger.error(error);
     }
-
-    protected async doAction(chat: ChatInterface, msg: MessageInterface): Promise<MessageInterface> {
-        try {
-            return msg.setStatus(statuses.STATUS_SUCCESS).withData({
-                cryptocurrencies: this.cryptocurrenciesService.getBase(true)
-            });
-        } catch (error) {
-            this.logger.error(error);
-        }
-    }
+  }
 }

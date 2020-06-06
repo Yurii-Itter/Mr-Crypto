@@ -8,16 +8,18 @@ import { ChatInterface } from '../../database/interfaces/chat.interface';
 
 @Injectable()
 export class SettingsAction extends BaseAction {
-    
-    protected setEvent(): void {
-        this.event = this.appEmitter.TELEGRAM_SETTINGS;
-    }
+  protected setEvent(): void {
+    this.event = this.appEmitter.TELEGRAM_SETTINGS;
+  }
 
-    protected async doAction(chat: ChatInterface, msg: MessageInterface): Promise<MessageInterface> {
-        try {
-            return msg.setStatus(statuses.STATUS_SUCCESS);
-        } catch (error) {
-            this.logger.error(error);
-        }
+  protected async doAction(
+    chat: ChatInterface,
+    msg: MessageInterface,
+  ): Promise<MessageInterface> {
+    try {
+      return msg.setStatus(statuses.STATUS_SUCCESS);
+    } catch (error) {
+      this.logger.error(error);
     }
+  }
 }

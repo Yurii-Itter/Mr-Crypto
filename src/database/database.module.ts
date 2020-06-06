@@ -6,10 +6,8 @@ import { DatabaseService } from './database.service';
 import { ChatSchema } from './schemas/chat.schema';
 
 @Module({
-    imports: [MongooseModule.forFeature([
-        { name: 'Chat', schema: ChatSchema }
-    ])],
-    providers: [DatabaseService],
-    exports: [DatabaseService]
+  imports: [MongooseModule.forFeature([{ name: 'Chat', schema: ChatSchema }])],
+  providers: [DatabaseService],
+  exports: [DatabaseService],
 })
-export class DatabaseModule { }
+export class DatabaseModule {}

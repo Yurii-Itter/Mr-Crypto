@@ -1,4 +1,4 @@
 export interface KeyboardCommandInterface {
-    trigger: Array<string>;
-    event: string;
+  trigger: string[];
+  event: string;
 }

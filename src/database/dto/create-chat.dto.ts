@@ -1,5 +1,5 @@
 export class CreateChatDto {
-    chatId: number;
-    fullName: string;
-    lang: string;
+  chatId: number;
+  fullName: string;
+  lang: string;
 }

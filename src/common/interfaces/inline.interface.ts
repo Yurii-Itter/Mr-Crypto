@@ -1,4 +1,4 @@
 export interface InlineInterface {
-    action: string,
-    key: string
+  action: string;
+  key: string;
 }

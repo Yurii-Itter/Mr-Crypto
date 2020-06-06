@@ -1,6 +1,6 @@
 export interface SymbolInterface {
-    [base: string]: Array<{
-        quote: string,
-        symbol: string
-    }>
+  [base: string]: Array<{
+    quote: string;
+    symbol: string;
+  }>;
 }

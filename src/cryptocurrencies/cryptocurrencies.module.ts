@@ -7,17 +7,17 @@ import { BinanceModule } from './binance/binance.module';
 import { TelegramModule } from '../telegram/telegram.module';
 
 @Module({
-    imports: [forwardRef(() => TelegramModule), CommonModule, BinanceModule],
-    providers: [
-        CryptocurrenciesService,
-        {
-            provide: 'CryptocurrenciesServiceInstance',
-            useFactory: (cryptocurrenciesService: CryptocurrenciesService) => {
-                return cryptocurrenciesService;
-            },
-            inject: [CryptocurrenciesService]
-        }
-    ],
-    exports: ['CryptocurrenciesServiceInstance']
+  imports: [forwardRef(() => TelegramModule), CommonModule, BinanceModule],
+  providers: [
+    CryptocurrenciesService,
+    {
+      provide: 'CryptocurrenciesServiceInstance',
+      useFactory: (cryptocurrenciesService: CryptocurrenciesService) => {
+        return cryptocurrenciesService;
+      },
+      inject: [CryptocurrenciesService],
+    },
+  ],
+  exports: ['CryptocurrenciesServiceInstance'],
 })
-export class CryptocurrenciesModule { }
+export class CryptocurrenciesModule {}

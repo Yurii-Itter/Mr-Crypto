@@ -15,7 +15,16 @@ import { CommonModule } from '../common/common.module';
 import { DatabaseModule } from '../database/database.module';
 
 @Module({
-    imports: [CommonModule, DatabaseModule, CryptocurrenciesModule],
-    providers: [StartAction, CryptocurrenciesAction, SubscriptionsAction, AboutServiceAction, SettingsAction, BackToMainMenuAction, CryptocurrenciesBaseAction, CryptocurrenciesQuoteAction]
+  imports: [CommonModule, DatabaseModule, CryptocurrenciesModule],
+  providers: [
+    StartAction,
+    CryptocurrenciesAction,
+    SubscriptionsAction,
+    AboutServiceAction,
+    SettingsAction,
+    BackToMainMenuAction,
+    CryptocurrenciesBaseAction,
+    CryptocurrenciesQuoteAction,
+  ],
 })
-export class ActionModule { }
+export class ActionModule {}

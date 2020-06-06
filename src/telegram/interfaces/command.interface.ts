@@ -1,4 +1,4 @@
 export interface CommandInterface {
-    command: string;
-    event: string;
+  command: string;
+  event: string;
 }

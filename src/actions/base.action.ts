@@ -11,65 +11,69 @@ import { ChatInterface } from '../database/interfaces/chat.interface';
 
 @Injectable()
 export class BaseAction {
-    protected appEmitter: AppEmitter;
-    protected config: ConfigService;
-    protected logger: Logger;
+  protected appEmitter: AppEmitter;
+  protected config: ConfigService;
+  protected logger: Logger;
 
-    protected templateService: TemplateService;
-    protected databaseService: DatabaseService;
+  protected templateService: TemplateService;
+  protected databaseService: DatabaseService;
 
-    protected event: string;
-    protected buttons: Array<string>;
+  protected event: string;
+  protected buttons: string[];
 
-    constructor(
-        @Inject('CryptocurrenciesServiceInstance') protected cryptocurrenciesService: CryptocurrenciesService,
-        config: ConfigService,
-        appEmitter: AppEmitter,
-        logger: Logger,
-        templateService: TemplateService,
-        databaseService: DatabaseService
-    ) {
-        this.config = config;
-        this.logger = logger;
+  constructor(
+    @Inject('CryptocurrenciesServiceInstance')
+    protected cryptocurrenciesService: CryptocurrenciesService,
+    config: ConfigService,
+    appEmitter: AppEmitter,
+    logger: Logger,
+    templateService: TemplateService,
+    databaseService: DatabaseService,
+  ) {
+    this.config = config;
+    this.logger = logger;
 
-        this.appEmitter = appEmitter;
-        this.templateService = templateService;
-        this.databaseService = databaseService;
+    this.appEmitter = appEmitter;
+    this.templateService = templateService;
+    this.databaseService = databaseService;
 
-        this.setEvent();
+    this.setEvent();
 
-        this.logger.log(`subscribed on ${this.event}`);
-        this.appEmitter.on(this.event, this.handleEvent.bind(this));
+    this.logger.log(`subscribed on ${this.event}`);
+    this.appEmitter.on(this.event, this.handleEvent.bind(this));
+  }
+
+  protected setEvent(): void {
+    throw new Error('not implemented');
+  }
+
+  protected async doAction(
+    chat: ChatInterface,
+    msg: MessageInterface,
+  ): Promise<MessageInterface> {
+    throw new Error('not implemented');
+  }
+
+  private async handleEvent(msg: MessageInterface) {
+    try {
+      const chat: ChatInterface = await this.databaseService.ensureChat(msg);
+      const message: MessageInterface = await this.doAction(chat, msg);
+
+      message.answer(
+        this.templateService.parseKeyboard(
+          this.templateService.apply(
+            {
+              action: this.event,
+              status: message.getReplyStatus(),
+              lang: chat.lang,
+            },
+            message.getReplyData(),
+          ),
+        ),
+        message.edit,
+      );
+    } catch (error) {
+      this.logger.error(error);
     }
-
-    protected setEvent(): void {
-        throw new Error('not implemented');
-    }
-
-    protected async doAction(chat: ChatInterface, msg: MessageInterface): Promise<MessageInterface> {
-        throw new Error('not implemented');
-    }
-
-    private async handleEvent(msg: MessageInterface) {
-        try {
-
-            const chat: ChatInterface = await this.databaseService.ensureChat(msg);
-            const message: MessageInterface = await this.doAction(chat, msg);
-
-            message.answer(
-                this.templateService.parseKeyboard(
-                    this.templateService.apply(
-                        {
-                            action: this.event,
-                            status: message.getReplyStatus(),
-                            lang: chat.lang,
-                        },
-                        message.getReplyData(),
-                    )
-                ), message.edit
-            );
-        } catch (error) {
-            this.logger.error(error);
-        }
-    }
+  }
 }
