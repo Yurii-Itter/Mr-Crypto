@@ -18,10 +18,14 @@ export class CryptocurrenciesQuoteAction extends BaseAction {
     msg: MessageInterface,
   ): Promise<MessageInterface> {
     try {
+      const [data] = msg.data.split('_');
+      const [base, symbol] = data.split('-');
+
       return msg
         .setStatus(statuses.STATUS_SUCCESS)
         .withData({
-          list: this.cryptocurrenciesService.getList(msg.data),
+          list: this.cryptocurrenciesService.getList(symbol),
+          base,
         })
         .withEdit();
     } catch (error) {

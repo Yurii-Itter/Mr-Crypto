@@ -18,10 +18,22 @@ export class CryptocurrenciesBaseAction extends BaseAction {
     msg: MessageInterface,
   ): Promise<MessageInterface> {
     try {
-      return msg.setStatus(statuses.STATUS_SUCCESS).withData({
-        quotes: this.cryptocurrenciesService.getQuote(msg.text, true),
-        chose: msg.text,
-      });
+      if (msg.data) {
+        const [base] = msg.data.split('_');
+
+        return msg
+          .setStatus(statuses.STATUS_SUCCESS)
+          .withData({
+            quotes: this.cryptocurrenciesService.getQuote(base, true),
+            chose: base,
+          })
+          .withEdit();
+      } else {
+        return msg.setStatus(statuses.STATUS_SUCCESS).withData({
+          quotes: this.cryptocurrenciesService.getQuote(msg.text, true),
+          chose: msg.text,
+        });
+      }
     } catch (error) {
       this.logger.error(error);
     }

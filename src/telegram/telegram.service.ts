@@ -36,10 +36,18 @@ export class TelegramService {
 
     this.bot.use(ctx => {
       if (ctx.updateType === 'callback_query') {
-        appEmitter.emit(
-          appEmitter.TELEGRAM_CRYPTOCURRENCIES_QUOTE,
-          new TelegramMessage(ctx),
-        );
+        const [, command] = ctx.update.callback_query.data.split('_');
+
+        command === 'info'
+          ? appEmitter.emit(
+              appEmitter.TELEGRAM_CRYPTOCURRENCIES_QUOTE,
+              new TelegramMessage(ctx),
+            )
+          : appEmitter.emit(
+              appEmitter.TELEGRAM_CRYPTOCURRENCIES_BASE,
+              new TelegramMessage(ctx),
+            );
+
         ctx.telegram.answerCbQuery(ctx.callbackQuery.id);
       } else if (
         ctx.updateType === 'message' &&
