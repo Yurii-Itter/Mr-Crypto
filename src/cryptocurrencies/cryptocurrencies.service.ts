@@ -32,16 +32,16 @@ export class CryptocurrenciesService {
 
     return keyboard
       ? mixed.reduce((accum, base, index, array) => {
-          if (chunk.length === 2 || index === array.length - 1) {
-            chunk.push({ base });
-            accum.push({ chunk });
-            chunk = [];
-          } else {
-            chunk.push({ base });
-          }
+        if (chunk.length === 2 || index === array.length - 1) {
+          chunk.push({ base });
+          accum.push({ chunk });
+          chunk = [];
+        } else {
+          chunk.push({ base });
+        }
 
-          return accum;
-        }, [])
+        return accum;
+      }, [])
       : mixed;
   }
 
@@ -52,16 +52,16 @@ export class CryptocurrenciesService {
 
     return keyboard
       ? mixed.reduce((accum, quote, index, array) => {
-          if (chunk.length === 2 || index === array.length - 1) {
-            chunk.push(quote);
-            accum.push({ chunk });
-            chunk = [];
-          } else {
-            chunk.push(quote);
-          }
+        if (chunk.length === 2 || index === array.length - 1) {
+          chunk.push(quote);
+          accum.push({ chunk });
+          chunk = [];
+        } else {
+          chunk.push(quote);
+        }
 
-          return accum;
-        }, [])
+        return accum;
+      }, [])
       : mixed;
   }
 

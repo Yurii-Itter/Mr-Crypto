@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 import { ChatInterface } from './interfaces/chat.interface';
 
 import { CreateChatDto } from './dto/create-chat.dto';
+import { SubDto } from './dto/sub.dto';
 
 @Injectable()
 export class DatabaseService {
@@ -26,5 +27,9 @@ export class DatabaseService {
 
     chat = new this.chatModel({ chatId, fullName, lang, p: false });
     return chat.save();
+  }
+
+  public async sub({ chatId, sub }: SubDto): Promise<ChatInterface> {
+    return this.chatModel.findOneAndUpdate({ chatId }, { $push: { sub } });
   }
 }

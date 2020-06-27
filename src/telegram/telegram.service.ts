@@ -38,31 +38,24 @@ export class TelegramService {
       if (ctx.updateType === 'callback_query') {
         const [, command] = ctx.update.callback_query.data.split('_');
 
-        command === 'info'
-          ? appEmitter.emit(
-              appEmitter.TELEGRAM_CRYPTOCURRENCIES_QUOTE,
-              new TelegramMessage(ctx),
-            )
-          : appEmitter.emit(
-              appEmitter.TELEGRAM_CRYPTOCURRENCIES_BASE,
-              new TelegramMessage(ctx),
-            );
+        command === 'back'
+          ? appEmitter.emit(appEmitter.BASE, new TelegramMessage(ctx))
+          : command === 'sub'
+          ? appEmitter.emit(appEmitter.SUB, new TelegramMessage(ctx))
+          : appEmitter.emit(appEmitter.QUOTE, new TelegramMessage(ctx));
 
         ctx.telegram.answerCbQuery(ctx.callbackQuery.id);
       } else if (
         ctx.updateType === 'message' &&
         this.cryptocurrenciesService.getBase().includes(ctx.message.text)
       ) {
-        appEmitter.emit(
-          appEmitter.TELEGRAM_CRYPTOCURRENCIES_BASE,
-          new TelegramMessage(ctx),
-        );
+        appEmitter.emit(appEmitter.BASE, new TelegramMessage(ctx));
       }
     });
   }
 
   private getCommandActionMapping(appEmitter: AppEmitter): CommandInterface[] {
-    return [{ command: 'start', event: appEmitter.TELEGRAM_START }];
+    return [{ command: 'start', event: appEmitter.START }];
   }
 
   private getKeyboardCommandsMapping(
@@ -71,23 +64,23 @@ export class TelegramService {
     return [
       {
         trigger: ['Cryptocurrencies 💰', 'Криптовалюты 💰'],
-        event: appEmitter.TELEGRAM_CRYPTOCURRENCIES,
+        event: appEmitter.CRYPTOCURRENCIES,
       },
       {
         trigger: ['My Subscriptions ⭐️', 'Мои Подписки ⭐️'],
-        event: appEmitter.TELEGRAM_SUBSCRIPTIONS,
+        event: appEmitter.SUBSCRIPTIONS,
       },
       {
         trigger: ['About Service 🚀', 'О Сервисе 🚀'],
-        event: appEmitter.TELEGRAM_ABOUT_SERVICE,
+        event: appEmitter.ABOUT,
       },
       {
         trigger: ['Settings ⚙️', 'Настройки ⚙️'],
-        event: appEmitter.TELEGRAM_SETTINGS,
+        event: appEmitter.SETTINGS,
       },
       {
         trigger: ['◀️ Back', '◀️ Назад'],
-        event: appEmitter.TELEGRAM_BACK_TO_MAIN_MENU,
+        event: appEmitter.MENU,
       },
     ];
   }
