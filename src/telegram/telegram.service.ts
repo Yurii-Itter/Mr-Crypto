@@ -37,14 +37,25 @@ export class TelegramService {
     this.bot.use(ctx => {
       if (ctx.updateType === 'callback_query') {
         const [, command] = ctx.update.callback_query.data.split('_');
-
-        command === 'back'
-          ? appEmitter.emit(appEmitter.BASE, new TelegramMessage(ctx))
-          : command === 'sub'
-          ? appEmitter.emit(appEmitter.SUB, new TelegramMessage(ctx))
-          : appEmitter.emit(appEmitter.QUOTE, new TelegramMessage(ctx));
-
         ctx.telegram.answerCbQuery(ctx.callbackQuery.id);
+
+        switch (command) {
+          case 'back':
+            appEmitter.emit(
+              appEmitter.BASE,
+              new TelegramMessage(ctx).withEdit(),
+            );
+            break;
+          case 'sub':
+            appEmitter.emit(appEmitter.SUB, new TelegramMessage(ctx));
+            break;
+          case 'unsub':
+            appEmitter.emit(appEmitter.UNSUB, new TelegramMessage(ctx));
+            break;
+          default:
+            appEmitter.emit(appEmitter.QUOTE, new TelegramMessage(ctx));
+            break;
+        }
       } else if (
         ctx.updateType === 'message' &&
         this.cryptocurrenciesService.getBase().includes(ctx.message.text)

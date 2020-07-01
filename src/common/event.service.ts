@@ -10,4 +10,5 @@ export class AppEmitter extends EventEmitter {
   public readonly BASE: string = 'base';
   public readonly QUOTE: string = 'quote';
   public readonly SUB: string = 'sub';
+  public readonly UNSUB: string = 'unsub';
 }

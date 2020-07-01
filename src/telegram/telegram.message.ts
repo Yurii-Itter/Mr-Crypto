@@ -4,7 +4,7 @@ import { BaseMessage } from '../message/base.message';
 
 import { MessageInterface } from '../message/interfaces/message.interface';
 import { ApplyInterface } from '../common/interfaces/apply.interface';
-import { InlineInterface } from '../common/interfaces/inline.interface';
+import { KeyboardInterface } from '../common/interfaces/keyboard.interface';
 
 export class TelegramMessage extends BaseMessage implements MessageInterface {
   private ctx: any;
@@ -32,58 +32,65 @@ export class TelegramMessage extends BaseMessage implements MessageInterface {
     this.lastName = message.from.last_name;
   }
 
-  private answerHandler(
-    content: string,
-    inline: InlineInterface[][],
-    keyboard: string[][],
-  ): string {
-    if (inline) {
-      return this.ctx.replyWithHTML(content, this.inlineHandler(inline));
-    } else if (keyboard) {
-      return this.ctx.replyWithHTML(content, this.keyboardHandler(keyboard));
-    } else {
-      return this.ctx.replyWithHTML(content);
-    }
+  private answerHandler(content: string, edit: boolean, keyboard: any): string {
+    return edit
+      ? this.ctx.editMessageText(content, keyboard)
+      : this.ctx.replyWithHTML(content, keyboard);
   }
 
-  private editHandler(content: string, inline: InlineInterface[][]): string {
-    if (inline) {
-      return this.ctx.editMessageText(content, this.inlineHandler(inline));
-    } else {
-      return this.ctx.editMessageText(content, Extra.HTML());
-    }
+  private keyboardHandler(
+    type: string,
+    edit: boolean,
+    keyboard: KeyboardInterface[][],
+  ): any {
+    return type === 'inline'
+      ? Extra.HTML().markup(
+          Markup.inlineKeyboard(this.keyboardFormater(type, keyboard)),
+        )
+      : type === 'keyboard'
+      ? Extra.HTML().markup(
+          Markup.keyboard(this.keyboardFormater(type, keyboard)).resize(),
+        )
+      : edit
+      ? Extra.HTML()
+      : undefined;
   }
 
-  private keyboardHandler(keyboard: string[][]): any {
-    return Extra.markup(Markup.keyboard(keyboard).resize());
-  }
+  private keyboardFormater(type: string, keyboard: KeyboardInterface[][]) {
+    const formated = [];
 
-  private inlineHandler(inline: InlineInterface[][]): any {
-    return Extra.HTML().markup(
-      Markup.inlineKeyboard(
-        (() => {
-          const keyboard = [];
-          inline.forEach(i => {
-            const k = [];
-            i.forEach(quote =>
-              k.push(Markup.callbackButton(quote.key, quote.action)),
-            );
-            keyboard.push(k);
-          });
-          return keyboard;
-        })(),
-      ),
-    );
+    keyboard.forEach(kbrd => {
+      const k = [];
+
+      kbrd.forEach(({ key, action }) => {
+        if (type === 'inline') {
+          k.push(Markup.callbackButton(key, action));
+        } else if (type === 'keyboard') {
+          switch (action) {
+            case 'location':
+              k.push(Markup.locationRequestButton(key));
+              break;
+            default:
+              k.push(key);
+              break;
+          }
+        }
+      });
+
+      formated.push(k);
+    });
+
+    return formated;
   }
 
   public answer(
-    { content, keyboard, inline }: ApplyInterface,
+    { content, type, keyboard }: ApplyInterface,
     edit: boolean,
   ): string {
-    if (edit) {
-      return this.editHandler(content, inline);
-    } else {
-      return this.answerHandler(content, inline, keyboard);
-    }
+    return this.answerHandler(
+      content,
+      edit,
+      this.keyboardHandler(type, edit, keyboard),
+    );
   }
 }

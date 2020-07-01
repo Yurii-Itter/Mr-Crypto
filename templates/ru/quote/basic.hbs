@@ -18,9 +18,15 @@
 
 <inline>
   <line>
-    <key action="{{symbol}}_sub">
-      Подписаться ⭐️
-    </key>
+    {{#if subscribed}}
+      <key action="{{symbol}}_unsub">
+        Отписаться 🔕
+      </key>
+    {{else}}
+      <key action="{{symbol}}_sub">
+        Подписаться 🔔
+      </key>
+    {{/if}}
     <key action="{{base}}_back">
       ◀️ Назад
     </key>

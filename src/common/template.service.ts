@@ -6,6 +6,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { ParamsInterface } from './interfaces/params.interface';
 import { ApplyInterface } from './interfaces/apply.interface';
+import { KeyboardInterface } from '../common/interfaces/keyboard.interface';
 
 @Injectable()
 export class TemplateService {
@@ -35,9 +36,10 @@ export class TemplateService {
     return template(data);
   }
 
-  public parseKeyboard(template: any): ApplyInterface {
-    const kbrd = template.match(/(?:.|\n)*(<keyboard>(?:.|\n)*<\/keyboard>)/);
-    const inln = template.match(/(?:.|\n)*(<inline>(?:.|\n)*<\/inline>)/);
+  public getKeyboard(template: any): ApplyInterface {
+    const [, type] = template.match(
+      /<(keyboard|inline)>(?:.|\n)+<\/(?:keyboard|inline)>/,
+    );
 
     const content = template
       .replace(/[^\n\S]+(.+)/g, '$1')
@@ -46,48 +48,42 @@ export class TemplateService {
       .match(/(?:.|\n)*(<content>(?:.|\n)*<\/content>)/)[1]
       .replace(/\s*\n?<\/?content>\n?\s*/g, '');
 
-    if (kbrd) {
-      const keyboard = [];
+    return type
+      ? {
+          type,
+          keyboard: this.parseKeyboard(template, type),
+          content,
+        }
+      : {
+          type: undefined,
+          content,
+        };
+  }
 
-      kbrd[1]
-        .replace(/<\/?keyboard>/g, '')
-        .replace(/\n/g, '')
-        .replace(/>\s+</g, '><')
-        .replace(/[^<]+/, '')
-        .match(/(<line>(.+?)<\/line>)/g)
-        .forEach((line: string) => {
-          keyboard.push(
-            line.match(/<key.+?<\/key>/g).map(k => {
-              return k.replace(/<\/?key[^>]*>/g, '');
-            }),
-          );
-        });
+  private parseKeyboard(template: any, type: string): KeyboardInterface[][] {
+    const keyboard = [];
 
-      return { content, keyboard };
-    } else if (inln) {
-      const inline = [];
+    template
+      .match(new RegExp(`<${type}>(?:.|\n)*<\/${type}>`))[0]
+      .replace(/<\/?keyboard>/g, '')
+      .replace(/\n/g, '')
+      .replace(/>\s+</g, '><')
+      .replace(/[^<]+/, '')
+      .match(/(<line>(.+?)<\/line>)/g)
+      .forEach((line: string) => {
+        keyboard.push(
+          line.match(/<key.+?<\/key>/g).map(k => {
+            return {
+              action: k.match(/.+action="/)
+                ? k.replace(/.+action="/, '').replace(/".+/, '')
+                : undefined,
+              key: k.replace(/<\/?key[^>]*>/g, ''),
+            };
+          }),
+        );
+      });
 
-      inln[1]
-        .replace(/<\/?inline>/g, '')
-        .replace(/\n/g, '')
-        .replace(/>\s+</g, '><')
-        .replace(/[^<]+/, '')
-        .match(/(<line>(.+?)<\/line>)/g)
-        .forEach((line: string) => {
-          inline.push(
-            line.match(/<key.+?<\/key>/g).map(l => {
-              return {
-                action: l.replace(/.+action="/g, '').replace(/".+/, ''),
-                key: l.replace(/<\/?key[^>]*>/g, ''),
-              };
-            }),
-          );
-        });
-
-      return { content, inline };
-    }
-
-    return { content };
+    return keyboard;
   }
 
   private getTemplate(params: ParamsInterface): (data: any) => string {

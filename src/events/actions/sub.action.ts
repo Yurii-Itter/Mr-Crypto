@@ -17,7 +17,7 @@ export class SubAction extends Action {
     msg: MessageInterface,
   ): Promise<MessageInterface> {
     try {
-      return msg.setStatus(statuses.CUSTOM).withEdit();
+      return msg.setStatus(statuses.SUB_TIMEZONE)
     } catch (error) {
       this.logger.error(error);
     }

@@ -4,5 +4,6 @@ export interface ChatInterface extends Document {
   chatId: number;
   fullName: string;
   lang: string;
+  sub: string[];
   p: boolean;
 }

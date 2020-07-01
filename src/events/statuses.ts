@@ -1,2 +1,3 @@
 export const BASIC = 'basic';
-export const CUSTOM = 'custom';
+
+export const SUB_TIMEZONE = 'timezone';

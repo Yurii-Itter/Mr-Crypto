@@ -1,7 +1,7 @@
-import { InlineInterface } from './inline.interface';
+import { KeyboardInterface } from './keyboard.interface';
 
 export interface ApplyInterface {
   content: any;
-  keyboard?: string[][];
-  inline?: InlineInterface[][];
+  type?: string;
+  keyboard?: KeyboardInterface[][];
 }

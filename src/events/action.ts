@@ -60,7 +60,7 @@ export class Action {
       const message: MessageInterface = await this.doAction(chat, msg);
 
       message.answer(
-        this.templateService.parseKeyboard(
+        this.templateService.getKeyboard(
           this.templateService.apply(
             {
               action: this.action,

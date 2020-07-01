@@ -18,22 +18,12 @@ export class BaseAction extends Action {
     msg: MessageInterface,
   ): Promise<MessageInterface> {
     try {
-      if (msg.data) {
-        const [base] = msg.data.split('_');
+      const res = msg.data ? msg.data.split('_')[0] : msg.text;
 
-        return msg
-          .setStatus(statuses.BASIC)
-          .withData({
-            quotes: this.cryptocurrenciesService.getQuote(base, true),
-            chose: base,
-          })
-          .withEdit();
-      } else {
-        return msg.setStatus(statuses.BASIC).withData({
-          quotes: this.cryptocurrenciesService.getQuote(msg.text, true),
-          chose: msg.text,
-        });
-      }
+      return msg.setStatus(statuses.BASIC).withData({
+        quotes: this.cryptocurrenciesService.getQuote(res, true),
+        chose: res,
+      });
     } catch (error) {
       this.logger.error(error);
     }

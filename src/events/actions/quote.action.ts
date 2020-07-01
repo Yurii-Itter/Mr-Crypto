@@ -25,6 +25,7 @@ export class QuoteAction extends Action {
         .setStatus(statuses.BASIC)
         .withData({
           list: this.cryptocurrenciesService.getList(symbol),
+          subscribed: chat.sub.includes(symbol),
           base,
         })
         .withEdit();
