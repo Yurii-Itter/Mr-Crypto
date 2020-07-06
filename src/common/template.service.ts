@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as handlebars from 'handlebars';
 import { readDirDeepSync } from 'read-dir-deep';
+
 import { Injectable, Logger } from '@nestjs/common';
 
 import { ParamsInterface } from './interfaces/params.interface';
@@ -82,6 +83,8 @@ export class TemplateService {
           }),
         );
       });
+
+    console.log(keyboard);
 
     return keyboard;
   }

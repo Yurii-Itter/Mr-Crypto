@@ -6,20 +6,13 @@ export class BaseMessage implements MessageInterface {
   public lang: string;
   public text: string;
   public data: any;
+  public firstName: string;
+  public lastName: string;
+  public location: any;
   public edit: boolean;
-
-  protected firstName: string;
-  protected lastName: string;
 
   protected replyStatus: string;
   protected replyData: any;
-
-  get fullName(): string {
-    const firstName: string = this.firstName || '';
-    const lastName: string = this.lastName || '';
-
-    return `${firstName} ${lastName}`.trim();
-  }
 
   public getReplyStatus(): string {
     return this.replyStatus;

@@ -3,8 +3,10 @@ export interface MessageInterface {
   messageId: number;
   lang: string;
   text: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   data: any;
+  location: any;
   edit: boolean;
   getReplyStatus: () => string;
   getReplyData: () => any;

@@ -5,6 +5,7 @@ import { AppEmitter } from '../common/event.service';
 import { TemplateService } from '../common/template.service';
 import { DatabaseService } from '../database/database.service';
 import { CryptocurrenciesService } from '../cryptocurrencies/cryptocurrencies.service';
+import { GoogleTimeZoneService } from '../common/google-time-zone.service';
 
 import { MessageInterface } from '../message/interfaces/message.interface';
 import { ChatInterface } from '../database/interfaces/chat.interface';
@@ -17,6 +18,7 @@ export class Action {
 
   protected templateService: TemplateService;
   protected databaseService: DatabaseService;
+  protected timeZoneService: GoogleTimeZoneService;
 
   protected action: string;
   protected buttons: string[];
@@ -29,6 +31,7 @@ export class Action {
     logger: Logger,
     templateService: TemplateService,
     databaseService: DatabaseService,
+    timeZoneService: GoogleTimeZoneService,
   ) {
     this.config = config;
     this.logger = logger;
@@ -36,6 +39,7 @@ export class Action {
     this.appEmitter = appEmitter;
     this.templateService = templateService;
     this.databaseService = databaseService;
+    this.timeZoneService = timeZoneService;
 
     this.setEvent();
 

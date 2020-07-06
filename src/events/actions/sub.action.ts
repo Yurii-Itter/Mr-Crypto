@@ -17,7 +17,23 @@ export class SubAction extends Action {
     msg: MessageInterface,
   ): Promise<MessageInterface> {
     try {
-      return msg.setStatus(statuses.SUB_TIMEZONE)
+
+      const { location } = msg;
+      const { timeZone } = chat;
+
+      if (timeZone) {
+        return msg.setStatus(statuses.SUB_TIME);
+      } else {
+
+        if (location) {
+          chat.timeZone = await this.timeZoneService.getTimezone(location);
+          chat.location = location;
+          await chat.save();
+          return msg.setStatus(statuses.SUB_TIME);
+        }
+
+        return msg.setStatus(statuses.SUB_TIME_ZONE);
+      }
     } catch (error) {
       this.logger.error(error);
     }

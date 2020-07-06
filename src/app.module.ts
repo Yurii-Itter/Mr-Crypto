@@ -19,6 +19,7 @@ import { ConfigService } from './common/config.service';
         uri: configService.get('DATABASE_URL'),
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        useCreateIndex: true,
       }),
       inject: [ConfigService],
     }),

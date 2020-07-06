@@ -1,4 +1,11 @@
 export class SubDto {
   chatId: number;
-  sub: string;
+  sub: {
+    symbol: string;
+    period: [{
+      day: number;
+      hour: number;
+      minute: number;
+    }];
+  };
 }

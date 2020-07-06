@@ -17,7 +17,7 @@ export class TelegramService {
 
   constructor(
     @Inject(forwardRef(() => 'CryptocurrenciesServiceInstance'))
-    private cryptocurrenciesService: CryptocurrenciesService,
+    cryptocurrenciesService: CryptocurrenciesService,
     config: ConfigService,
     appEmitter: AppEmitter,
   ) {
@@ -34,7 +34,7 @@ export class TelegramService {
       },
     );
 
-    this.bot.use(ctx => {
+    this.bot.use(async ctx => {
       if (ctx.updateType === 'callback_query') {
         const [, command] = ctx.update.callback_query.data.split('_');
         ctx.telegram.answerCbQuery(ctx.callbackQuery.id);
@@ -56,11 +56,14 @@ export class TelegramService {
             appEmitter.emit(appEmitter.QUOTE, new TelegramMessage(ctx));
             break;
         }
-      } else if (
-        ctx.updateType === 'message' &&
-        this.cryptocurrenciesService.getBase().includes(ctx.message.text)
-      ) {
-        appEmitter.emit(appEmitter.BASE, new TelegramMessage(ctx));
+      } else if (ctx.updateType === 'message') {
+        const { text, location } = ctx.update.message;
+
+        if (cryptocurrenciesService.getBase().includes(text)) {
+          appEmitter.emit(appEmitter.BASE, new TelegramMessage(ctx));
+        } else if (location) {
+          appEmitter.emit(appEmitter.SUB, new TelegramMessage(ctx));
+        }
       }
     });
   }

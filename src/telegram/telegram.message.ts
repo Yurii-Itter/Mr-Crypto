@@ -30,6 +30,7 @@ export class TelegramMessage extends BaseMessage implements MessageInterface {
     this.lang = message.from.language_code;
     this.firstName = message.from.first_name;
     this.lastName = message.from.last_name;
+    this.location = message.location;
   }
 
   private answerHandler(content: string, edit: boolean, keyboard: any): string {
