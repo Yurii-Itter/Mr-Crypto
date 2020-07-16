@@ -1,6 +1,6 @@
-import { TimezoneInterface } from '../../common/interfaces/timezone.interface';
+import { TimeZoneInterface } from '../../common/interfaces/time-zone.interface';
 
 export class TimeZoneDto {
   chatId: number;
-  timeZone: TimezoneInterface;
+  timeZone: TimeZoneInterface;
 }

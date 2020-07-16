@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-import * as statuses from '../statuses';
 import { Action } from '../action';
 
 import { MessageInterface } from '../../message/interfaces/message.interface';
@@ -17,8 +16,17 @@ export class CryptocurrenciesAction extends Action {
     msg: MessageInterface,
   ): Promise<MessageInterface> {
     try {
-      return msg.setStatus(statuses.BASIC).withData({
-        cryptocurrencies: this.cryptocurrenciesService.getBase(true),
+      const { location } = msg;
+
+      if (location) {
+        chat.timeZone = await this.timeZoneService.getTimezone(location);
+        chat.location = location;
+        await chat.save();
+        return msg;
+      }
+
+      return msg.withData({
+        cryptocurrencies: this.cryptocurrenciesService.getBaseKeyboard(),
       });
     } catch (error) {
       this.logger.error(error);

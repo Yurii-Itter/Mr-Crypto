@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-import * as statuses from '../statuses';
-
 import { MessageInterface } from '../../message/interfaces/message.interface';
 import { ChatInterface } from '../../database/interfaces/chat.interface';
 
@@ -20,10 +18,12 @@ export class BaseAction extends Action {
     try {
       const res = msg.data ? msg.data.split('_')[0] : msg.text;
 
-      return msg.setStatus(statuses.BASIC).withData({
-        quotes: this.cryptocurrenciesService.getQuote(res, true),
-        chose: res,
-      });
+      return msg
+        .withData({
+          quotes: this.cryptocurrenciesService.getQuoteKeyboard(res),
+          chose: res,
+        })
+        .withAction(this.appEmitter.BASE);
     } catch (error) {
       this.logger.error(error);
     }

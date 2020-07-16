@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-import * as statuses from '../statuses';
 import { Action } from '../action';
 
 import { MessageInterface } from '../../message/interfaces/message.interface';
@@ -17,23 +16,7 @@ export class SubAction extends Action {
     msg: MessageInterface,
   ): Promise<MessageInterface> {
     try {
-
-      const { location } = msg;
-      const { timeZone } = chat;
-
-      if (timeZone) {
-        return msg.setStatus(statuses.SUB_TIME);
-      } else {
-
-        if (location) {
-          chat.timeZone = await this.timeZoneService.getTimezone(location);
-          chat.location = location;
-          await chat.save();
-          return msg.setStatus(statuses.SUB_TIME);
-        }
-
-        return msg.setStatus(statuses.SUB_TIME_ZONE);
-      }
+      return msg;
     } catch (error) {
       this.logger.error(error);
     }

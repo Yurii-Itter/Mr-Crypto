@@ -27,7 +27,7 @@ export class DatabaseService {
     lang,
   }: CreateChatDto): Promise<ChatInterface> {
     try {
-      let chat: ChatInterface = await this.chatModel.findOne({ chatId });
+      const chat: ChatInterface = await this.chatModel.findOne({ chatId });
       return chat
         ? chat
         : new this.chatModel({ chatId, firstName, lastName, lang }).save();

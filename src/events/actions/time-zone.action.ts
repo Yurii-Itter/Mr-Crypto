@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 
+import { Action } from '../action';
+
 import { MessageInterface } from '../../message/interfaces/message.interface';
 import { ChatInterface } from '../../database/interfaces/chat.interface';
 
-import { Action } from '../action';
-
 @Injectable()
-export class MenuAction extends Action {
+export class TimeZoneAction extends Action {
   protected setEvent(): void {
-    this.action = this.appEmitter.MENU;
+    this.action = this.appEmitter.TIMEZONE;
   }
 
   protected async doAction(

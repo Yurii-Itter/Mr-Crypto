@@ -1,4 +1,4 @@
-export interface TimezoneInterface {
+export interface TimeZoneInterface {
   dstOffset: number;
   rawOffset: number;
   status: string;

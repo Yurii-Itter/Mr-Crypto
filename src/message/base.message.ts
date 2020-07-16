@@ -11,29 +11,34 @@ export class BaseMessage implements MessageInterface {
   public location: any;
   public edit: boolean;
 
-  protected replyStatus: string;
   protected replyData: any;
-
-  public getReplyStatus(): string {
-    return this.replyStatus;
-  }
+  protected replyAction: string;
 
   public getReplyData(): any {
     return this.replyData;
   }
 
-  public setStatus(status: string): MessageInterface {
-    this.replyStatus = status;
+  public getReplyAction(): string {
+    return this.replyAction;
+  }
+
+  public withAction(action: string): MessageInterface {
+    this.replyAction = action;
     return this;
   }
 
   public withData(data: any): MessageInterface {
-    this.replyData = data;
+    this.replyData = this.replyData ? { ...this.replyData, ...data } : data;
     return this;
   }
 
   public withEdit(): MessageInterface {
     this.edit = true;
+    return this;
+  }
+
+  public withoutEdit(): MessageInterface {
+    this.edit = false;
     return this;
   }
 

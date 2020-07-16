@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-import * as statuses from '../statuses';
-
 import { MessageInterface } from '../../message/interfaces/message.interface';
 import { ChatInterface } from '../../database/interfaces/chat.interface';
 
@@ -22,13 +20,14 @@ export class QuoteAction extends Action {
       const [base, symbol] = data.split('-');
 
       return msg
-        .setStatus(statuses.BASIC)
         .withData({
           list: this.cryptocurrenciesService.getList(symbol),
           subscribed: chat.sub.includes(symbol),
+          symbol,
           base,
         })
-        .withEdit();
+        .withEdit()
+        .withAction(this.appEmitter.QUOTE);
     } catch (error) {
       this.logger.error(error);
     }

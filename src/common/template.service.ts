@@ -19,6 +19,11 @@ export class TemplateService {
 
   constructor(logger: Logger) {
     this.logger = logger;
+
+    handlebars.registerHelper('bool', bool => {
+      return !bool;
+    });
+
     this.load();
   }
 
@@ -84,14 +89,12 @@ export class TemplateService {
         );
       });
 
-    console.log(keyboard);
-
     return keyboard;
   }
 
   private getTemplate(params: ParamsInterface): (data: any) => string {
-    const { lang, action, status } = params;
-    return this.templatesMap.get(this.getTemplateKey(lang, action, status));
+    const { lang, action } = params;
+    return this.templatesMap.get(this.getTemplateKey(lang, action));
   }
 
   private load() {
@@ -101,17 +104,15 @@ export class TemplateService {
     this.templatesMap = templateFileNames.reduce((acc, fileName) => {
       const template = fs.readFileSync(fileName, { encoding: 'utf-8' });
 
-      const [, lang, action, status] = fileName
-        .replace(/\.hbs$/, '')
-        .split('/');
+      const [, lang, action] = fileName.replace(/\.hbs$/, '').split('/');
       return acc.set(
-        this.getTemplateKey(lang, action, status),
+        this.getTemplateKey(lang, action),
         handlebars.compile(template),
       );
     }, new Map());
   }
 
-  private getTemplateKey(lang: string, action: string, status: string): string {
-    return `${lang}-${action}-${status}`;
+  private getTemplateKey(lang: string, action: string): string {
+    return `${lang}-${action}`;
   }
 }

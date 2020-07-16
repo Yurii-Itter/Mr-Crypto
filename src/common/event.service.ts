@@ -11,4 +11,7 @@ export class AppEmitter extends EventEmitter {
   public readonly QUOTE: string = 'quote';
   public readonly SUB: string = 'sub';
   public readonly UNSUB: string = 'unsub';
+  public readonly TIMEZONE: string = 'time-zone';
+  public readonly DAY: string = 'day';
+  public readonly EXCHANGE: string = 'exchange';
 }

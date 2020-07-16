@@ -1,0 +1,79 @@
+<content>
+  <strong>
+    Select day of week
+  </strong>
+</content>
+
+<inline>
+  <line>
+    <key action="{{symbol}}-{{bool monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if monday}}
+        Monday ✅
+      {{else}}
+        Monday ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key action="{{symbol}}-{{monday}}-{{bool tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if tuesday}}
+        Tuesday ✅
+      {{else}}
+        Tuesday ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key action="{{symbol}}-{{monday}}-{{tuesday}}-{{bool wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if wednesday}}
+        Wednesday ✅
+      {{else}}
+        Wednesday ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key action="{{symbol}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{bool thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if thursday}}
+        Thursday ✅
+      {{else}}
+        Thursday ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key action="{{symbol}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{bool friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if friday}}
+        Friday ✅
+      {{else}}
+        Friday ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key action="{{symbol}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{bool saturday}}-{{sunday}}_day">
+      {{#if saturday}}
+        Saturday ✅
+      {{else}}
+        Saturday ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key action="{{symbol}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{bool sunday}}_day">
+      {{#if sunday}}
+        Sunday ✅
+      {{else}}
+        Sunday ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key action="{{symbol}}_quoteback">
+      ◀️ Back
+    </key>
+    <key action="{{symbol}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_time">
+      Next Step ▶️
+    </key>
+  </line>
+</inline>

@@ -58,7 +58,7 @@ export class Action {
     throw new Error('not implemented');
   }
 
-  private async handleEvent(msg: MessageInterface) {
+  private async handleEvent(msg: MessageInterface): Promise<void> {
     try {
       const chat: ChatInterface = await this.databaseService.ensureChat(msg);
       const message: MessageInterface = await this.doAction(chat, msg);
@@ -67,8 +67,9 @@ export class Action {
         this.templateService.getKeyboard(
           this.templateService.apply(
             {
-              action: this.action,
-              status: message.getReplyStatus(),
+              action: message.getReplyAction()
+                ? message.getReplyAction()
+                : this.action,
               lang: chat.lang,
             },
             message.getReplyData(),

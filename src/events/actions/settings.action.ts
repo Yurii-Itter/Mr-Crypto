@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-import * as statuses from '../statuses';
 import { Action } from '../action';
 
 import { MessageInterface } from '../../message/interfaces/message.interface';
@@ -17,7 +16,7 @@ export class SettingsAction extends Action {
     msg: MessageInterface,
   ): Promise<MessageInterface> {
     try {
-      return msg.setStatus(statuses.BASIC);
+      return msg;
     } catch (error) {
       this.logger.error(error);
     }

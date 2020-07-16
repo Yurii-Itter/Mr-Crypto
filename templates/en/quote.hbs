@@ -1,7 +1,7 @@
 <content>
   {{#list}}
     <strong>
-      {{symbol}}
+      {{../symbol}}
     </strong>
 
     <strong>
@@ -23,11 +23,11 @@
         Unsubscribe 🔕
       </key>
     {{else}}
-      <key action="{{symbol}}_sub">
+      <key action="{{symbol}}_days">
         Subscribe 🔔
       </key>
     {{/if}}
-    <key action="{{base}}_back">
+    <key action="{{base}}_baseback">
       ◀️ Back
     </key>
   </line>
