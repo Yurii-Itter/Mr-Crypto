@@ -20,8 +20,20 @@ export class TemplateService {
   constructor(logger: Logger) {
     this.logger = logger;
 
-    handlebars.registerHelper('bool', bool => {
-      return !bool;
+    handlebars.registerHelper('toggle', state => {
+      return state === 'son'
+        ? 'soff'
+        : state === 'off' || state === 'soff'
+        ? 'on'
+        : 'off';
+    });
+
+    handlebars.registerHelper('switch', state => {
+      return state === 'off' || state === 'soff' ? false : true;
+    });
+
+    handlebars.registerHelper('inc', number => {
+      return number + 1;
     });
 
     this.load();

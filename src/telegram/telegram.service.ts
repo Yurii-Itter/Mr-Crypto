@@ -21,65 +21,62 @@ export class TelegramService {
     const token = configService.get('TELEGRAM_BOT_TOKEN');
     this.botService = new Telegraf(token);
 
-    this.botService.start(ctx =>
+    this.botService.start(async ctx =>
       appEmitter.emit(appEmitter.START, new TelegramMessage(ctx)),
     );
 
-    this.botService.on('location', ctx =>
-      appEmitter.emit(
-        appEmitter.CRYPTOCURRENCIES,
-        new TelegramMessage(ctx).withData({ timezone: true }),
-      ),
+    this.botService.on('location', async ctx =>
+      appEmitter.emit(appEmitter.CRYPTOCURRENCIES, new TelegramMessage(ctx)),
     );
 
     this.botService
       .hears(
         (base: string) => {
           return cryptocurrenciesService.getBase().includes(base)
-            ? true
-            : false;
+            ? /true/.exec('true')
+            : /true/.exec('false');
         },
-        ctx => appEmitter.emit(appEmitter.BASE, new TelegramMessage(ctx)),
+        async ctx => appEmitter.emit(appEmitter.BASE, new TelegramMessage(ctx)),
       )
-      .hears(['Cryptocurrencies 💰', 'Криптовалюты 💰'], ctx =>
+      .hears(['Cryptocurrencies 💰', 'Криптовалюты 💰'], async ctx =>
         appEmitter.emit(appEmitter.CRYPTOCURRENCIES, new TelegramMessage(ctx)),
       )
-      .hears(['My Subscriptions ⭐️', 'Мои Подписки ⭐️'], ctx =>
+      .hears(['My Subscriptions ⭐️', 'Мои Подписки ⭐️'], async ctx =>
         appEmitter.emit(appEmitter.SUBSCRIPTIONS, new TelegramMessage(ctx)),
       )
-      .hears(['About Service 🚀', 'О Сервисе 🚀'], ctx =>
+      .hears(['About Service 🚀', 'О Сервисе 🚀'], async ctx =>
         appEmitter.emit(appEmitter.ABOUT, new TelegramMessage(ctx)),
       )
-      .hears(['Settings ⚙️', 'Настройки ⚙️'], ctx =>
+      .hears(['Settings ⚙️', 'Настройки ⚙️'], async ctx =>
         appEmitter.emit(appEmitter.SETTINGS, new TelegramMessage(ctx)),
       )
-      .hears(['◀️ Back', '◀️ Назад'], ctx =>
+      .hears(['◀️ Back', '◀️ Назад'], async ctx =>
         appEmitter.emit(appEmitter.MENU, new TelegramMessage(ctx)),
       );
 
     this.botService
-      .action(/.+_baseback/, ctx =>
+      .action(/.+_baseback/, async ctx =>
         appEmitter.emit(appEmitter.BASE, new TelegramMessage(ctx).withEdit()),
       )
-      .action(/.+_quoteback/, ctx =>
+      .action(/.+_quoteback/, async ctx =>
         appEmitter.emit(appEmitter.QUOTE, new TelegramMessage(ctx).withEdit()),
       )
-      .action(/.+_day/, ctx =>
+      .action(/.+_dayback/, async ctx =>
         appEmitter.emit(appEmitter.DAY, new TelegramMessage(ctx).withEdit()),
       )
-      .action(/.+_exchange/, ctx =>
-        appEmitter.emit(
-          appEmitter.EXCHANGE,
-          new TelegramMessage(ctx).withEdit(),
-        ),
+      .action(/.+_day/, async ctx =>
+        appEmitter.emit(appEmitter.DAY, new TelegramMessage(ctx).withEdit()),
       )
-      .action(/.+_sub/, ctx =>
+      .action(/.+_time/, async ctx =>
+        appEmitter.emit(appEmitter.TIME, new TelegramMessage(ctx).withEdit()),
+      )
+      .action(/.+_sub/, async ctx =>
         appEmitter.emit(appEmitter.SUB, new TelegramMessage(ctx).withEdit()),
       )
-      .action(/.+_unsub/, ctx =>
+      .action(/.+_unsub/, async ctx =>
         appEmitter.emit(appEmitter.UNSUB, new TelegramMessage(ctx).withEdit()),
       )
-      .action(/.+_quote/, ctx =>
+      .action(/.+_quote/, async ctx =>
         appEmitter.emit(appEmitter.QUOTE, new TelegramMessage(ctx).withEdit()),
       );
   }

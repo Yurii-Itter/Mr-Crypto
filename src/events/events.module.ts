@@ -11,6 +11,7 @@ import { QuoteAction } from './actions/quote.action';
 import { SubAction } from './actions/sub.action';
 import { TimeZoneAction } from './actions/time-zone.action';
 import { DayAction } from './actions/day.action';
+import { TimeAction } from './actions/time.action';
 
 import { CryptocurrenciesModule } from '../cryptocurrencies/cryptocurrencies.module';
 
@@ -31,6 +32,7 @@ import { DatabaseModule } from '../database/database.module';
     SubAction,
     TimeZoneAction,
     DayAction,
+    TimeAction,
   ],
 })
 export class EventModule {}

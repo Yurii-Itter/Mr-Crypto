@@ -20,6 +20,7 @@ import { ConfigService } from './common/config.service';
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
+        useFindAndModify: false,
       }),
       inject: [ConfigService],
     }),

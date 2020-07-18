@@ -8,13 +8,11 @@ export interface ChatInterface extends Document {
   sub: [
     {
       symbol: string;
-      period: [
-        {
-          day: number;
-          hour: number;
-          minute: number;
-        },
-      ];
+      period: {
+        days: [number];
+        hour: number;
+        minute: number;
+      };
     },
   ];
   location: {

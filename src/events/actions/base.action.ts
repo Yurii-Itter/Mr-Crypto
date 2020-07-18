@@ -16,12 +16,12 @@ export class BaseAction extends Action {
     msg: MessageInterface,
   ): Promise<MessageInterface> {
     try {
-      const res = msg.data ? msg.data.split('_')[0] : msg.text;
+      const base = msg.data ? msg.data.split('_')[0] : msg.text;
 
       return msg
         .withData({
-          quotes: this.cryptocurrenciesService.getQuoteKeyboard(res),
-          chose: res,
+          quotes: this.cryptocurrenciesService.getQuoteKeyboard(base),
+          chose: base,
         })
         .withAction(this.appEmitter.BASE);
     } catch (error) {

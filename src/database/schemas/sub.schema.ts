@@ -4,5 +4,5 @@ import { PeriodSchema } from './period.schema';
 
 export const SubSchema = new mongoose.Schema({
   symbol: { type: String },
-  period: [PeriodSchema],
+  period: PeriodSchema,
 });

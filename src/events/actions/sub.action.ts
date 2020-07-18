@@ -16,7 +16,49 @@ export class SubAction extends Action {
     msg: MessageInterface,
   ): Promise<MessageInterface> {
     try {
-      return msg;
+      const { chatId } = chat;
+
+      const [data] = msg.data.split('_');
+      const [
+        ,
+        symbol,
+        monday,
+        tuesday,
+        wednesday,
+        thursday,
+        friday,
+        saturday,
+        sunday,
+        h,
+        hh,
+        m,
+        mm,
+      ] = data.split('-');
+
+      const hour = +(h + hh);
+      const minute = +(m + mm);
+
+      const days = [
+        monday,
+        tuesday,
+        wednesday,
+        thursday,
+        friday,
+        saturday,
+        sunday,
+      ].reduce((accum: number[], day: string, index: number) => {
+        if (day === 'on' || day === 'son') {
+          accum.push(index + 1);
+        }
+        return accum;
+      }, []);
+
+      await this.databaseService.sub({
+        chatId,
+        sub: { symbol, period: { days, hour, minute } },
+      });
+
+      return msg.withData({ symbol });
     } catch (error) {
       this.logger.error(error);
     }

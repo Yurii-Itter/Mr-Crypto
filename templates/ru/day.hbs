@@ -6,8 +6,8 @@
 
 <inline>
   <line>
-    <key action="{{symbol}}-{{bool monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
-      {{#if monday}}
+    <key action="{{parent}}-{{toggle monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if (switch monday)}}
         Понедельник ✅
       {{else}}
         Понедельник ❌
@@ -15,8 +15,8 @@
     </key>
   </line>
   <line>
-    <key action="{{symbol}}-{{monday}}-{{bool tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
-      {{#if tuesday}}
+    <key action="{{parent}}-{{monday}}-{{toggle tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if (switch tuesday)}}
         Вторник ✅
       {{else}}
         Вторник ❌
@@ -24,8 +24,8 @@
     </key>
   </line>
   <line>
-    <key action="{{symbol}}-{{monday}}-{{tuesday}}-{{bool wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
-      {{#if wednesday}}
+    <key action="{{parent}}-{{monday}}-{{tuesday}}-{{toggle wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if (switch wednesday)}}
         Среда ✅
       {{else}}
         Среда ❌
@@ -33,8 +33,8 @@
     </key>
   </line>
   <line>
-    <key action="{{symbol}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{bool thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
-      {{#if thursday}}
+    <key action="{{parent}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{toggle thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if (switch thursday)}}
         Четверг ✅
       {{else}}
         Четверг ❌
@@ -42,8 +42,8 @@
     </key>
   </line>
   <line>
-    <key action="{{symbol}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{bool friday}}-{{saturday}}-{{sunday}}_day">
-      {{#if friday}}
+    <key action="{{parent}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{toggle friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if (switch friday)}}
         Пятница ✅
       {{else}}
         Пятница ❌
@@ -51,8 +51,8 @@
     </key>
   </line>
   <line>
-    <key action="{{symbol}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{bool saturday}}-{{sunday}}_day">
-      {{#if saturday}}
+    <key action="{{parent}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{toggle saturday}}-{{sunday}}_day">
+      {{#if (switch saturday)}}
         Суббота ✅
       {{else}}
         Суббота ❌
@@ -60,8 +60,8 @@
     </key>
   </line>
   <line>
-    <key action="{{symbol}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{bool sunday}}_day">
-      {{#if sunday}}
+    <key action="{{parent}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{toggle sunday}}_day">
+      {{#if (switch sunday)}}
         Воскресенье ✅
       {{else}}
         Воскресенье ❌
@@ -69,10 +69,10 @@
     </key>
   </line>
   <line>
-    <key action="{{symbol}}_quoteback">
+    <key action="{{parent}}_quoteback">
       ◀️ Назад
     </key>
-    <key action="{{symbol}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_time">
+    <key action="{{parent}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_time">
       Дальше ▶️
     </key>
   </line>

@@ -17,12 +17,13 @@ export class CryptocurrenciesAction extends Action {
   ): Promise<MessageInterface> {
     try {
       const { location } = msg;
+      const { timeZone } = chat;
 
-      if (location) {
+      if (location && !timeZone) {
         chat.timeZone = await this.timeZoneService.getTimezone(location);
         chat.location = location;
         await chat.save();
-        return msg;
+        msg.withData({ timezone: true });
       }
 
       return msg.withData({

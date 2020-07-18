@@ -18,17 +18,17 @@
 
 <inline>
   <line>
+    <key action="{{base}}_baseback">
+      ◀️ Назад
+    </key>
     {{#if subscribed}}
       <key action="{{symbol}}_unsub">
         Отписаться 🔕
       </key>
     {{else}}
-      <key action="{{symbol}}_day">
+      <key action="{{base}}-{{symbol}}_day">
         Подписаться 🔔
       </key>
     {{/if}}
-    <key action="{{base}}_baseback">
-      ◀️ Назад
-    </key>
   </line>
 </inline>

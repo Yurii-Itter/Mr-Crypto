@@ -22,7 +22,7 @@ export class QuoteAction extends Action {
       return msg
         .withData({
           list: this.cryptocurrenciesService.getList(symbol),
-          subscribed: chat.sub.includes(symbol),
+          subscribed: chat.sub.map(s => s.symbol).includes(symbol),
           symbol,
           base,
         })

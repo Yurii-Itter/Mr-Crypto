@@ -21,8 +21,33 @@ export class DayAction extends Action {
       }
 
       const [data] = msg.data.split('_');
-      const [
-        symbol,
+      const [parent] = data.match(/^(?:-?[^-]+){2}/);
+
+      let days = data.replace(new RegExp(`${parent}-?`), '').split('-');
+
+      if (days.filter((day: string) => day === 'on').length === 1) {
+        if (days.filter((day: string) => day === 'son').length === 1) {
+          days = days.map((day: string) => (day === 'son' ? 'on' : day));
+        } else {
+          days = days.map((day: string) => (day === 'on' ? 'son' : day));
+        }
+      }
+
+      if (days.every((day: string) => day === 'off' || day === 'soff')) {
+        const allowed = days.reduce(
+          (accum: number[], day: string, index: number) => {
+            if (day !== 'soff') {
+              accum.push(index);
+            }
+            return accum;
+          },
+          [],
+        );
+        days[allowed[Math.floor(Math.random() * allowed.length)]] = 'son';
+        days = days.map((day: string) => (day === 'soff' ? 'off' : day));
+      }
+
+      let [
         monday,
         tuesday,
         wednesday,
@@ -30,17 +55,17 @@ export class DayAction extends Action {
         friday,
         saturday,
         sunday,
-      ] = data.split('-');
+      ] = days;
 
       return msg.withData({
-        symbol,
-        monday: monday ? monday == 'true' : true,
-        tuesday: tuesday ? tuesday == 'true' : true,
-        wednesday: wednesday ? wednesday == 'true' : true,
-        thursday: thursday ? thursday == 'true' : true,
-        friday: friday ? friday == 'true' : true,
-        saturday: saturday ? saturday == 'true' : true,
-        sunday: sunday ? sunday == 'true' : true,
+        parent,
+        monday: monday ? monday : 'on',
+        tuesday: tuesday ? tuesday : 'on',
+        wednesday: wednesday ? wednesday : 'on',
+        thursday: thursday ? thursday : 'on',
+        friday: friday ? friday : 'on',
+        saturday: saturday ? saturday : 'on',
+        sunday: sunday ? sunday : 'on',
       });
     } catch (error) {
       this.logger.error(error);
