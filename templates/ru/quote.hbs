@@ -1,0 +1,36 @@
+<content>
+  {{#list}}
+    <strong>
+      {{../formated}}
+    </strong>
+
+    <strong>
+      {{source}}:
+    </strong>
+    <code>
+      Последняя цена: {{last}}
+      Изменения за 24 часа: {{change}} ({{percent}}%)
+      Самая высокая цена за 24 часа: {{high}}
+      Самая низкая цена за 24 часа: {{low}}
+    </code>
+  {{/list}}
+</content>
+
+<inline>
+  <line>
+    {{#if base}}
+      <key action="{{base}}_baseback">
+        ◀️ Назад
+      </key>
+    {{/if}}
+    {{#if subscribed}}
+      <key action="{{symbol}}_unsub">
+        Отписаться 🔕
+      </key>
+    {{else}}
+      <key action="{{base}}-{{symbol}}_day">
+        Подписаться 🔔
+      </key>
+    {{/if}}
+  </line>
+</inline>

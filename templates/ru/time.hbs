@@ -1,0 +1,17 @@
+<content>
+  <strong>Выберите Время</strong>
+</content>
+
+<inline>
+  <line>
+    <key action="{{parent}}-{{inc h}}-{{hh}}-{{m}}-{{mm}}_time">{{h}}</key>
+    <key action="{{parent}}-{{h}}-{{inc hh}}-{{m}}-{{mm}}_time">{{hh}}</key>
+    <key action="{{parent}}-0-0-0-0_time">:</key>
+    <key action="{{parent}}-{{h}}-{{hh}}-{{inc m}}-{{mm}}_time">{{m}}</key>
+    <key action="{{parent}}-{{h}}-{{hh}}-{{m}}-{{inc mm}}_time">{{mm}}</key>
+  </line>
+  <line>
+    <key action="{{parent}}_dayback">◀️ Назад</key>
+    <key action="{{parent}}-{{h}}-{{hh}}-{{m}}-{{mm}}_sub">Подписаться 🔔</key>
+  </line>
+</inline>

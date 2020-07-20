@@ -8,6 +8,7 @@ export class ConfigService {
     this.envConfig = envalid.cleanEnv(process.env, {
       APP_PORT: port({ default: 3000 }),
       TELEGRAM_BOT_TOKEN: str(),
+      GOOGLE_KEY: str(),
       DATABASE_URL: str(),
     });
   }

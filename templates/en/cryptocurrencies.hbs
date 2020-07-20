@@ -1,0 +1,27 @@
+<content>
+  {{#if timezone}}
+    <code>
+      Time zone set successfully ✅
+    </code>
+
+  {{/if}}
+  <strong>
+    Choose cryptocurrency:
+  </strong>
+</content>
+
+<keyboard>
+  <line>
+    <key>◀️ Back</key>
+    <key>🔎 Search</key>
+  </line>
+  {{#cryptocurrencies}}
+    <line>
+      {{#each chunk}}<key>{{this}}</key>{{/each}}
+    </line>
+  {{/cryptocurrencies}}
+  <line>
+    <key>◀️ Back</key>
+    <key>🔎 Search</key>
+  </line>
+</keyboard>

@@ -3,6 +3,8 @@ import { Injectable, Inject, forwardRef, Logger } from '@nestjs/common';
 import { BinanceService } from './binance/binance.service';
 import { TelegramService } from '../telegram/telegram.service';
 
+import { SymbolValueInterface } from './interfaces/symbol-value.interface';
+
 @Injectable()
 export class CryptocurrenciesService {
   private logger: Logger;
@@ -25,52 +27,30 @@ export class CryptocurrenciesService {
     await this.telegramService.launch();
   }
 
-  public getBase(keyboard?: boolean): string[] | string[][] {
+  public getBase(): string[] {
     const bases = [...Object.keys(this.binanceService.symbols)];
-    const mixed = [...new Set(bases)];
-    let chunk = [];
-
-    return keyboard
-      ? mixed.reduce((accum, base, index, array) => {
-          if (chunk.length === 2 || index === array.length - 1) {
-            chunk.push({ base });
-            accum.push({ chunk });
-            chunk = [];
-          } else {
-            chunk.push({ base });
-          }
-
-          return accum;
-        }, [])
-      : mixed;
+    return [...new Set(bases)];
   }
 
-  public getQuote(base: string, keyboard?: boolean): string[] | string[][] {
+  public getSymbols(): string[] {
+    const symbols = [...Object.keys(this.binanceService.formated)];
+    return [...new Set(symbols)];
+  }
+
+  public getQuote(base: string): SymbolValueInterface[] {
     const quotes = [...this.binanceService.symbols[base]];
-    const mixed = [...new Set(quotes)];
-    let chunk = [];
-
-    return keyboard
-      ? mixed.reduce((accum, quote, index, array) => {
-          if (chunk.length === 2 || index === array.length - 1) {
-            chunk.push(quote);
-            accum.push({ chunk });
-            chunk = [];
-          } else {
-            chunk.push(quote);
-          }
-
-          return accum;
-        }, [])
-      : mixed;
+    return [...new Set(quotes)];
   }
 
-  public getList(list: string) {
+  public getFormated(symbol: string): string {
+    return this.binanceService.formated[symbol];
+  }
+
+  public getList(symbol: string) {
     return [
       {
-        symbol: list.toLocaleUpperCase(),
         source: 'Binance',
-        ...this.binanceService.list[list],
+        ...this.binanceService.list[symbol],
       },
     ];
   }

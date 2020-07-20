@@ -1,9 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
-import axios, { AxiosResponse } from 'axios';
 import * as ws from 'ws';
+import axios, { AxiosResponse } from 'axios';
+
+import { Injectable, Logger } from '@nestjs/common';
 
 import { ListInterface } from './interfaces/list.interface';
 import { SymbolInterface } from './interfaces/symbol.interface';
+import { FormatedInterface } from './interfaces/formated.interface';
 
 @Injectable()
 export class BaseCryptocurrency {
@@ -11,6 +13,7 @@ export class BaseCryptocurrency {
   protected stream: any;
 
   public symbols: SymbolInterface;
+  public formated: FormatedInterface;
   public list: ListInterface = {};
 
   constructor(logger: Logger) {
@@ -19,7 +22,7 @@ export class BaseCryptocurrency {
 
   protected async getExchangeInfo(link: string): Promise<AxiosResponse> {
     try {
-      return await axios.get(link);
+      return axios.get(link);
     } catch (error) {
       this.logger.error(error);
     }

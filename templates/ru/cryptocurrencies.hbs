@@ -1,0 +1,27 @@
+<content>
+  {{#if timezone}}
+    <code>
+      Часовой пояс добавлен ✅
+    </code>
+
+  {{/if}}
+  <strong>
+    Выберите криптовалюту:
+  </strong>
+</content>
+
+<keyboard>
+  <line>
+    <key>◀️ Назад</key>
+    <key>🔎 Поиск</key>
+  </line>
+  {{#cryptocurrencies}}
+    <line>
+      {{#each chunk}}<key>{{this}}</key>{{/each}}
+    </line>
+  {{/cryptocurrencies}}
+  <line>
+    <key>◀️ Назад</key>
+    <key>🔎 Поиск</key>
+  </line>
+</keyboard>

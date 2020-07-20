@@ -1,0 +1,19 @@
+<content>
+  <strong>Сдесь вы можете видеть ваши подписки</strong>
+</content>
+
+<keyboard>
+  <line>
+    <key>◀️ Назад</key>
+    <key>🔎 Поиск</key>
+  </line>
+  {{#sub}}
+    <line>
+      {{#each chunk}}<key>{{this}}</key>{{/each}}
+    </line>
+  {{/sub}}
+  <line>
+    <key>◀️ Назад</key>
+    <key>🔎 Поиск</key>
+  </line>
+</keyboard>

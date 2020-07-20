@@ -2,10 +2,12 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as handlebars from 'handlebars';
 import { readDirDeepSync } from 'read-dir-deep';
+
 import { Injectable, Logger } from '@nestjs/common';
 
 import { ParamsInterface } from './interfaces/params.interface';
 import { ApplyInterface } from './interfaces/apply.interface';
+import { KeyboardInterface } from '../common/interfaces/keyboard.interface';
 
 @Injectable()
 export class TemplateService {
@@ -17,6 +19,23 @@ export class TemplateService {
 
   constructor(logger: Logger) {
     this.logger = logger;
+
+    handlebars.registerHelper('toggle', state => {
+      return state === 'son'
+        ? 'soff'
+        : state === 'off' || state === 'soff'
+        ? 'on'
+        : 'off';
+    });
+
+    handlebars.registerHelper('switch', state => {
+      return state === 'off' || state === 'soff' ? false : true;
+    });
+
+    handlebars.registerHelper('inc', number => {
+      return number + 1;
+    });
+
     this.load();
   }
 
@@ -35,9 +54,10 @@ export class TemplateService {
     return template(data);
   }
 
-  public parseKeyboard(template: any): ApplyInterface {
-    const kbrd = template.match(/(?:.|\n)*(<keyboard>(?:.|\n)*<\/keyboard>)/);
-    const inln = template.match(/(?:.|\n)*(<inline>(?:.|\n)*<\/inline>)/);
+  public getKeyboard(template: any): ApplyInterface {
+    const type = template.match(
+      /<(keyboard|inline)>(?:.|\n)+<\/(?:keyboard|inline)>/,
+    );
 
     const content = template
       .replace(/[^\n\S]+(.+)/g, '$1')
@@ -46,53 +66,47 @@ export class TemplateService {
       .match(/(?:.|\n)*(<content>(?:.|\n)*<\/content>)/)[1]
       .replace(/\s*\n?<\/?content>\n?\s*/g, '');
 
-    if (kbrd) {
-      const keyboard = [];
+    return type
+      ? {
+          type: type[1],
+          keyboard: this.parseKeyboard(template, type[1]),
+          content,
+        }
+      : {
+          type: undefined,
+          content,
+        };
+  }
 
-      kbrd[1]
-        .replace(/<\/?keyboard>/g, '')
-        .replace(/\n/g, '')
-        .replace(/>\s+</g, '><')
-        .replace(/[^<]+/, '')
-        .match(/(<line>(.+?)<\/line>)/g)
-        .forEach((line: string) => {
-          keyboard.push(
-            line.match(/<key.+?<\/key>/g).map(k => {
-              return k.replace(/<\/?key[^>]*>/g, '');
-            }),
-          );
-        });
+  private parseKeyboard(template: any, type: string): KeyboardInterface[][] {
+    const keyboard = [];
 
-      return { content, keyboard };
-    } else if (inln) {
-      const inline = [];
+    template
+      .match(new RegExp(`<${type}>(?:.|\n)*<\/${type}>`))[0]
+      .replace(/<\/?keyboard>/g, '')
+      .replace(/\n/g, '')
+      .replace(/>\s+</g, '><')
+      .replace(/[^<]+/, '')
+      .match(/(<line>(.+?)<\/line>)/g)
+      .forEach((line: string) => {
+        keyboard.push(
+          line.match(/<key.+?<\/key>/g).map(k => {
+            return {
+              action: k.match(/.+action="/)
+                ? k.replace(/.+action="/, '').replace(/".+/, '')
+                : undefined,
+              key: k.replace(/<\/?key[^>]*>/g, ''),
+            };
+          }),
+        );
+      });
 
-      inln[1]
-        .replace(/<\/?inline>/g, '')
-        .replace(/\n/g, '')
-        .replace(/>\s+</g, '><')
-        .replace(/[^<]+/, '')
-        .match(/(<line>(.+?)<\/line>)/g)
-        .forEach((line: string) => {
-          inline.push(
-            line.match(/<key.+?<\/key>/g).map(l => {
-              return {
-                action: l.replace(/.+action="/g, '').replace(/".+/, ''),
-                key: l.replace(/<\/?key[^>]*>/g, ''),
-              };
-            }),
-          );
-        });
-
-      return { content, inline };
-    }
-
-    return { content };
+    return keyboard;
   }
 
   private getTemplate(params: ParamsInterface): (data: any) => string {
-    const { lang, action, status } = params;
-    return this.templatesMap.get(this.getTemplateKey(lang, action, status));
+    const { lang, action } = params;
+    return this.templatesMap.get(this.getTemplateKey(lang, action));
   }
 
   private load() {
@@ -102,17 +116,15 @@ export class TemplateService {
     this.templatesMap = templateFileNames.reduce((acc, fileName) => {
       const template = fs.readFileSync(fileName, { encoding: 'utf-8' });
 
-      const [, lang, action, status] = fileName
-        .replace(/\.hbs$/, '')
-        .split('/');
+      const [, lang, action] = fileName.replace(/\.hbs$/, '').split('/');
       return acc.set(
-        this.getTemplateKey(lang, action, status),
+        this.getTemplateKey(lang, action),
         handlebars.compile(template),
       );
     }, new Map());
   }
 
-  private getTemplateKey(lang: string, action: string, status: string): string {
-    return `${lang}-${action}-${status}`;
+  private getTemplateKey(lang: string, action: string): string {
+    return `${lang}-${action}`;
   }
 }

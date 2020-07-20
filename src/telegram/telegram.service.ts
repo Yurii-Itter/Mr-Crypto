@@ -6,105 +6,93 @@ import { ConfigService } from '../common/config.service';
 import { AppEmitter } from '../common/event.service';
 import { CryptocurrenciesService } from '../cryptocurrencies/cryptocurrencies.service';
 
-import { CommandInterface } from './interfaces/command.interface';
-import { KeyboardCommandInterface } from './interfaces/keyboardCommand.interface';
-
 import { TelegramMessage } from './telegram.message';
 
 @Injectable()
 export class TelegramService {
-  private bot: Telegraf<any>;
+  private botService: Telegraf<any>;
 
   constructor(
     @Inject(forwardRef(() => 'CryptocurrenciesServiceInstance'))
-    private cryptocurrenciesService: CryptocurrenciesService,
-    config: ConfigService,
+    cryptocurrenciesService: CryptocurrenciesService,
+    configService: ConfigService,
     appEmitter: AppEmitter,
   ) {
-    const token: string = config.get('TELEGRAM_BOT_TOKEN');
-    this.bot = new Telegraf(token);
+    const token = configService.get('TELEGRAM_BOT_TOKEN');
+    this.botService = new Telegraf(token);
 
-    this.getCommandActionMapping(appEmitter).forEach(({ command, event }) => {
-      this.setCommandAction(command, event, appEmitter);
-    });
-
-    this.getKeyboardCommandsMapping(appEmitter).forEach(
-      ({ trigger, event }) => {
-        trigger.forEach(tgr => this.setKeyboardAction(tgr, event, appEmitter));
-      },
+    this.botService.start(async ctx =>
+      appEmitter.emit(appEmitter.START, new TelegramMessage(ctx)),
     );
 
-    this.bot.use(ctx => {
-      if (ctx.updateType === 'callback_query') {
-        appEmitter.emit(
-          appEmitter.TELEGRAM_CRYPTOCURRENCIES_QUOTE,
-          new TelegramMessage(ctx),
-        );
-        ctx.telegram.answerCbQuery(ctx.callbackQuery.id);
-      } else if (
-        ctx.updateType === 'message' &&
-        this.cryptocurrenciesService.getBase().includes(ctx.message.text)
-      ) {
-        appEmitter.emit(
-          appEmitter.TELEGRAM_CRYPTOCURRENCIES_BASE,
-          new TelegramMessage(ctx),
-        );
-      }
-    });
-  }
-
-  private getCommandActionMapping(appEmitter: AppEmitter): CommandInterface[] {
-    return [{ command: 'start', event: appEmitter.TELEGRAM_START }];
-  }
-
-  private getKeyboardCommandsMapping(
-    appEmitter: AppEmitter,
-  ): KeyboardCommandInterface[] {
-    return [
-      {
-        trigger: ['Cryptocurrencies 💰', 'Криптовалюты 💰'],
-        event: appEmitter.TELEGRAM_CRYPTOCURRENCIES,
-      },
-      {
-        trigger: ['My Subscriptions ⭐️', 'Мои Подписки ⭐️'],
-        event: appEmitter.TELEGRAM_SUBSCRIPTIONS,
-      },
-      {
-        trigger: ['About Service 🚀', 'О Сервисе 🚀'],
-        event: appEmitter.TELEGRAM_ABOUT_SERVICE,
-      },
-      {
-        trigger: ['Settings ⚙️', 'Настройки ⚙️'],
-        event: appEmitter.TELEGRAM_SETTINGS,
-      },
-      {
-        trigger: ['◀️ Back', '◀️ Назад'],
-        event: appEmitter.TELEGRAM_BACK_TO_MAIN_MENU,
-      },
-    ];
-  }
-
-  private setKeyboardAction(
-    trigger: string,
-    event: string,
-    appEmitter: AppEmitter,
-  ): void {
-    this.bot.hears(trigger, ctx =>
-      appEmitter.emit(event, new TelegramMessage(ctx)),
+    this.botService.on('location', async ctx =>
+      appEmitter.emit(appEmitter.CRYPTOCURRENCIES, new TelegramMessage(ctx)),
     );
-  }
 
-  private setCommandAction(
-    trigger: string,
-    event: string,
-    appEmitter: AppEmitter,
-  ): void {
-    this.bot.command(trigger, ctx =>
-      appEmitter.emit(event, new TelegramMessage(ctx)),
-    );
+    this.botService
+      .hears(
+        (base: string) => {
+          return cryptocurrenciesService.getBase().includes(base)
+            ? /true/.exec('true')
+            : /true/.exec('false');
+        },
+        async ctx => appEmitter.emit(appEmitter.BASE, new TelegramMessage(ctx)),
+      )
+      .hears(
+        (symbol: string) => {
+          return cryptocurrenciesService
+            .getSymbols()
+            .includes(symbol.replace('-', ''))
+            ? /true/.exec('true')
+            : /true/.exec('false');
+        },
+        async ctx =>
+          appEmitter.emit(appEmitter.QUOTE, new TelegramMessage(ctx)),
+      )
+      .hears(['Cryptocurrencies 💰', 'Криптовалюты 💰'], async ctx =>
+        appEmitter.emit(appEmitter.CRYPTOCURRENCIES, new TelegramMessage(ctx)),
+      )
+      .hears(['My Subscriptions ⭐️', 'Мои Подписки ⭐️'], async ctx =>
+        appEmitter.emit(appEmitter.SUBSCRIPTIONS, new TelegramMessage(ctx)),
+      )
+      .hears(['About Service 🚀', 'О Сервисе 🚀'], async ctx =>
+        appEmitter.emit(appEmitter.ABOUT, new TelegramMessage(ctx)),
+      )
+      .hears(['Settings ⚙️', 'Настройки ⚙️'], async ctx =>
+        appEmitter.emit(appEmitter.SETTINGS, new TelegramMessage(ctx)),
+      )
+      .hears(['◀️ Back', '◀️ Назад'], async ctx =>
+        appEmitter.emit(appEmitter.MENU, new TelegramMessage(ctx)),
+      );
+
+    this.botService
+      .action(/.+_baseback/, async ctx =>
+        appEmitter.emit(appEmitter.BASE, new TelegramMessage(ctx).withEdit()),
+      )
+      .action(/.+_quoteback/, async ctx =>
+        appEmitter.emit(appEmitter.QUOTE, new TelegramMessage(ctx).withEdit()),
+      )
+      .action(/.+_dayback/, async ctx =>
+        appEmitter.emit(appEmitter.DAY, new TelegramMessage(ctx).withEdit()),
+      )
+      .action(/.+_day/, async ctx =>
+        appEmitter.emit(appEmitter.DAY, new TelegramMessage(ctx).withEdit()),
+      )
+      .action(/.+_time/, async ctx =>
+        appEmitter.emit(appEmitter.TIME, new TelegramMessage(ctx).withEdit()),
+      )
+      .action(/.+_sub/, async ctx =>
+        appEmitter.emit(appEmitter.SUB, new TelegramMessage(ctx).withEdit()),
+      )
+      .action(/.+_unsub/, async ctx =>
+        appEmitter.emit(appEmitter.UNSUB, new TelegramMessage(ctx).withEdit()),
+      )
+      .action(/.+_quote/, async ctx =>
+        appEmitter.emit(appEmitter.QUOTE, new TelegramMessage(ctx).withEdit()),
+      );
   }
 
   public async launch(): Promise<void> {
-    await this.bot.launch();
+    await this.botService.launch();
   }
 }

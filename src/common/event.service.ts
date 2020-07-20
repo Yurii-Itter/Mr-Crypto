@@ -1,18 +1,17 @@
 import { EventEmitter } from 'events';
 
 export class AppEmitter extends EventEmitter {
-  public readonly TELEGRAM_START: string = 'event_telegram_start';
-  public readonly TELEGRAM_CRYPTOCURRENCIES: string =
-    'event_telegram_cryptocurrencies';
-  public readonly TELEGRAM_SUBSCRIPTIONS: string =
-    'event_telegram_subscriptions';
-  public readonly TELEGRAM_ABOUT_SERVICE: string =
-    'event_telegram_about_service';
-  public readonly TELEGRAM_SETTINGS: string = 'event_telegram_settings';
-  public readonly TELEGRAM_BACK_TO_MAIN_MENU: string =
-    'event_telegram_back_to_main_menu';
-  public readonly TELEGRAM_CRYPTOCURRENCIES_BASE: string =
-    'event_telegram_cryptocurrencies_base';
-  public readonly TELEGRAM_CRYPTOCURRENCIES_QUOTE: string =
-    'event_telegram_cryptocurrencies_quote';
+  public readonly START: string = 'start';
+  public readonly CRYPTOCURRENCIES: string = 'cryptocurrencies';
+  public readonly SUBSCRIPTIONS: string = 'subscriptions';
+  public readonly ABOUT: string = 'about';
+  public readonly SETTINGS: string = 'settings';
+  public readonly MENU: string = 'menu';
+  public readonly BASE: string = 'base';
+  public readonly QUOTE: string = 'quote';
+  public readonly SUB: string = 'sub';
+  public readonly UNSUB: string = 'unsub';
+  public readonly TIMEZONE: string = 'time-zone';
+  public readonly DAY: string = 'day';
+  public readonly TIME: string = 'time';
 }

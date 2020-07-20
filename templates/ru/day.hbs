@@ -1,0 +1,79 @@
+<content>
+  <strong>
+    Выберите дни недели
+  </strong>
+</content>
+
+<inline>
+  <line>
+    <key action="{{parent}}-{{toggle monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if (switch monday)}}
+        Понедельник ✅
+      {{else}}
+        Понедельник ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key action="{{parent}}-{{monday}}-{{toggle tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if (switch tuesday)}}
+        Вторник ✅
+      {{else}}
+        Вторник ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key action="{{parent}}-{{monday}}-{{tuesday}}-{{toggle wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if (switch wednesday)}}
+        Среда ✅
+      {{else}}
+        Среда ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key action="{{parent}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{toggle thursday}}-{{friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if (switch thursday)}}
+        Четверг ✅
+      {{else}}
+        Четверг ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key action="{{parent}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{toggle friday}}-{{saturday}}-{{sunday}}_day">
+      {{#if (switch friday)}}
+        Пятница ✅
+      {{else}}
+        Пятница ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key action="{{parent}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{toggle saturday}}-{{sunday}}_day">
+      {{#if (switch saturday)}}
+        Суббота ✅
+      {{else}}
+        Суббота ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key action="{{parent}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{toggle sunday}}_day">
+      {{#if (switch sunday)}}
+        Воскресенье ✅
+      {{else}}
+        Воскресенье ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key action="{{parent}}_quoteback">
+      ◀️ Назад
+    </key>
+    <key action="{{parent}}-{{monday}}-{{tuesday}}-{{wednesday}}-{{thursday}}-{{friday}}-{{saturday}}-{{sunday}}_time">
+      Дальше ▶️
+    </key>
+  </line>
+</inline>
