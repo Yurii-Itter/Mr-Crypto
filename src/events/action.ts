@@ -1,6 +1,7 @@
 import { Injectable, Inject, Logger } from '@nestjs/common';
 
 import { ConfigService } from '../common/config.service';
+import { UtilService } from '../common/util.service';
 import { AppEmitter } from '../common/event.service';
 import { TemplateService } from '../common/template.service';
 import { DatabaseService } from '../database/database.service';
@@ -14,6 +15,7 @@ import { ChatInterface } from '../database/interfaces/chat.interface';
 export class Action {
   protected appEmitter: AppEmitter;
   protected config: ConfigService;
+  protected util: UtilService;
   protected logger: Logger;
 
   protected templateService: TemplateService;
@@ -27,6 +29,7 @@ export class Action {
     @Inject('CryptocurrenciesServiceInstance')
     protected cryptocurrenciesService: CryptocurrenciesService,
     config: ConfigService,
+    util: UtilService,
     appEmitter: AppEmitter,
     logger: Logger,
     templateService: TemplateService,
@@ -34,6 +37,7 @@ export class Action {
     timeZoneService: GoogleTimeZoneService,
   ) {
     this.config = config;
+    this.util = util;
     this.logger = logger;
 
     this.appEmitter = appEmitter;

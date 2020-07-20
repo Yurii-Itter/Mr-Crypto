@@ -12,16 +12,16 @@
 
 <keyboard>
   <line>
-    <key>🔎 Поиск</key>
     <key>◀️ Назад</key>
+    <key>🔎 Поиск</key>
   </line>
   {{#cryptocurrencies}}
     <line>
-      {{#chunk}}<key>{{base}}</key>{{/chunk}}
+      {{#each chunk}}<key>{{this}}</key>{{/each}}
     </line>
   {{/cryptocurrencies}}
   <line>
-    <key>🔎 Поиск</key>
     <key>◀️ Назад</key>
+    <key>🔎 Поиск</key>
   </line>
 </keyboard>

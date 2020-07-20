@@ -20,7 +20,7 @@ export class BaseAction extends Action {
 
       return msg
         .withData({
-          quotes: this.cryptocurrenciesService.getQuoteKeyboard(base),
+          quotes: this.util.chunk(this.cryptocurrenciesService.getQuote(base)),
           chose: base,
         })
         .withAction(this.appEmitter.BASE);

@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { BaseCryptocurrency } from '../base.cryptocurrency';
 
 import { SymbolInterface } from '../interfaces/symbol.interface';
+import { FormatedInterface } from '../interfaces/formated.interface';
 
 @Injectable()
 export class BinanceService extends BaseCryptocurrency {
@@ -30,12 +31,18 @@ export class BinanceService extends BaseCryptocurrency {
         accum[baseAsset]
           ? (accum[baseAsset] = [
               ...accum[baseAsset],
-              { quote: quoteAsset, symbol: symbol.toLowerCase() },
+              { quote: quoteAsset, symbol },
             ])
-          : (accum[baseAsset] = [
-              { quote: quoteAsset, symbol: symbol.toLowerCase() },
-            ]);
+          : (accum[baseAsset] = [{ quote: quoteAsset, symbol }]);
 
+        return accum;
+      },
+      {},
+    );
+
+    this.formated = trading.reduce(
+      (accum: FormatedInterface, { symbol, baseAsset, quoteAsset }) => {
+        accum[symbol] = `${baseAsset}-${quoteAsset}`;
         return accum;
       },
       {},
@@ -53,12 +60,12 @@ export class BinanceService extends BaseCryptocurrency {
 
     this.stream.on('message', (msg: string) => {
       const { P, p, h, l, c, s } = JSON.parse(msg).data;
-      this.list[s.toLowerCase()] = {
-        last: c,
-        high: h,
-        low: l,
-        change: p,
-        percent: P,
+      this.list[s] = {
+        last: +c,
+        high: +h,
+        low: +l,
+        change: +p,
+        percent: +P,
       };
     });
 

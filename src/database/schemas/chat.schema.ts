@@ -18,5 +18,4 @@ export const ChatSchema = new mongoose.Schema({
     type: TimeZoneSchema,
     default: undefined,
   },
-  p: { type: Boolean, default: false },
 });

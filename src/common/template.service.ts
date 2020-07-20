@@ -55,7 +55,7 @@ export class TemplateService {
   }
 
   public getKeyboard(template: any): ApplyInterface {
-    const [, type] = template.match(
+    const type = template.match(
       /<(keyboard|inline)>(?:.|\n)+<\/(?:keyboard|inline)>/,
     );
 
@@ -68,8 +68,8 @@ export class TemplateService {
 
     return type
       ? {
-          type,
-          keyboard: this.parseKeyboard(template, type),
+          type: type[1],
+          keyboard: this.parseKeyboard(template, type[1]),
           content,
         }
       : {

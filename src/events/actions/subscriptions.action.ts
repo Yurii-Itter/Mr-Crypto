@@ -16,7 +16,15 @@ export class SubscriptionsAction extends Action {
     msg: MessageInterface,
   ): Promise<MessageInterface> {
     try {
-      return msg;
+      const { sub } = chat;
+
+      return msg.withData({
+        sub: this.util.chunk(
+          sub.map(({ symbol }) =>
+            this.cryptocurrenciesService.getFormated(symbol),
+          ),
+        ),
+      });
     } catch (error) {
       this.logger.error(error);
     }

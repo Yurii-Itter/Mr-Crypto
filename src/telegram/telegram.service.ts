@@ -38,6 +38,17 @@ export class TelegramService {
         },
         async ctx => appEmitter.emit(appEmitter.BASE, new TelegramMessage(ctx)),
       )
+      .hears(
+        (symbol: string) => {
+          return cryptocurrenciesService
+            .getSymbols()
+            .includes(symbol.replace('-', ''))
+            ? /true/.exec('true')
+            : /true/.exec('false');
+        },
+        async ctx =>
+          appEmitter.emit(appEmitter.QUOTE, new TelegramMessage(ctx)),
+      )
       .hears(['Cryptocurrencies 💰', 'Криптовалюты 💰'], async ctx =>
         appEmitter.emit(appEmitter.CRYPTOCURRENCIES, new TelegramMessage(ctx)),
       )

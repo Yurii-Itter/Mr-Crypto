@@ -27,7 +27,9 @@ export class CryptocurrenciesAction extends Action {
       }
 
       return msg.withData({
-        cryptocurrencies: this.cryptocurrenciesService.getBaseKeyboard(),
+        cryptocurrencies: this.util.chunk(
+          this.cryptocurrenciesService.getBase(),
+        ),
       });
     } catch (error) {
       this.logger.error(error);

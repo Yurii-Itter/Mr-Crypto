@@ -1,3 +1,19 @@
 <content>
-    <strong>Subscriptions</strong>
+  <strong>Here you got your subscriptions</strong>
 </content>
+
+<keyboard>
+  <line>
+    <key>◀️ Back</key>
+    <key>🔎 Search</key>
+  </line>
+  {{#sub}}
+    <line>
+      {{#each chunk}}<key>{{this}}</key>{{/each}}
+    </line>
+  {{/sub}}
+  <line>
+    <key>◀️ Back</key>
+    <key>🔎 Search</key>
+  </line>
+</keyboard>

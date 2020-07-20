@@ -27,46 +27,23 @@ export class CryptocurrenciesService {
     await this.telegramService.launch();
   }
 
-  public getBaseKeyboard(): string[][] {
-    let chunk = [];
-
-    return this.getBase().reduce((accum, base, index, array) => {
-      if (chunk.length === 2 || index === array.length - 1) {
-        chunk.push({ base });
-        accum.push({ chunk });
-        chunk = [];
-      } else {
-        chunk.push({ base });
-      }
-
-      return accum;
-    }, []);
-  }
-
   public getBase(): string[] {
     const bases = [...Object.keys(this.binanceService.symbols)];
     return [...new Set(bases)];
   }
 
-  public getQuoteKeyboard(base: string): string[][] {
-    let chunk = [];
-
-    return this.getQuote(base).reduce((accum, quote, index, array) => {
-      if (chunk.length === 2 || index === array.length - 1) {
-        chunk.push(quote);
-        accum.push({ chunk });
-        chunk = [];
-      } else {
-        chunk.push(quote);
-      }
-
-      return accum;
-    }, []);
+  public getSymbols(): string[] {
+    const symbols = [...Object.keys(this.binanceService.formated)];
+    return [...new Set(symbols)];
   }
 
   public getQuote(base: string): SymbolValueInterface[] {
     const quotes = [...this.binanceService.symbols[base]];
     return [...new Set(quotes)];
+  }
+
+  public getFormated(symbol: string): string {
+    return this.binanceService.formated[symbol];
   }
 
   public getList(symbol: string) {

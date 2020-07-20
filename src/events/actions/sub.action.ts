@@ -19,6 +19,7 @@ export class SubAction extends Action {
       const { chatId } = chat;
 
       const [data] = msg.data.split('_');
+      console.log(data);
       const [
         ,
         symbol,
@@ -58,7 +59,9 @@ export class SubAction extends Action {
         sub: { symbol, period: { days, hour, minute } },
       });
 
-      return msg.withData({ symbol });
+      return msg.withData({
+        formated: this.cryptocurrenciesService.getFormated(symbol),
+      });
     } catch (error) {
       this.logger.error(error);
     }
