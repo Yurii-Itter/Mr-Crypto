@@ -6,17 +6,11 @@ import { CryptocurrenciesModule } from '../cryptocurrencies/cryptocurrencies.mod
 import { TelegramService } from './telegram.service';
 
 @Module({
-  imports: [forwardRef(() => CryptocurrenciesModule), CommonModule],
-  providers: [
-    TelegramService,
-    {
-      provide: 'TelegramServiceInstance',
-      useFactory: (telegramService: TelegramService) => {
-        return telegramService;
-      },
-      inject: [TelegramService],
-    },
-  ],
-  exports: ['TelegramServiceInstance'],
+  imports: [CryptocurrenciesModule, CommonModule],
+  providers: [TelegramService],
 })
-export class TelegramModule {}
+export class TelegramModule {
+  constructor(telegramService: TelegramService) {
+    telegramService.launch();
+  }
+}

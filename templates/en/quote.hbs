@@ -1,8 +1,7 @@
 <content>
+  <strong>{{formated}}</strong>
+  
   {{#list}}
-    <strong>
-      {{../formated}}
-    </strong>
 
     <strong>
       {{source}}:
@@ -18,9 +17,11 @@
 
 <inline>
   <line>
-    <key action="{{base}}_baseback">
-      ◀️ Back
-    </key>
+    {{#if base}}
+      <key action="{{base}}_baseback">
+        ◀️ Back
+      </key>
+    {{/if}}
     {{#if subscribed}}
       <key action="{{symbol}}_unsub">
         Unsubscribe 🔕

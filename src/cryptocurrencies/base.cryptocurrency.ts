@@ -3,20 +3,21 @@ import axios, { AxiosResponse } from 'axios';
 
 import { Injectable, Logger } from '@nestjs/common';
 
+import { UtilService } from '../common/util.service';
+
 import { ListInterface } from './interfaces/list.interface';
-import { SymbolInterface } from './interfaces/symbol.interface';
-import { FormatedInterface } from './interfaces/formated.interface';
 
 @Injectable()
 export class BaseCryptocurrency {
+  protected utilService: UtilService;
   protected logger: Logger;
+
   protected stream: any;
 
-  public symbols: SymbolInterface;
-  public formated: FormatedInterface;
   public list: ListInterface = {};
 
-  constructor(logger: Logger) {
+  constructor(utilService: UtilService, logger: Logger) {
+    this.utilService = utilService;
     this.logger = logger;
   }
 
@@ -36,16 +37,11 @@ export class BaseCryptocurrency {
     }
   }
 
-  protected async symbolHandler(): Promise<void> {
+  public async symbols(): Promise<string[]> {
     throw new Error('not implemented');
   }
 
-  protected async streamHandler(): Promise<void> {
+  public async streamHandler(symbols: string[]): Promise<void> {
     throw new Error('not implemented');
-  }
-
-  public async launch(): Promise<void> {
-    await this.symbolHandler();
-    await this.streamHandler();
   }
 }

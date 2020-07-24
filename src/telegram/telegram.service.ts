@@ -1,6 +1,6 @@
 import Telegraf from 'telegraf';
 
-import { Injectable, forwardRef, Inject } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 
 import { ConfigService } from '../common/config.service';
 import { AppEmitter } from '../common/event.service';
@@ -11,15 +11,18 @@ import { TelegramMessage } from './telegram.message';
 @Injectable()
 export class TelegramService {
   private botService: Telegraf<any>;
+  private cryptocurrenciesService: CryptocurrenciesService;
 
   constructor(
-    @Inject(forwardRef(() => 'CryptocurrenciesServiceInstance'))
+    @Inject('CryptocurrenciesServiceInstance')
     cryptocurrenciesService: CryptocurrenciesService,
     configService: ConfigService,
     appEmitter: AppEmitter,
   ) {
     const token = configService.get('TELEGRAM_BOT_TOKEN');
     this.botService = new Telegraf(token);
+
+    this.cryptocurrenciesService = cryptocurrenciesService;
 
     this.botService.start(async ctx =>
       appEmitter.emit(appEmitter.START, new TelegramMessage(ctx)),
@@ -93,6 +96,7 @@ export class TelegramService {
   }
 
   public async launch(): Promise<void> {
+    await this.cryptocurrenciesService.cryptocurrenciesLauncher();
     await this.botService.launch();
   }
 }

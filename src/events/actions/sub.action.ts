@@ -19,7 +19,6 @@ export class SubAction extends Action {
       const { chatId } = chat;
 
       const [data] = msg.data.split('_');
-      console.log(data);
       const [
         ,
         symbol,

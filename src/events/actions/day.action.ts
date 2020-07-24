@@ -47,7 +47,7 @@ export class DayAction extends Action {
         days = days.map((day: string) => (day === 'soff' ? 'off' : day));
       }
 
-      let [
+      const [
         monday,
         tuesday,
         wednesday,

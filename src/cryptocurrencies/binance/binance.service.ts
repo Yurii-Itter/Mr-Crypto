@@ -2,56 +2,28 @@ import { Injectable } from '@nestjs/common';
 
 import { BaseCryptocurrency } from '../base.cryptocurrency';
 
-import { SymbolInterface } from '../interfaces/symbol.interface';
-import { FormatedInterface } from '../interfaces/formated.interface';
-
 @Injectable()
 export class BinanceService extends BaseCryptocurrency {
-  protected async symbolHandler(): Promise<void> {
-    const raw = await this.getExchangeInfo(
-      'https://api.binance.com/api/v3/exchangeInfo',
-    );
-    const trading = raw.data.symbols.filter(
-      ({ status }) => status === 'TRADING',
-    );
-
-    this.stream = trading.reduce(
-      (accum: string, { symbol }, index: number, array: any[]) => {
-        array.length - 1 === index
-          ? (accum += `${symbol.toLowerCase()}@ticker`)
-          : (accum += `${symbol.toLowerCase()}@ticker/`);
-
-        return accum;
-      },
-      '',
-    );
-
-    this.symbols = trading.reduce(
-      (accum: SymbolInterface, { symbol, baseAsset, quoteAsset }) => {
-        accum[baseAsset]
-          ? (accum[baseAsset] = [
-              ...accum[baseAsset],
-              { quote: quoteAsset, symbol },
-            ])
-          : (accum[baseAsset] = [{ quote: quoteAsset, symbol }]);
-
-        return accum;
-      },
-      {},
-    );
-
-    this.formated = trading.reduce(
-      (accum: FormatedInterface, { symbol, baseAsset, quoteAsset }) => {
-        accum[symbol] = `${baseAsset}-${quoteAsset}`;
-        return accum;
-      },
-      {},
-    );
+  public async symbols(): Promise<string[]> {
+    return (
+      await this.getExchangeInfo('https://api.binance.com/api/v3/exchangeInfo')
+    ).data.symbols
+      .filter(({ status }) => status === 'TRADING')
+      .map(({ baseAsset, quoteAsset }) => `${baseAsset}-${quoteAsset === 'USDT' ? 'USD' : quoteAsset}`);
   }
 
-  protected async streamHandler(): Promise<void> {
+  public async streamHandler(symbols: string[]): Promise<void> {
     this.stream = await this.getAllMarketTickersStream(
-      `wss://stream.binance.com:9443/stream?streams=${this.stream}`,
+      `wss://stream.binance.com:9443/stream?streams=${symbols.reduce(
+        (accum: string, symbol, index: number, array: any[]) => {
+          array.length - 1 === index
+            ? (accum += `${symbol.replace('-', '').replace('USD', 'USDT').toLowerCase()}@ticker`)
+            : (accum += `${symbol.replace('-', '').replace('USD', 'USDT').toLowerCase()}@ticker/`);
+
+          return accum;
+        },
+        '',
+      )}`,
     );
 
     this.stream.on('open', () => {
@@ -60,12 +32,12 @@ export class BinanceService extends BaseCryptocurrency {
 
     this.stream.on('message', (msg: string) => {
       const { P, p, h, l, c, s } = JSON.parse(msg).data;
-      this.list[s] = {
-        last: +c,
-        high: +h,
-        low: +l,
-        change: +p,
-        percent: +P,
+      this.list[s.replace('USDT', 'USD')] = {
+        last: this.utilService.cut(c),
+        high: this.utilService.cut(h),
+        low: this.utilService.cut(l),
+        change: this.utilService.cut(p),
+        percent: P.replace(/(\.\d{2}).+/, '$1'),
       };
     });
 
