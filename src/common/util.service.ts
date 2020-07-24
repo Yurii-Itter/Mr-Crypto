@@ -17,4 +17,24 @@ export class UtilService {
       return accum;
     }, []);
   }
+
+  public cut(value: string): string {
+    return value.match(/-?[1-9]\d*\./)
+      ? value.replace(/(\.\d{2}).*/, '$1')
+      : value.replace(/0+$/, '');
+  }
+
+  public change(last: string, open: string): string {
+    return (+last - +open)
+      .toString()
+      .substring(0, last.length + 1)
+      .replace(/0+$/, '');
+  }
+
+  public percent(last: string, open: string): string {
+    return ((+this.change(last, open) * 100) / +open)
+      .toString()
+      .substring(0, 4)
+      .replace(/0+$/, '');
+  }
 }

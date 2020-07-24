@@ -4,10 +4,10 @@ import { CryptocurrenciesService } from './cryptocurrencies.service';
 
 import { CommonModule } from '../common/common.module';
 import { BinanceModule } from './binance/binance.module';
-import { TelegramModule } from '../telegram/telegram.module';
+import { CoinbaseModule } from './coinbase/coinbase.module';
 
 @Module({
-  imports: [forwardRef(() => TelegramModule), CommonModule, BinanceModule],
+  imports: [CommonModule, BinanceModule, CoinbaseModule],
   providers: [
     CryptocurrenciesService,
     {

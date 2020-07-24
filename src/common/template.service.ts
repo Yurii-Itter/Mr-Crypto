@@ -32,8 +32,8 @@ export class TemplateService {
       return state === 'off' || state === 'soff' ? false : true;
     });
 
-    handlebars.registerHelper('inc', number => {
-      return number + 1;
+    handlebars.registerHelper('inc', value => {
+      return value + 1;
     });
 
     this.load();
