@@ -75,13 +75,9 @@ export class DatabaseService {
 
   public async subscriptions(): Promise<SubscriptionsInterface[]> {
     try {
-      // const day = moment().isoWeekday();
-      // const hour = moment().hour();
-      // const minute = moment().minute();
-
-      const day = 7;
-      const hour = 14;
-      const minute = 28;
+      const day = moment().isoWeekday();
+      const hour = moment().hour();
+      const minute = moment().minute();
 
       return this.chatModel.aggregate([
         { $unwind: '$sub' },
