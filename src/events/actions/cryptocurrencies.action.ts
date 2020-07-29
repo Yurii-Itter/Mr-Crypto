@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { Action } from '../action';
 
-import { MessageInterface } from '../../message/interfaces/message.interface';
+import { TelegramMessageInterface } from '../../telegram/interfaces/message.interface';
 import { ChatInterface } from '../../database/interfaces/chat.interface';
 
 @Injectable()
@@ -13,8 +13,8 @@ export class CryptocurrenciesAction extends Action {
 
   protected async doAction(
     chat: ChatInterface,
-    msg: MessageInterface,
-  ): Promise<MessageInterface> {
+    msg: TelegramMessageInterface,
+  ): Promise<TelegramMessageInterface> {
     try {
       const { location } = msg;
       const { timeZone } = chat;

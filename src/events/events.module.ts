@@ -9,6 +9,7 @@ import { MenuAction } from './actions/menu.action';
 import { BaseAction } from './actions/base.action';
 import { QuoteAction } from './actions/quote.action';
 import { SubAction } from './actions/sub.action';
+import { UnsubAction } from './actions/unsub.action';
 import { TimeZoneAction } from './actions/time-zone.action';
 import { DayAction } from './actions/day.action';
 import { TimeAction } from './actions/time.action';
@@ -33,6 +34,7 @@ import { DatabaseModule } from '../database/database.module';
     TimeZoneAction,
     DayAction,
     TimeAction,
+    UnsubAction,
   ],
 })
 export class EventModule {}

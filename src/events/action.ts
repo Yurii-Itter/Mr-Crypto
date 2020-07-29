@@ -8,7 +8,7 @@ import { DatabaseService } from '../database/database.service';
 import { CryptocurrenciesService } from '../cryptocurrencies/cryptocurrencies.service';
 import { GoogleTimeZoneService } from '../common/google-time-zone.service';
 
-import { MessageInterface } from '../message/interfaces/message.interface';
+import { TelegramMessageInterface } from '../telegram/interfaces/message.interface';
 import { ChatInterface } from '../database/interfaces/chat.interface';
 
 @Injectable()
@@ -57,15 +57,15 @@ export class Action {
 
   protected async doAction(
     chat: ChatInterface,
-    msg: MessageInterface,
-  ): Promise<MessageInterface> {
+    msg: TelegramMessageInterface,
+  ): Promise<TelegramMessageInterface> {
     throw new Error('not implemented');
   }
 
-  private async handleEvent(msg: MessageInterface): Promise<void> {
+  private async handleEvent(msg: TelegramMessageInterface): Promise<void> {
     try {
       const chat: ChatInterface = await this.databaseService.ensureChat(msg);
-      const message: MessageInterface = await this.doAction(chat, msg);
+      const message: TelegramMessageInterface = await this.doAction(chat, msg);
 
       message.answer(
         this.templateService.getKeyboard(

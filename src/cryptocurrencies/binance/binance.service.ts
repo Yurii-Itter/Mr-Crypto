@@ -9,7 +9,10 @@ export class BinanceService extends BaseCryptocurrency {
       await this.getExchangeInfo('https://api.binance.com/api/v3/exchangeInfo')
     ).data.symbols
       .filter(({ status }) => status === 'TRADING')
-      .map(({ baseAsset, quoteAsset }) => `${baseAsset}-${quoteAsset === 'USDT' ? 'USD' : quoteAsset}`);
+      .map(
+        ({ baseAsset, quoteAsset }) =>
+          `${baseAsset}-${quoteAsset === 'USDT' ? 'USD' : quoteAsset}`,
+      );
   }
 
   public async streamHandler(symbols: string[]): Promise<void> {
@@ -17,8 +20,14 @@ export class BinanceService extends BaseCryptocurrency {
       `wss://stream.binance.com:9443/stream?streams=${symbols.reduce(
         (accum: string, symbol, index: number, array: any[]) => {
           array.length - 1 === index
-            ? (accum += `${symbol.replace('-', '').replace('USD', 'USDT').toLowerCase()}@ticker`)
-            : (accum += `${symbol.replace('-', '').replace('USD', 'USDT').toLowerCase()}@ticker/`);
+            ? (accum += `${symbol
+                .replace('-', '')
+                .replace('USD', 'USDT')
+                .toLowerCase()}@ticker`)
+            : (accum += `${symbol
+                .replace('-', '')
+                .replace('USD', 'USDT')
+                .toLowerCase()}@ticker/`);
 
           return accum;
         },

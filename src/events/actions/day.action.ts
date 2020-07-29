@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { MessageInterface } from '../../message/interfaces/message.interface';
+import { TelegramMessageInterface } from '../../telegram/interfaces/message.interface';
 import { ChatInterface } from '../../database/interfaces/chat.interface';
 
 import { Action } from '../action';
@@ -13,8 +13,8 @@ export class DayAction extends Action {
 
   protected async doAction(
     chat: ChatInterface,
-    msg: MessageInterface,
-  ): Promise<MessageInterface> {
+    msg: TelegramMessageInterface,
+  ): Promise<TelegramMessageInterface> {
     try {
       if (!chat.timeZone) {
         return msg.withAction(this.appEmitter.TIMEZONE).withoutEdit();

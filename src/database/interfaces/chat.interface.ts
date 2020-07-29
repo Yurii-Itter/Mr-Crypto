@@ -2,10 +2,10 @@ import { Document } from 'mongoose';
 
 export interface ChatInterface extends Document {
   chatId: number;
-  firstName: string;
-  lastName: string;
-  lang: string;
-  sub: [
+  firstName?: string;
+  lastName?: string;
+  lang?: string;
+  sub?: [
     {
       symbol: string;
       period: {
@@ -15,15 +15,14 @@ export interface ChatInterface extends Document {
       };
     },
   ];
-  location: {
+  location?: {
     latitude: number;
     longitude: number;
   };
-  timeZone: {
+  timeZone?: {
     dstOffset: number;
     rawOffset: number;
     timeZoneId: string;
     timeZoneName: string;
   };
-  p: boolean;
 }
