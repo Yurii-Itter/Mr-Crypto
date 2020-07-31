@@ -1,12 +1,16 @@
 import { Model } from 'mongoose';
 
-import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { Injectable, Logger } from '@nestjs/common';
+
+import * as moment from 'moment';
 
 import { ChatInterface } from './interfaces/chat.interface';
+import { SubscriptionsInterface } from './interfaces/subscriptions.interface';
 
-import { TimeZoneDto } from './dto/time-zone.dto';
 import { CreateChatDto } from './dto/create-chat.dto';
+import { TimeZoneDto } from './dto/time-zone.dto';
+import { UnsubDto } from './dto/unsub.dto';
 import { SubDto } from './dto/sub.dto';
 
 @Injectable()
@@ -51,6 +55,53 @@ export class DatabaseService {
   }
 
   public async sub({ chatId, sub }: SubDto): Promise<ChatInterface> {
-    return this.chatModel.findOneAndUpdate({ chatId }, { $push: { sub } });
+    try {
+      return this.chatModel.findOneAndUpdate({ chatId }, { $push: { sub } });
+    } catch (error) {
+      this.logger.log(error);
+    }
+  }
+
+  public async unsub({ chatId, symbol }: UnsubDto): Promise<ChatInterface> {
+    try {
+      return this.chatModel.findOneAndUpdate(
+        { chatId },
+        { $pull: { sub: { symbol } } },
+      );
+    } catch (error) {
+      this.logger.log(error);
+    }
+  }
+
+  public async subscriptions(): Promise<SubscriptionsInterface[]> {
+    try {
+      const day = moment().isoWeekday();
+      const hour = moment().hour();
+      const minute = moment().minute();
+
+      return this.chatModel.aggregate([
+        { $unwind: '$sub' },
+        {
+          $match: {
+            'sub.period.days': { $elemMatch: { $eq: day } },
+            'sub.period.hour': { $eq: hour },
+            'sub.period.minute': { $eq: minute },
+          },
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              chatId: '$chatId',
+              symbol: '$sub.symbol',
+              lang: '$lang',
+              firstName: '$firstName',
+              lastName: '$lastName',
+            },
+          },
+        },
+      ]);
+    } catch (error) {
+      this.logger.log(error);
+    }
   }
 }

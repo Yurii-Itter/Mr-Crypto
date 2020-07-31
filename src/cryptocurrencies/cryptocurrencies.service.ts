@@ -2,7 +2,6 @@ import { Injectable, Inject, forwardRef, Logger } from '@nestjs/common';
 
 import { BinanceService } from './binance/binance.service';
 import { CoinbaseService } from './coinbase/coinbase.service';
-import { TelegramService } from '../telegram/telegram.service';
 
 import { SymbolInterface } from './interfaces/symbol.interface';
 import { FormatedInterface } from './interfaces/formated.interface';
@@ -32,7 +31,10 @@ export class CryptocurrenciesService {
     const coinbase = await this.coinbaseService.symbols();
     const binance = await this.binanceService.symbols();
 
-    this.available = coinbase.filter(symbol => binance.indexOf(symbol) !== -1 && symbol.split('-')[1] === 'USD');
+    this.available = coinbase.filter(
+      symbol =>
+        binance.indexOf(symbol) !== -1 && symbol.split('-')[1] === 'USD',
+    );
 
     this.symbols = this.available.reduce((accum: SymbolInterface, symbol) => {
       const [base, quote] = symbol.split('-');
@@ -51,7 +53,7 @@ export class CryptocurrenciesService {
     }, {});
   }
 
-  public async cryptocurrenciesLauncher(): Promise<void> {
+  public async launch(): Promise<void> {
     await this.symbolsHandler();
     await this.coinbaseService.streamHandler(this.available);
     await this.binanceService.streamHandler(this.available);

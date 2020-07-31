@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { MessageInterface } from '../../message/interfaces/message.interface';
+import { TelegramMessageInterface } from '../../telegram/interfaces/message.interface';
 import { ChatInterface } from '../../database/interfaces/chat.interface';
 
 import { Action } from '../action';
@@ -13,8 +13,8 @@ export class BaseAction extends Action {
 
   protected async doAction(
     chat: ChatInterface,
-    msg: MessageInterface,
-  ): Promise<MessageInterface> {
+    msg: TelegramMessageInterface,
+  ): Promise<TelegramMessageInterface> {
     try {
       const base = msg.data ? msg.data.split('_')[0] : msg.text;
 
