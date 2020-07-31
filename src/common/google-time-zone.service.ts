@@ -18,11 +18,11 @@ export class GoogleTimeZoneService {
   public async getTimezone({
     latitude,
     longitude,
-  }: LocationInterface): Promise<TimeZoneInterface> {
+  }: LocationInterface, lang: string): Promise<TimeZoneInterface> {
     return (
       await axios.get(
         `https://maps.googleapis.com/maps/api/timezone/json?location=${latitude},${longitude}&timestamp=${Date.now() /
-          1000}&key=${this.config.get('GOOGLE_KEY')}`,
+        1000}&key=${this.config.get('GOOGLE_KEY')}&language=${lang}`,
       )
     ).data;
   }

@@ -17,10 +17,10 @@ export class CryptocurrenciesAction extends Action {
   ): Promise<TelegramMessageInterface> {
     try {
       const { location } = msg;
-      const { timeZone } = chat;
+      const { timeZone, lang } = chat;
 
       if (location && !timeZone) {
-        chat.timeZone = await this.timeZoneService.getTimezone(location);
+        chat.timeZone = await this.timeZoneService.getTimezone(location, lang);
         chat.location = location;
         await chat.save();
         msg.withData({ timezone: true });

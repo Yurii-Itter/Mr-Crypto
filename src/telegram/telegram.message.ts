@@ -55,12 +55,12 @@ export class TelegramMessage implements TelegramMessageInterface {
   ): Promise<boolean | Message> {
     return edit
       ? this.telegram.editMessageText(
-          this.chatId,
-          this.messageId,
-          null,
-          content,
-          keyboard,
-        )
+        this.chatId,
+        this.messageId,
+        null,
+        content,
+        keyboard,
+      )
       : this.telegram.sendMessage(this.chatId, content, keyboard);
   }
 
@@ -71,15 +71,15 @@ export class TelegramMessage implements TelegramMessageInterface {
   ): any {
     return type === 'inline'
       ? Extra.HTML().markup(
-          Markup.inlineKeyboard(this.keyboardFormater(type, keyboard)),
-        )
+        Markup.inlineKeyboard(this.keyboardFormater(type, keyboard)),
+      )
       : type === 'keyboard'
-      ? Extra.HTML().markup(
+        ? Extra.HTML().markup(
           Markup.keyboard(this.keyboardFormater(type, keyboard)).resize(),
         )
-      : edit
-      ? Extra.HTML()
-      : undefined;
+        : edit
+          ? Extra.HTML()
+          : undefined;
   }
 
   private keyboardFormater(type: string, keyboard: KeyboardInterface[][]) {
