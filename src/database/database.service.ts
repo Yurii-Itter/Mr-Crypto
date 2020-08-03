@@ -75,17 +75,43 @@ export class DatabaseService {
 
   public async subscriptions(): Promise<SubscriptionsInterface[]> {
     try {
-      const day = moment().isoWeekday();
-      const hour = moment().hour();
-      const minute = moment().minute();
-
       return this.chatModel.aggregate([
         { $unwind: '$sub' },
+        { $unwind: '$sub.period.days' },
         {
-          $match: {
-            'sub.period.days': { $elemMatch: { $eq: day } },
-            'sub.period.hour': { $eq: hour },
-            'sub.period.minute': { $eq: minute },
+          $set: {
+            date: {
+              $toDate: {
+                $multiply: [
+                  1000,
+                  {
+                    $add: [
+                      moment()
+                        .utc()
+                        .unix(),
+                      {
+                        $add: ['$timeZone.dstOffset', '$timeZone.rawOffset'],
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          },
+        },
+        {
+          $redact: {
+            $cond: {
+              if: {
+                $and: [
+                  { $eq: [{ $isoDayOfWeek: '$date' }, '$sub.period.days'] },
+                  { $eq: [{ $hour: '$date' }, '$sub.period.hour'] },
+                  { $eq: [{ $minute: '$date' }, '$sub.period.minute'] },
+                ],
+              },
+              then: '$$KEEP',
+              else: '$$PRUNE',
+            },
           },
         },
         {

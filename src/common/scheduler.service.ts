@@ -19,6 +19,8 @@ export class SchedulerService {
     this.appEmitter = appEmitter;
     this.databaseService = databaseService;
     this.telegramService = telegramService;
+
+    this.triggerSubscriptions();
   }
 
   @Cron(CronExpression.EVERY_MINUTE)

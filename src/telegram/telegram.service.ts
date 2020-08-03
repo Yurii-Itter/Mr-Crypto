@@ -70,11 +70,7 @@ export class TelegramService {
       );
 
     this.bot
-      .action(/.+_baseback/, async ctx => this.emit(appEmitter.BASE, ctx, true))
-      .action(/.+_quoteback/, async ctx =>
-        this.emit(appEmitter.QUOTE, ctx, true),
-      )
-      .action(/.+_dayback/, async ctx => this.emit(appEmitter.DAY, ctx, true))
+      .action(/.+_base/, async ctx => this.emit(appEmitter.BASE, ctx, true))
       .action(/.+_day/, async ctx => this.emit(appEmitter.DAY, ctx, true))
       .action(/.+_time/, async ctx => this.emit(appEmitter.TIME, ctx, true))
       .action(/.+_sub/, async ctx => this.emit(appEmitter.SUB, ctx, true))

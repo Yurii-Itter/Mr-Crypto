@@ -15,14 +15,14 @@ export class GoogleTimeZoneService {
     this.config = config;
   }
 
-  public async getTimezone({
-    latitude,
-    longitude,
-  }: LocationInterface, lang: string): Promise<TimeZoneInterface> {
+  public async getTimezone(
+    { latitude, longitude }: LocationInterface,
+    lang: string,
+  ): Promise<TimeZoneInterface> {
     return (
       await axios.get(
         `https://maps.googleapis.com/maps/api/timezone/json?location=${latitude},${longitude}&timestamp=${Date.now() /
-        1000}&key=${this.config.get('GOOGLE_KEY')}&language=${lang}`,
+          1000}&key=${this.config.get('GOOGLE_KEY')}&language=${lang}`,
       )
     ).data;
   }
