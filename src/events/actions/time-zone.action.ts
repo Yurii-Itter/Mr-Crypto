@@ -1,22 +1,18 @@
+import { TelegrafContext as Context } from 'telegraf/typings/context';
+
 import { Injectable } from '@nestjs/common';
 
 import { Action } from '../action';
 
-import { TelegramMessageInterface } from '../../telegram/interfaces/message.interface';
-import { ChatInterface } from '../../database/interfaces/chat.interface';
-
 @Injectable()
 export class TimeZoneAction extends Action {
   protected setEvent(): void {
-    this.action = this.appEmitter.TIMEZONE;
+    this.event = this.eventService.TIMEZONE;
   }
 
-  protected async doAction(
-    chat: ChatInterface,
-    msg: TelegramMessageInterface,
-  ): Promise<TelegramMessageInterface> {
+  protected async doAction(ctx: Context): Promise<void> {
     try {
-      return msg;
+      // return msg;
     } catch (error) {
       this.logger.error(error);
     }

@@ -1,94 +1,84 @@
 import { Telegraf, Telegram } from 'telegraf';
 
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, Logger } from '@nestjs/common';
 
+import { EventService } from '../common/event.service';
 import { ConfigService } from '../common/config.service';
-import { AppEmitter } from '../common/event.service';
-import { CryptocurrenciesService } from '../cryptocurrencies/cryptocurrencies.service';
-
-import { TelegramMessage } from './telegram.message';
+import { ExchangeService } from '../exchanges/exchange.service';
 
 @Injectable()
 export class TelegramService {
+  private logger: Logger;
+
   private bot: Telegraf<any>;
-  private telegram: Telegram;
-  private appEmitter: AppEmitter;
-  private cryptocurrenciesService: CryptocurrenciesService;
+  private eventService: EventService;
+  private exchangeService: ExchangeService;
+
+  public telegram: Telegram;
 
   constructor(
-    @Inject('CryptocurrenciesServiceInstance')
-    cryptocurrenciesService: CryptocurrenciesService,
+    @Inject('ExchangeServiceInstance')
+    exchangeService: ExchangeService,
     configService: ConfigService,
-    appEmitter: AppEmitter,
+    eventService: EventService,
+    logger: Logger,
   ) {
     const token = configService.get('TELEGRAM_BOT_TOKEN');
     this.bot = new Telegraf(token);
+
+    this.logger = logger;
+    this.eventService = eventService;
     this.telegram = this.bot.telegram;
+    this.exchangeService = exchangeService;
 
-    this.appEmitter = appEmitter;
-    this.cryptocurrenciesService = cryptocurrenciesService;
-
-    this.bot.start(async ctx => this.emit(appEmitter.START, ctx, false));
+    this.bot.start(async ctx =>
+      this.eventService.emit(this.eventService.START, ctx),
+    );
 
     this.bot.on('location', async ctx =>
-      this.emit(appEmitter.CRYPTOCURRENCIES, ctx, false),
+      this.eventService.emit(this.eventService.CRYPTOCURRENCIES, ctx),
     );
 
     this.bot
-      .hears(
-        (base: string) => {
-          return cryptocurrenciesService.getBase().includes(base)
-            ? /true/.exec('true')
-            : /true/.exec('false');
-        },
-        async ctx => this.emit(appEmitter.BASE, ctx, false),
-      )
-      .hears(
-        (symbol: string) => {
-          return cryptocurrenciesService
-            .getSymbols()
-            .includes(symbol.replace('-', ''))
-            ? /true/.exec('true')
-            : /true/.exec('false');
-        },
-        async ctx => this.emit(appEmitter.QUOTE, ctx, false),
-      )
-      .hears(['Cryptocurrencies 💰', 'Криптовалюты 💰'], async ctx =>
-        this.emit(appEmitter.CRYPTOCURRENCIES, ctx, false),
-      )
-      .hears(['My Subscriptions ⭐️', 'Мои Подписки ⭐️'], async ctx =>
-        this.emit(appEmitter.SUBSCRIPTIONS, ctx, false),
-      )
-      .hears(['About Service 🚀', 'О Сервисе 🚀'], async ctx =>
-        this.emit(appEmitter.ABOUT, ctx, false),
+      .hears(['◀️ Back', '◀️ Назад'], async ctx =>
+        this.eventService.emit(this.eventService.MENU, ctx),
       )
       .hears(['Settings ⚙️', 'Настройки ⚙️'], async ctx =>
-        this.emit(appEmitter.SETTINGS, ctx, false),
+        this.eventService.emit(this.eventService.SETTINGS, ctx),
       )
-      .hears(['◀️ Back', '◀️ Назад'], async ctx =>
-        this.emit(appEmitter.MENU, ctx, false),
+      .hears(['About Service 🚀', 'О Сервисе 🚀'], async ctx =>
+        this.eventService.emit(this.eventService.ABOUT, ctx),
+      )
+      .hears(['My Subscriptions ⭐️', 'Мои Подписки ⭐️'], async ctx =>
+        this.eventService.emit(eventService.SUBSCRIPTIONS, ctx),
+      )
+      .hears(['Cryptocurrencies 💰', 'Криптовалюты 💰'], async ctx =>
+        this.eventService.emit(this.eventService.CRYPTOCURRENCIES, ctx),
       );
 
     this.bot
-      .action(/.+_base/, async ctx => this.emit(appEmitter.BASE, ctx, true))
-      .action(/.+_day/, async ctx => this.emit(appEmitter.DAY, ctx, true))
-      .action(/.+_time/, async ctx => this.emit(appEmitter.TIME, ctx, true))
-      .action(/.+_sub/, async ctx => this.emit(appEmitter.SUB, ctx, true))
-      .action(/.+_unsub/, async ctx => this.emit(appEmitter.UNSUB, ctx, true))
-      .action(/.+_quote/, async ctx => this.emit(appEmitter.QUOTE, ctx, true));
-  }
-
-  public async emit(action: string, ctx: any, edit: boolean): Promise<void> {
-    this.appEmitter.emit(
-      action,
-      edit
-        ? new TelegramMessage(ctx, this.telegram).withEdit()
-        : new TelegramMessage(ctx, this.telegram),
-    );
+      .action(/^.+_base$/, async ctx =>
+        this.eventService.emit(this.eventService.BASE, ctx),
+      )
+      .action(/^.+_days$/, async ctx =>
+        this.eventService.emit(this.eventService.DAYS, ctx),
+      )
+      .action(/^.+_time$/, async ctx =>
+        this.eventService.emit(this.eventService.TIME, ctx),
+      )
+      .action(/^.+_unsub$/, async ctx =>
+        this.eventService.emit(this.eventService.UNSUB, ctx),
+      )
+      .action(/^.+_quote$/, async ctx =>
+        this.eventService.emit(this.eventService.QUOTE, ctx),
+      )
+      .action(/^.+_subscribe$/, async ctx =>
+        this.eventService.emit(this.eventService.SUBSCRIBE, ctx),
+      );
   }
 
   public async launch(): Promise<void> {
-    await this.cryptocurrenciesService.launch();
+    await this.exchangeService.launch();
     await this.bot.launch();
   }
 }

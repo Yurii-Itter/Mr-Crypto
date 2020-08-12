@@ -14,13 +14,14 @@ import { TimeZoneAction } from './actions/time-zone.action';
 import { DayAction } from './actions/day.action';
 import { TimeAction } from './actions/time.action';
 
-import { CryptocurrenciesModule } from '../cryptocurrencies/cryptocurrencies.module';
+import { TelegramModule } from '../telegram/telegram.module';
+import { ExchangeModule } from '../exchanges/exchange.module';
 
 import { CommonModule } from '../common/common.module';
 import { DatabaseModule } from '../database/database.module';
 
 @Module({
-  imports: [CommonModule, DatabaseModule, CryptocurrenciesModule],
+  imports: [CommonModule, DatabaseModule, ExchangeModule, TelegramModule],
   providers: [
     StartAction,
     CryptocurrenciesAction,

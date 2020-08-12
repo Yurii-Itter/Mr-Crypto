@@ -2,30 +2,31 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as handlebars from 'handlebars';
 import { readDirDeepSync } from 'read-dir-deep';
+import { Extra, Markup } from 'telegraf';
 
 import { Injectable, Logger } from '@nestjs/common';
 
-import { ParamsInterface } from './interfaces/params.interface';
-import { ApplyInterface } from './interfaces/apply.interface';
-import { KeyboardInterface } from '../common/interfaces/keyboard.interface';
+import { TemplateInterface } from './interfaces/template.interface';
 
 @Injectable()
 export class TemplateService {
-  private readonly DEFAULT_LANG: string = 'en';
   private readonly TEMPLATE_PATH: string = 'templates';
 
   private logger: Logger;
-  private templatesMap: Map<string, (d: any) => string>;
+  private templatesMap: Map<string, (data: any) => string>;
 
   constructor(logger: Logger) {
     this.logger = logger;
 
+    //todo
     handlebars.registerHelper('toggle', state => {
-      return state === 'son'
-        ? 'soff'
-        : state === 'off' || state === 'soff'
-        ? 'on'
-        : 'off';
+      if (state === 'son') {
+        return 'soff';
+      } else if (state === 'off' || state === 'soff') {
+        return 'on';
+      } else {
+        return 'off';
+      }
     });
 
     handlebars.registerHelper('switch', state => {
@@ -39,92 +40,102 @@ export class TemplateService {
     this.load();
   }
 
-  public apply(params: ParamsInterface, data: any): string {
-    let template = this.getTemplate(params);
+  private load(): void {
+    const templatesDir = path.join(process.cwd(), this.TEMPLATE_PATH);
+    const templateFileNames = readDirDeepSync(templatesDir);
 
-    if (!template) {
-      params.lang = this.DEFAULT_LANG;
-      template = this.getTemplate(params);
-    }
+    this.templatesMap = templateFileNames.reduce((acc, fileName) => {
+      const template = fs.readFileSync(fileName, { encoding: 'utf-8' });
+      const [, lang, action] = fileName.replace(/\.hbs$/, '').split('/');
 
-    if (!template) {
-      throw new Error('template-not-found');
-    }
-
-    return template(data);
+      return acc.set(`${lang}-${action}`, handlebars.compile(template));
+    }, new Map());
   }
 
-  public getKeyboard(template: any): ApplyInterface {
-    const type = template.match(
-      /<(keyboard|inline)>(?:.|\n)+<\/(?:keyboard|inline)>/,
-    );
+  // private getTemplate(language_code: string, action: string): (data: any) => string {
+  //   return this.templatesMap.get(this.getTemplateKey(language_code, action));
+  // }
 
-    const content = template
-      .replace(/[^\n\S]+(.+)/g, '$1')
+  // private getTemplateKey(lang: string, action: string): string {
+  //   return `${lang}-${action}`;
+  // }
+
+  // public apply(language_code: string, action: string, data: any): string {
+  //   const template = this.getTemplate(language_code, action)(data);
+
+  //   if (!template) {
+  //     throw new Error('template-not-found');
+  //   }
+
+  //   return template;
+  // }
+
+  private getContent(raw: string): string {
+    return raw.replace(/[^\n\S]+(.+)/g, '$1')
       .replace(/>\n([^<\n])/g, '>$1')
       .replace(/([^>\n])\n</g, '$1<')
       .match(/(?:.|\n)*(<content>(?:.|\n)*<\/content>)/)[1]
       .replace(/\s*\n?<\/?content>\n?\s*/g, '');
-
-    return type
-      ? {
-          type: type[1],
-          keyboard: this.parseKeyboard(template, type[1]),
-          content,
-        }
-      : {
-          type: undefined,
-          content,
-        };
   }
 
-  private parseKeyboard(template: any, type: string): KeyboardInterface[][] {
-    const keyboard = [];
+  private getKeyboard(raw: string) {
+    const type = raw.match(
+      /<(keyboard|inline)>(?:.|\n)+<\/(?:keyboard|inline)>/,
+    );
 
-    template
-      .match(new RegExp(`<${type}>(?:.|\n)*<\/${type}>`))[0]
+    if (!type) {
+      return null;
+    }
+
+    const buttons = raw
+      .match(new RegExp(`<${type[1]}>(?:.|\n)*<\/${type[1]}>`))[0]
       .replace(/<\/?keyboard>/g, '')
       .replace(/\n/g, '')
       .replace(/>\s+</g, '><')
       .replace(/[^<]+/, '')
       .match(/(<line>(.+?)<\/line>)/g)
-      .forEach((line: string) => {
-        keyboard.push(
-          line.match(/<key.+?<\/key>/g).map(k => {
-            return {
-              action: k.match(/.+action="/)
-                ? k.replace(/.+action="/, '').replace(/".+/, '')
-                : undefined,
-              key: k.replace(/<\/?key[^>]*>/g, ''),
-            };
-          }),
-        );
-      });
+      .reduce((accum, line) => {
+        const keys = line.match(/<key.+?<\/key>/g);
+        if (type[1] === 'inline') {
+          accum.push();
+        } else if (type[1] === 'keyboard') {
+          accum.push();
+        }
+        return accum;
+      }, [])
+    // .replace(/<\/?keyboard>/g, '')
+    // .replace(/\n/g, '')
+    // .replace(/>\s+</g, '><')
+    // .replace(/[^<]+/, '')
+    // .match(/(<line>(.+?)<\/line>)/g)
 
-    return keyboard;
+    return buttons;
+    // .reduce((accum, line) => {
+    //   if (type === 'inline') {
+    //     accum.push()
+    //   } else if (type === 'keyboard') {
+
+    //   }
+    //   return accum
+    // }, []);
+    // .forEach((line: string) => {
+    //   keyboard.push(
+    //     line.match(/<key.+?<\/key>/g).map(k => {
+    //       return {
+    //         action: k.match(/.+action="/)
+    //           ? k.replace(/.+action="/, '').replace(/".+/, '')
+    //           : undefined,
+    //         key: k.replace(/<\/?key[^>]*>/g, ''),
+    //       };
+    //     }),
+    //   );
+    // });
   }
 
-  private getTemplate(params: ParamsInterface): (data: any) => string {
-    const { lang, action } = params;
-    return this.templatesMap.get(this.getTemplateKey(lang, action));
-  }
-
-  private load() {
-    const templatesDir: string = path.join(process.cwd(), this.TEMPLATE_PATH);
-    const templateFileNames: string[] = readDirDeepSync(templatesDir);
-
-    this.templatesMap = templateFileNames.reduce((acc, fileName) => {
-      const template = fs.readFileSync(fileName, { encoding: 'utf-8' });
-
-      const [, lang, action] = fileName.replace(/\.hbs$/, '').split('/');
-      return acc.set(
-        this.getTemplateKey(lang, action),
-        handlebars.compile(template),
-      );
-    }, new Map());
-  }
-
-  private getTemplateKey(lang: string, action: string): string {
-    return `${lang}-${action}`;
+  public apply(lang: string, action: string, data: any) {
+    const raw = this.templatesMap.get(`${lang}-${action}`)(data);
+    const content = this.getContent(raw);
+    const keyboard = this.getKeyboard(raw);
+    console.log(keyboard);
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable, Inject, forwardRef, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { BinanceService } from './binance/binance.service';
 import { CoinbaseService } from './coinbase/coinbase.service';
@@ -8,7 +8,7 @@ import { FormatedInterface } from './interfaces/formated.interface';
 import { SymbolValueInterface } from './interfaces/symbol-value.interface';
 
 @Injectable()
-export class CryptocurrenciesService {
+export class ExchangeService {
   private logger: Logger;
   private binanceService: BinanceService;
   private coinbaseService: CoinbaseService;

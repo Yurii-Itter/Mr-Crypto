@@ -8,7 +8,7 @@ import { UtilService } from '../common/util.service';
 import { ListInterface } from './interfaces/list.interface';
 
 @Injectable()
-export class BaseCryptocurrency {
+export class BaseExchange {
   protected utilService: UtilService;
   protected logger: Logger;
 

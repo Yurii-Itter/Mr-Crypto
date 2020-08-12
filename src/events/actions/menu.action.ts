@@ -1,22 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { TelegrafContext as Context } from 'telegraf/typings/context';
 
-import { TelegramMessageInterface } from '../../telegram/interfaces/message.interface';
-import { ChatInterface } from '../../database/interfaces/chat.interface';
+import { Injectable } from '@nestjs/common';
 
 import { Action } from '../action';
 
 @Injectable()
 export class MenuAction extends Action {
   protected setEvent(): void {
-    this.action = this.appEmitter.MENU;
+    this.event = this.eventService.MENU;
   }
 
-  protected async doAction(
-    chat: ChatInterface,
-    msg: TelegramMessageInterface,
-  ): Promise<TelegramMessageInterface> {
+  protected async doAction(ctx: Context): Promise<void> {
     try {
-      return msg;
+      this.templateService.apply('en', 'base', {
+        quotes: this.util.chunk(this.exchangeService.getQuote('BTC')),
+        chose: 'BTC',
+      });
+      // return msg;
     } catch (error) {
       this.logger.error(error);
     }

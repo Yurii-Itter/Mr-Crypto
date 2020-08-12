@@ -1,7 +1,7 @@
 export interface SubscriptionsInterface {
-  chatId: number;
+  id: number;
+  first_name: string;
+  last_name: string;
+  language_code: string;
   symbol: string;
-  lang: string;
-  firstName: string;
-  lastName: string;
 }

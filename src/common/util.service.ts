@@ -1,3 +1,6 @@
+import { Message } from 'telegraf/typings/telegram-types';
+import { TelegrafContext as Context } from 'telegraf/typings/context';
+
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -36,5 +39,15 @@ export class UtilService {
       .toString()
       .substring(0, 4)
       .replace(/0+$/, '');
+  }
+
+  public getMessage(ctx: Context): Message {
+    return ctx.update.message
+      ? ctx.update.message
+      : ctx.update.callback_query.message;
+  }
+
+  public getData(ctx: Context): string {
+    return ctx.update.callback_query.data;
   }
 }

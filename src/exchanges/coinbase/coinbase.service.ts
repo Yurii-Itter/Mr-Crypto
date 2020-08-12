@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
-import { BaseCryptocurrency } from '../base.cryptocurrency';
+import { BaseExchange } from '../base.exchange';
 
 @Injectable()
-export class CoinbaseService extends BaseCryptocurrency {
+export class CoinbaseService extends BaseExchange {
   public async symbols(): Promise<string[]> {
     return (
       await this.getExchangeInfo('https://api.pro.coinbase.com/products')

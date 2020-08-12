@@ -1,38 +1,31 @@
 import { Module, Logger, forwardRef } from '@nestjs/common';
-import { ScheduleModule } from '@nestjs/schedule';
 
-import { ConfigService } from './config.service';
-import { AppEmitter } from './event.service';
-import { TemplateService } from './template.service';
-import { GoogleTimeZoneService } from './google-time-zone.service';
 import { UtilService } from './util.service';
-import { SchedulerService } from './scheduler.service';
+import { EventService } from './event.service';
+import { ConfigService } from './config.service';
+import { TemplateService } from './template.service';
+import { TimeZoneService } from './time-zone.service';
 
 import { DatabaseModule } from '../database/database.module';
 import { TelegramModule } from '../telegram/telegram.module';
 
 @Module({
-  imports: [
-    forwardRef(() => TelegramModule),
-    forwardRef(() => DatabaseModule),
-    ScheduleModule.forRoot(),
-  ],
+  imports: [forwardRef(() => TelegramModule), forwardRef(() => DatabaseModule)],
   providers: [
-    { provide: ConfigService, useValue: new ConfigService() },
-    { provide: UtilService, useValue: new UtilService() },
-    { provide: AppEmitter, useValue: new AppEmitter() },
     { provide: Logger, useValue: new Logger() },
+    { provide: UtilService, useValue: new UtilService() },
+    { provide: EventService, useValue: new EventService() },
+    { provide: ConfigService, useValue: new ConfigService() },
     TemplateService,
-    GoogleTimeZoneService,
-    SchedulerService,
+    TimeZoneService,
   ],
   exports: [
-    ConfigService,
     Logger,
-    AppEmitter,
-    TemplateService,
-    GoogleTimeZoneService,
     UtilService,
+    EventService,
+    ConfigService,
+    TemplateService,
+    TimeZoneService,
   ],
 })
 export class CommonModule {}

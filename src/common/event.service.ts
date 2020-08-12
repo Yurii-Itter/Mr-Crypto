@@ -1,17 +1,17 @@
 import { EventEmitter } from 'events';
 
-export class AppEmitter extends EventEmitter {
-  public readonly START: string = 'start';
-  public readonly CRYPTOCURRENCIES: string = 'cryptocurrencies';
-  public readonly SUBSCRIPTIONS: string = 'subscriptions';
-  public readonly ABOUT: string = 'about';
-  public readonly SETTINGS: string = 'settings';
+export class EventService extends EventEmitter {
   public readonly MENU: string = 'menu';
   public readonly BASE: string = 'base';
-  public readonly QUOTE: string = 'quote';
-  public readonly SUB: string = 'sub';
-  public readonly UNSUB: string = 'unsub';
-  public readonly TIMEZONE: string = 'time-zone';
-  public readonly DAY: string = 'day';
+  public readonly DAYS: string = 'days';
   public readonly TIME: string = 'time';
+  public readonly QUOTE: string = 'quote';
+  public readonly UNSUB: string = 'unsub';
+  public readonly ABOUT: string = 'about';
+  public readonly START: string = 'start';
+  public readonly TIMEZONE: string = 'time-zone';
+  public readonly SETTINGS: string = 'settings';
+  public readonly SUBSCRIBE: string = 'subscribe';
+  public readonly SUBSCRIPTIONS: string = 'subscriptions';
+  public readonly CRYPTOCURRENCIES: string = 'cryptocurrencies';
 }

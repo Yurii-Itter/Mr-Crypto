@@ -1,21 +1,14 @@
 import * as mongoose from 'mongoose';
 
 import { LocationSchema } from './location.schema';
-import { TimeZoneSchema } from './time-zone.schema';
-import { SubSchema } from './sub.schema';
+import { SubscribtionSchema } from './subscription.schema';
 
 export const ChatSchema = new mongoose.Schema({
-  chatId: { type: Number, required: true, unique: true },
-  firstName: { type: String, required: true, trim: true },
-  lastName: { type: String, trim: true },
-  lang: { type: String, default: 'en' },
-  sub: [SubSchema],
-  location: {
-    type: LocationSchema,
-    default: undefined,
-  },
-  timeZone: {
-    type: TimeZoneSchema,
-    default: undefined,
-  },
+  id: { type: Number, required: true, unique: true },
+  first_name: { type: String, required: true, trim: true },
+  last_name: { type: String, required: false, trim: true },
+  language_code: { type: String, required: true, default: 'en' },
+  subscriptions: { type: [SubscribtionSchema], required: false },
+  location: { type: LocationSchema, required: false, default: undefined },
+  timeZoneId: { type: String, required: false },
 });

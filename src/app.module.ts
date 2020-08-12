@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { TelegramModule } from './telegram/telegram.module';
+import { ConfigService } from './common/config.service';
+
 import { EventModule } from './events/events.module';
 import { CommonModule } from './common/common.module';
+import { TelegramModule } from './telegram/telegram.module';
 import { DatabaseModule } from './database/database.module';
-import { CryptocurrenciesModule } from './cryptocurrencies/cryptocurrencies.module';
-
-import { ConfigService } from './common/config.service';
+import { ExchangeModule } from './exchanges/exchange.module';
 
 @Module({
   imports: [
@@ -24,10 +24,10 @@ import { ConfigService } from './common/config.service';
       }),
       inject: [ConfigService],
     }),
-    TelegramModule,
     EventModule,
     DatabaseModule,
-    CryptocurrenciesModule,
+    ExchangeModule,
+    TelegramModule,
   ],
   controllers: [],
   providers: [],

@@ -1,29 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { TelegrafContext as Context } from 'telegraf/typings/context';
 
-import { TelegramMessageInterface } from '../../telegram/interfaces/message.interface';
-import { ChatInterface } from '../../database/interfaces/chat.interface';
+import { Injectable } from '@nestjs/common';
 
 import { Action } from '../action';
 
 @Injectable()
 export class BaseAction extends Action {
   protected setEvent(): void {
-    this.action = this.appEmitter.BASE;
+    this.event = this.eventService.BASE;
   }
 
-  protected async doAction(
-    chat: ChatInterface,
-    msg: TelegramMessageInterface,
-  ): Promise<TelegramMessageInterface> {
+  protected async doAction(ctx: Context): Promise<void> {
     try {
-      const base = msg.data ? msg.data.split('_')[0] : msg.text;
-
-      return msg
-        .withData({
-          quotes: this.util.chunk(this.cryptocurrenciesService.getQuote(base)),
-          chose: base,
-        })
-        .withAction(this.appEmitter.BASE);
+      // const base = msg.queryData ? msg.queryData.split('_')[0] : msg.text;
+      // return msg
+      //   .withData({
+      //     quotes: this.util.chunk(this.cryptocurrenciesService.getQuote(base)),
+      //     chose: base,
+      //   })
+      //   .withAction(this.eventService.BASE);
     } catch (error) {
       this.logger.error(error);
     }

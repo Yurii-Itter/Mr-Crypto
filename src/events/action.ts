@@ -1,88 +1,58 @@
+import { TelegrafContext as Context } from 'telegraf/typings/context';
+
 import { Injectable, Inject, Logger } from '@nestjs/common';
 
-import { ConfigService } from '../common/config.service';
 import { UtilService } from '../common/util.service';
-import { AppEmitter } from '../common/event.service';
+import { EventService } from '../common/event.service';
+import { ConfigService } from '../common/config.service';
 import { TemplateService } from '../common/template.service';
+import { TimeZoneService } from '../common/time-zone.service';
 import { DatabaseService } from '../database/database.service';
-import { CryptocurrenciesService } from '../cryptocurrencies/cryptocurrencies.service';
-import { GoogleTimeZoneService } from '../common/google-time-zone.service';
-
-import { TelegramMessageInterface } from '../telegram/interfaces/message.interface';
-import { ChatInterface } from '../database/interfaces/chat.interface';
+import { ExchangeService } from '../exchanges/exchange.service';
 
 @Injectable()
 export class Action {
-  protected appEmitter: AppEmitter;
-  protected config: ConfigService;
-  protected util: UtilService;
+  protected event: string;
   protected logger: Logger;
-
+  protected util: UtilService;
+  protected config: ConfigService;
+  protected eventService: EventService;
   protected templateService: TemplateService;
   protected databaseService: DatabaseService;
-  protected timeZoneService: GoogleTimeZoneService;
-
-  protected action: string;
-  protected buttons: string[];
+  protected timeZoneService: TimeZoneService;
+  protected exchangeService: ExchangeService;
 
   constructor(
-    @Inject('CryptocurrenciesServiceInstance')
-    protected cryptocurrenciesService: CryptocurrenciesService,
-    config: ConfigService,
-    util: UtilService,
-    appEmitter: AppEmitter,
-    logger: Logger,
+    @Inject('ExchangeServiceInstance')
+    exchangeService: ExchangeService,
+    timeZoneService: TimeZoneService,
     templateService: TemplateService,
     databaseService: DatabaseService,
-    timeZoneService: GoogleTimeZoneService,
+    eventService: EventService,
+    config: ConfigService,
+    util: UtilService,
+    logger: Logger,
   ) {
-    this.config = config;
     this.util = util;
+    this.config = config;
     this.logger = logger;
-
-    this.appEmitter = appEmitter;
+    this.eventService = eventService;
     this.templateService = templateService;
     this.databaseService = databaseService;
     this.timeZoneService = timeZoneService;
+    this.exchangeService = exchangeService;
 
     this.setEvent();
 
-    this.logger.log(`subscribed on ${this.action} event`);
-    this.appEmitter.on(this.action, this.handleEvent.bind(this));
+    this.logger.log(`subscribed on ${this.event} event`);
+    this.eventService.on(this.event, this.doAction.bind(this));
   }
 
   protected setEvent(): void {
     throw new Error('not implemented');
   }
 
-  protected async doAction(
-    chat: ChatInterface,
-    msg: TelegramMessageInterface,
-  ): Promise<TelegramMessageInterface> {
+  protected async doAction(ctx: Context): Promise<void> {
     throw new Error('not implemented');
-  }
-
-  private async handleEvent(msg: TelegramMessageInterface): Promise<void> {
-    try {
-      const chat: ChatInterface = await this.databaseService.ensureChat(msg);
-      const message: TelegramMessageInterface = await this.doAction(chat, msg);
-
-      message.answer(
-        this.templateService.getKeyboard(
-          this.templateService.apply(
-            {
-              action: message.getReplyAction()
-                ? message.getReplyAction()
-                : this.action,
-              lang: chat.lang,
-            },
-            message.getReplyData(),
-          ),
-        ),
-        message.edit,
-      );
-    } catch (error) {
-      this.logger.error(error);
-    }
   }
 }
