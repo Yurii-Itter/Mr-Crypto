@@ -32,7 +32,7 @@ export class TelegramService {
     );
 
     this.bot.on('location', async ctx =>
-      this.eventService.emit(this.eventService.CRYPTOCURRENCIES, ctx),
+      this.eventService.emit(this.eventService.LOCATION, ctx),
     );
 
     this.bot

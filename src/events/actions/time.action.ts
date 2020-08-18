@@ -15,11 +15,10 @@ export class TimeAction extends Action {
   protected async doAction(ctx: Context, chat: ChatInterface): Promise<void> {
     try {
       const data = this.util.getData(ctx);
+
       const [parent] = data.match(/^(?:-?[^-]+){9}/);
-      const time = data
-        .replace(new RegExp(`${parent}-?`), '')
-        .split('-')
-        .map((t: string) => +t);
+      const rawTime = data.replace(new RegExp(`${parent}-?`), '');
+      const time = rawTime.split('-').map(t => +t);
 
       let [h, hh, m, mm] = time;
 
@@ -42,19 +41,14 @@ export class TimeAction extends Action {
         mm = 0;
       }
 
-      const { text, extra } = this.templateService.apply(
-        chat.language_code,
-        this.event,
-        {
-          parent,
-          h: h ? h : 0,
-          hh: hh ? hh : 0,
-          m: m ? m : 0,
-          mm: mm ? mm : 0,
-        }
-      );
-
-      await ctx.editMessageText(text, extra);
+      this.edit = true;
+      this.values = {
+        parent,
+        h: h ? h : 0,
+        hh: hh ? hh : 0,
+        m: m ? m : 0,
+        mm: mm ? mm : 0,
+      };
     } catch (error) {
       this.logger.error(error);
     }

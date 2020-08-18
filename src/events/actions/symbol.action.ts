@@ -14,20 +14,15 @@ export class SymbolAction extends Action {
 
   protected async doAction(ctx: Context, chat: ChatInterface): Promise<void> {
     try {
-      const symbol = this.util.getData(ctx);
+      const data = this.util.getData(ctx);
 
-      const { text, extra } = this.templateService.apply(
-        chat.language_code,
-        this.event,
-        {
-          list: this.exchangeService.getList(symbol),
-          subscribed: chat.subscriptions.map(s => s.symbol).includes(symbol),
-          formated: this.exchangeService.getFormated(symbol),
-          symbol,
-        }
-      );
+      const formated = data;
+      const subscribed = true;
+      const symbol = data.replace('-', '');
+      const list = this.exchangeService.getList(symbol);
 
-      await ctx.replyWithHTML(text, extra);
+      this.edit = false;
+      this.values = { list, subscribed, formated, symbol };
     } catch (error) {
       this.logger.error(error);
     }

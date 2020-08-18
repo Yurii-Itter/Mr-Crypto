@@ -7,16 +7,14 @@ export interface ChatInterface extends Document {
   first_name: string;
   last_name?: string;
   language_code: string;
-  subscriptions?: [
-    {
-      symbol: string;
-      period: {
-        days: number[];
-        hour: number;
-        minute: number;
-      };
-    },
-  ];
+  subscriptions?: {
+    symbol: string;
+    period: {
+      days: number[];
+      hour: number;
+      minute: number;
+    };
+  }[];
   location?: LocationInterface;
   timeZoneId?: string;
 }

@@ -14,7 +14,11 @@ import { TelegrafContext as Context } from 'telegraf/typings/context';
 
 @Injectable()
 export class Action {
+  protected values: any;
+  protected lang: string;
   protected event: string;
+  protected edit: boolean;
+  protected action: string;
   protected logger: Logger;
   protected util: UtilService;
   protected config: ConfigService;
@@ -45,6 +49,7 @@ export class Action {
     this.exchangeService = exchangeService;
 
     this.setEvent();
+    this.action = this.event;
 
     this.logger.log(`subscribed on ${this.event} event`);
     this.eventService.on(this.event, this.handleEvent.bind(this));
@@ -62,6 +67,17 @@ export class Action {
     const chatData = this.util.getChatData(ctx);
     const chat = await this.databaseService.ensureChat(chatData);
 
-    this.doAction(ctx, chat);
+    const { language_code } = chat;
+    this.lang = language_code;
+
+    await this.doAction(ctx, chat);
+
+    const { text, extra } = this.templateService.apply(
+      this.lang,
+      this.action,
+      this.values,
+    );
+
+    this.edit ? ctx.editMessageText(text, extra) : ctx.reply(text, extra);
   }
 }

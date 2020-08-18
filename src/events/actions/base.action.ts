@@ -15,17 +15,13 @@ export class BaseAction extends Action {
   protected async doAction(ctx: Context, chat: ChatInterface): Promise<void> {
     try {
       const data = this.util.getData(ctx);
+      const isCallback = this.util.isCallback(ctx);
 
-      const { text, extra } = this.templateService.apply(
-        chat.language_code,
-        this.event,
-        {
-          quotes: this.util.chunk(this.exchangeService.getQuote(data)),
-          chose: data,
-        },
-      );
+      const chose = data;
+      const quotes = this.util.chunk(this.exchangeService.getQuote(data), 3);
 
-      await ctx.replyWithHTML(text, extra);
+      this.edit = isCallback;
+      this.values = { quotes, chose };
     } catch (error) {
       this.logger.error(error);
     }

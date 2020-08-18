@@ -15,8 +15,6 @@ import { ExchangeService } from '../exchanges/exchange.service';
 
 @Injectable()
 export class ScheduledAction {
-  private scheduler: SchedulerRegistry;
-
   protected logger: Logger;
   protected jobName: string;
   protected util: UtilService;
@@ -29,6 +27,8 @@ export class ScheduledAction {
   protected databaseService: DatabaseService;
   protected timeZoneService: TimeZoneService;
   protected exchangeService: ExchangeService;
+
+  private scheduler: SchedulerRegistry;
 
   constructor(
     @Inject('ExchangeServiceInstance')
@@ -62,12 +62,6 @@ export class ScheduledAction {
     this.declareJob();
   }
 
-  private declareJob(): void {
-    const job = new CronJob(this.jobInterval, () => this.doAction());
-    this.scheduler.addCronJob(this.jobName, job);
-    job.start();
-  }
-
   protected setJobName(): void {
     throw new Error('not implemented');
   }
@@ -78,5 +72,11 @@ export class ScheduledAction {
 
   protected async doAction(): Promise<void> {
     throw new Error('not implemented');
+  }
+
+  private declareJob(): void {
+    const job = new CronJob(this.jobInterval, () => this.doAction());
+    this.scheduler.addCronJob(this.jobName, job);
+    job.start();
   }
 }

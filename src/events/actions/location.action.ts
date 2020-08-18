@@ -7,20 +7,24 @@ import { ChatInterface } from '../../database/interfaces/chat.interface';
 import { TelegrafContext as Context } from 'telegraf/typings/context';
 
 @Injectable()
-export class CryptocurrenciesAction extends Action {
+export class LocationAction extends Action {
   protected setEvent(): void {
-    this.event = this.eventService.CRYPTOCURRENCIES;
+    this.event = this.eventService.LOCATION;
   }
 
   protected async doAction(ctx: Context, chat: ChatInterface): Promise<void> {
     try {
-      const cryptocurrencies = this.util.chunk(
-        this.exchangeService.getBase(),
-        3,
-      );
+      const message = this.util.getMessage(ctx);
+
+      const { location } = message;
+      const updated = chat.timeZoneId ? true : false;
+      const { timeZoneId } = await this.timeZoneService.getTimezoe(location);
+
+      chat.timeZoneId = timeZoneId;
+      await chat.save();
 
       this.edit = false;
-      this.values = { cryptocurrencies };
+      this.values = { updated };
     } catch (error) {
       this.logger.error(error);
     }

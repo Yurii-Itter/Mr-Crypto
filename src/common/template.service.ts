@@ -16,7 +16,7 @@ type Button = KeyboardButton | InlineKeyboardButton;
 @Injectable()
 export class TemplateService {
   private readonly TEMPLATE_PATH: string = 'templates';
-  private templatesMap: Map<string, (data: any) => string>;
+  private templatesMap: Map<string, (values: any) => string>;
 
   constructor() {
     handlebars.registerHelper('toggle', state => {
@@ -124,8 +124,8 @@ export class TemplateService {
     });
   }
 
-  public apply(lang: string, event: string, data?: any): TemplateInterface {
-    const raw = this.templatesMap.get(`${lang}-${event}`)(data);
+  public apply(lang: string, event: string, values?: any): TemplateInterface {
+    const raw = this.templatesMap.get(`${lang}-${event}`)(values);
 
     const text = this.getText(raw);
     const rawKeyboar = this.getRawKeyboard(raw);
@@ -138,6 +138,6 @@ export class TemplateService {
       return { text, extra };
     }
 
-    return { text };
+    return { text, extra: { parse_mode: 'HTML' } };
   }
 }

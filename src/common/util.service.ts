@@ -8,11 +8,11 @@ import { TelegrafContext as Context } from 'telegraf/typings/context';
 
 @Injectable()
 export class UtilService {
-  public chunk(data: any[]): any[][] {
+  public chunk(data: any[], size: number): any[][] {
     let chunk = [];
 
     return data.reduce((accum, quote, index, array) => {
-      if (chunk.length === 2 || index === array.length - 1) {
+      if (chunk.length === size || index === array.length - 1) {
         chunk.push(quote);
         accum.push({ chunk });
         chunk = [];

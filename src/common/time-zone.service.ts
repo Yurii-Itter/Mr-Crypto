@@ -18,17 +18,15 @@ export class TimeZoneService {
     this.config = config;
   }
 
-  public async getTimezoe(
-    { latitude, longitude }: LocationInterface,
-    language_code: string,
-  ): Promise<TimeZoneInterface> {
+  public async getTimezoe({
+    latitude,
+    longitude,
+  }: LocationInterface): Promise<TimeZoneInterface> {
     try {
       return (
         await axios.get(
           `https://maps.googleapis.com/maps/api/timezone/json?location=${latitude},${longitude}&timestamp=${Date.now() /
-            1000}&key=${this.config.get(
-            'GOOGLE_KEY',
-          )}&language=${language_code}`,
+            1000}&key=${this.config.get('GOOGLE_KEY')}`,
         )
       ).data;
     } catch (error) {

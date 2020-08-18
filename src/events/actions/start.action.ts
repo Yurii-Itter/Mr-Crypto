@@ -13,15 +13,7 @@ export class StartAction extends Action {
   }
 
   protected async doAction(ctx: Context, chat: ChatInterface): Promise<void> {
-    try {
-      const { text, extra } = this.templateService.apply(
-        chat.language_code,
-        this.event,
-      );
-
-      await ctx.replyWithHTML(text, extra);
-    } catch (error) {
-      this.logger.error(error);
-    }
+    this.edit = false;
+    this.values = {};
   }
 }

@@ -14,19 +14,14 @@ export class SubscriptionsAction extends Action {
 
   protected async doAction(ctx: Context, chat: ChatInterface): Promise<void> {
     try {
-      const { text, extra } = this.templateService.apply(
-        chat.language_code,
-        this.event,
-        {
-          subscriptions: this.util.chunk(
-            chat.subscriptions.map(({ symbol }) =>
-              this.exchangeService.getFormated(symbol),
-            ),
-          ),
-        },
-      );
+      const unchunked = chat.subscriptions.map(subscription => {
+        const { symbol } = subscription;
+        return this.exchangeService.getFormated(symbol);
+      });
+      const subscriptions = this.util.chunk(unchunked, 2);
 
-      await ctx.replyWithHTML(text, extra);
+      this.edit = false;
+      this.values = { subscriptions };
     } catch (error) {
       this.logger.error(error);
     }

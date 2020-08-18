@@ -11,9 +11,11 @@ import { BaseAction } from './actions/base.action';
 import { QuoteAction } from './actions/quote.action';
 import { SubscribeAction } from './actions/subscribe.action';
 import { SubscriptionsScheduledAction } from './scheduled/subscriptions.action';
+import { SymbolAction } from './actions/symbol.action';
+import { LocationAction } from './actions/location.action';
 import { UnsubAction } from './actions/unsub.action';
 import { TimeZoneAction } from './actions/time-zone.action';
-import { DayAction } from './actions/day.action';
+import { DayAction } from './actions/days.action';
 import { TimeAction } from './actions/time.action';
 
 import { TelegramModule } from '../telegram/telegram.module';
@@ -32,7 +34,9 @@ import { DatabaseModule } from '../database/database.module';
   ],
   providers: [
     StartAction,
+    SymbolAction,
     CryptocurrenciesAction,
+    LocationAction,
     SubscriptionsScheduledAction,
     SubscriptionsAction,
     AboutAction,
