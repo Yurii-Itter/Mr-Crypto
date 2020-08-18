@@ -1,6 +1,6 @@
 import { Telegraf, Telegram } from 'telegraf';
 
-import { Injectable, Inject, Logger } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 
 import { EventService } from '../common/event.service';
 import { ConfigService } from '../common/config.service';
@@ -8,8 +8,6 @@ import { ExchangeService } from '../exchanges/exchange.service';
 
 @Injectable()
 export class TelegramService {
-  private logger: Logger;
-
   private bot: Telegraf<any>;
   private eventService: EventService;
   private exchangeService: ExchangeService;
@@ -21,12 +19,10 @@ export class TelegramService {
     exchangeService: ExchangeService,
     configService: ConfigService,
     eventService: EventService,
-    logger: Logger,
   ) {
     const token = configService.get('TELEGRAM_BOT_TOKEN');
     this.bot = new Telegraf(token);
 
-    this.logger = logger;
     this.eventService = eventService;
     this.telegram = this.bot.telegram;
     this.exchangeService = exchangeService;
@@ -40,6 +36,22 @@ export class TelegramService {
     );
 
     this.bot
+      .hears(
+        (base: string) => {
+          return exchangeService.getBase().includes(base)
+            ? /true/.exec('true')
+            : /true/.exec('false');
+        },
+        async ctx => this.eventService.emit(eventService.BASE, ctx),
+      )
+      .hears(
+        (symbol: string) => {
+          return exchangeService.getSymbols().includes(symbol.replace('-', ''))
+            ? /true/.exec('true')
+            : /true/.exec('false');
+        },
+        async ctx => this.eventService.emit(eventService.SYMBOL, ctx),
+      )
       .hears(['◀️ Back', '◀️ Назад'], async ctx =>
         this.eventService.emit(this.eventService.MENU, ctx),
       )

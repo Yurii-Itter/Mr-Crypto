@@ -31,10 +31,7 @@ export class ExchangeService {
     const coinbase = await this.coinbaseService.symbols();
     const binance = await this.binanceService.symbols();
 
-    this.available = coinbase.filter(
-      symbol =>
-        binance.indexOf(symbol) !== -1 && symbol.split('-')[1] === 'USD',
-    );
+    this.available = coinbase.filter(symbol => binance.indexOf(symbol) !== -1);
 
     this.symbols = this.available.reduce((accum: SymbolInterface, symbol) => {
       const [base, quote] = symbol.split('-');

@@ -1,32 +1,30 @@
-import * as path from 'path';
 import * as fs from 'fs';
+import * as path from 'path';
 import * as handlebars from 'handlebars';
-import { readDirDeepSync } from 'read-dir-deep';
 import { Extra, Markup } from 'telegraf';
+import { readDirDeepSync } from 'read-dir-deep';
 
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { TemplateInterface } from './interfaces/template.interface';
+
+import { ExtraReplyMessage } from 'telegraf/typings/telegram-types';
+import { KeyboardButton, InlineKeyboardButton } from 'telegraf/typings/markup';
+
+type Button = KeyboardButton | InlineKeyboardButton;
 
 @Injectable()
 export class TemplateService {
   private readonly TEMPLATE_PATH: string = 'templates';
-
-  private logger: Logger;
   private templatesMap: Map<string, (data: any) => string>;
 
-  constructor(logger: Logger) {
-    this.logger = logger;
-
-    //todo
+  constructor() {
     handlebars.registerHelper('toggle', state => {
-      if (state === 'son') {
-        return 'soff';
-      } else if (state === 'off' || state === 'soff') {
-        return 'on';
-      } else {
-        return 'off';
-      }
+      return state === 'son'
+        ? 'soff'
+        : state === 'off' || state === 'soff'
+        ? 'on'
+        : 'off';
     });
 
     handlebars.registerHelper('switch', state => {
@@ -46,96 +44,100 @@ export class TemplateService {
 
     this.templatesMap = templateFileNames.reduce((acc, fileName) => {
       const template = fs.readFileSync(fileName, { encoding: 'utf-8' });
-      const [, lang, action] = fileName.replace(/\.hbs$/, '').split('/');
+      const [, lang, event] = fileName.replace(/\.hbs$/, '').split('/');
 
-      return acc.set(`${lang}-${action}`, handlebars.compile(template));
+      return acc.set(`${lang}-${event}`, handlebars.compile(template));
     }, new Map());
   }
 
-  // private getTemplate(language_code: string, action: string): (data: any) => string {
-  //   return this.templatesMap.get(this.getTemplateKey(language_code, action));
-  // }
-
-  // private getTemplateKey(lang: string, action: string): string {
-  //   return `${lang}-${action}`;
-  // }
-
-  // public apply(language_code: string, action: string, data: any): string {
-  //   const template = this.getTemplate(language_code, action)(data);
-
-  //   if (!template) {
-  //     throw new Error('template-not-found');
-  //   }
-
-  //   return template;
-  // }
-
-  private getContent(raw: string): string {
-    return raw.replace(/[^\n\S]+(.+)/g, '$1')
+  private getText(raw: string): string {
+    return raw
+      .replace(/[^\n\S]+(.+)/g, '$1')
       .replace(/>\n([^<\n])/g, '>$1')
       .replace(/([^>\n])\n</g, '$1<')
       .match(/(?:.|\n)*(<content>(?:.|\n)*<\/content>)/)[1]
       .replace(/\s*\n?<\/?content>\n?\s*/g, '');
   }
 
-  private getKeyboard(raw: string) {
-    const type = raw.match(
-      /<(keyboard|inline)>(?:.|\n)+<\/(?:keyboard|inline)>/,
-    );
-
-    if (!type) {
-      return null;
-    }
-
-    const buttons = raw
-      .match(new RegExp(`<${type[1]}>(?:.|\n)*<\/${type[1]}>`))[0]
-      .replace(/<\/?keyboard>/g, '')
+  private getRawKeyboard(raw: string): RegExpMatchArray {
+    return raw
       .replace(/\n/g, '')
       .replace(/>\s+</g, '><')
-      .replace(/[^<]+/, '')
-      .match(/(<line>(.+?)<\/line>)/g)
-      .reduce((accum, line) => {
-        const keys = line.match(/<key.+?<\/key>/g);
-        if (type[1] === 'inline') {
-          accum.push();
-        } else if (type[1] === 'keyboard') {
-          accum.push();
-        }
-        return accum;
-      }, [])
-    // .replace(/<\/?keyboard>/g, '')
-    // .replace(/\n/g, '')
-    // .replace(/>\s+</g, '><')
-    // .replace(/[^<]+/, '')
-    // .match(/(<line>(.+?)<\/line>)/g)
-
-    return buttons;
-    // .reduce((accum, line) => {
-    //   if (type === 'inline') {
-    //     accum.push()
-    //   } else if (type === 'keyboard') {
-
-    //   }
-    //   return accum
-    // }, []);
-    // .forEach((line: string) => {
-    //   keyboard.push(
-    //     line.match(/<key.+?<\/key>/g).map(k => {
-    //       return {
-    //         action: k.match(/.+action="/)
-    //           ? k.replace(/.+action="/, '').replace(/".+/, '')
-    //           : undefined,
-    //         key: k.replace(/<\/?key[^>]*>/g, ''),
-    //       };
-    //     }),
-    //   );
-    // });
+      .match(/<(keyboard|inline)>(.+)<\/(?:keyboard|inline)>/);
   }
 
-  public apply(lang: string, action: string, data: any) {
-    const raw = this.templatesMap.get(`${lang}-${action}`)(data);
-    const content = this.getContent(raw);
-    const keyboard = this.getKeyboard(raw);
-    console.log(keyboard);
+  private keyHandler(type: string, key: string): Button {
+    const [, sub] =
+      key.search(/sub="[^"]+"/) !== -1 ? key.match(/sub="([^"]+)"/) : '';
+    const [, data] =
+      key.search(/data="[^"]+"/) !== -1 ? key.match(/data="([^"]+)"/) : '';
+    const [, text] = key.match(/<key[^>]*>([^<]+)<\/key>/);
+
+    if (type === 'keyboard') {
+      switch (sub) {
+        case 'contact':
+          return Markup.contactRequestButton(text);
+        case 'location':
+          return Markup.locationRequestButton(text);
+        default:
+          return text;
+      }
+    } else if (type === 'inline') {
+      switch (sub) {
+        case 'pay':
+          return Markup.payButton(text);
+        case 'game':
+          return Markup.gameButton(text);
+        case 'url':
+          return Markup.urlButton(text, data);
+        case 'chat':
+          return Markup.switchToChatButton(text, data);
+        case 'current':
+          return Markup.switchToCurrentChatButton(text, data);
+        default:
+          return Markup.callbackButton(text, data);
+      }
+    }
+  }
+
+  private extraHanddler(type: string, keyboard: Button[][]): ExtraReplyMessage {
+    if (type === 'keyboard') {
+      return Extra.HTML().markup(
+        Markup.keyboard(keyboard as KeyboardButton[][]).resize(),
+      );
+    } else if (type === 'inline') {
+      return Extra.HTML().markup(
+        Markup.inlineKeyboard(keyboard as InlineKeyboardButton[][]),
+      );
+    }
+  }
+
+  private formatKeyboard(type: string, lines: string): Button[][] {
+    return lines.match(/<line>.+?<\/line>/g).map(line => {
+      return line
+        .match(/<key[^>]*>.+?<\/key>/g)
+        .reduce((accum: Button[], key: string) => {
+          const button = this.keyHandler(type, key);
+          accum.push(button);
+          return accum;
+        }, []);
+    });
+  }
+
+  public apply(lang: string, event: string, data?: any): TemplateInterface {
+    const raw = this.templatesMap.get(`${lang}-${event}`)(data);
+
+    const text = this.getText(raw);
+    const rawKeyboar = this.getRawKeyboard(raw);
+
+    if (rawKeyboar) {
+      const [, type, lines] = rawKeyboar;
+      const keyboard = this.formatKeyboard(type, lines);
+      const extra = this.extraHanddler(type, keyboard);
+
+      return { text, extra };
+    }
+
+    return { text };
   }
 }

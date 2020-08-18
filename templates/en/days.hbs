@@ -1,0 +1,79 @@
+<content>
+  <strong>
+    Select day of week
+  </strong>
+</content>
+
+<inline>
+  <line>
+    <key data="{{parent}}-{{toggle mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_day">
+      {{#if (switch mon)}}
+        mon ✅
+      {{else}}
+        mon ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key data="{{parent}}-{{mon}}-{{toggle tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_day">
+      {{#if (switch tue)}}
+        tue ✅
+      {{else}}
+        tue ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key data="{{parent}}-{{mon}}-{{tue}}-{{toggle wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_day">
+      {{#if (switch wed)}}
+        wed ✅
+      {{else}}
+        wed ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{toggle thu}}-{{fri}}-{{sat}}-{{sun}}_day">
+      {{#if (switch thu)}}
+        thu ✅
+      {{else}}
+        thu ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{toggle fri}}-{{sat}}-{{sun}}_day">
+      {{#if (switch fri)}}
+        fri ✅
+      {{else}}
+        fri ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{toggle sat}}-{{sun}}_day">
+      {{#if (switch sat)}}
+        sat ✅
+      {{else}}
+        sat ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{toggle sun}}_day">
+      {{#if (switch sun)}}
+        sun ✅
+      {{else}}
+        sun ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key data="{{parent}}_quote">
+      ◀️ Back
+    </key>
+    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_time">
+      Next Step ▶️
+    </key>
+  </line>
+</inline>

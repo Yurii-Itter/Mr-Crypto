@@ -2,6 +2,7 @@ import { Module, Logger, forwardRef } from '@nestjs/common';
 
 import { UtilService } from './util.service';
 import { EventService } from './event.service';
+import { NameService } from './name.service';
 import { ConfigService } from './config.service';
 import { TemplateService } from './template.service';
 import { TimeZoneService } from './time-zone.service';
@@ -13,6 +14,7 @@ import { TelegramModule } from '../telegram/telegram.module';
   imports: [forwardRef(() => TelegramModule), forwardRef(() => DatabaseModule)],
   providers: [
     { provide: Logger, useValue: new Logger() },
+    { provide: NameService, useValue: new NameService() },
     { provide: UtilService, useValue: new UtilService() },
     { provide: EventService, useValue: new EventService() },
     { provide: ConfigService, useValue: new ConfigService() },
@@ -22,6 +24,7 @@ import { TelegramModule } from '../telegram/telegram.module';
   exports: [
     Logger,
     UtilService,
+    NameService,
     EventService,
     ConfigService,
     TemplateService,

@@ -1,8 +1,10 @@
-import { TelegrafContext as Context } from 'telegraf/typings/context';
-
 import { Injectable } from '@nestjs/common';
 
 import { Action } from '../action';
+
+import { ChatInterface } from '../../database/interfaces/chat.interface';
+
+import { TelegrafContext as Context } from 'telegraf/typings/context';
 
 @Injectable()
 export class BaseAction extends Action {
@@ -10,15 +12,20 @@ export class BaseAction extends Action {
     this.event = this.eventService.BASE;
   }
 
-  protected async doAction(ctx: Context): Promise<void> {
+  protected async doAction(ctx: Context, chat: ChatInterface): Promise<void> {
     try {
-      // const base = msg.queryData ? msg.queryData.split('_')[0] : msg.text;
-      // return msg
-      //   .withData({
-      //     quotes: this.util.chunk(this.cryptocurrenciesService.getQuote(base)),
-      //     chose: base,
-      //   })
-      //   .withAction(this.eventService.BASE);
+      const data = this.util.getData(ctx);
+
+      const { text, extra } = this.templateService.apply(
+        chat.language_code,
+        this.event,
+        {
+          quotes: this.util.chunk(this.exchangeService.getQuote(data)),
+          chose: data,
+        },
+      );
+
+      await ctx.replyWithHTML(text, extra);
     } catch (error) {
       this.logger.error(error);
     }

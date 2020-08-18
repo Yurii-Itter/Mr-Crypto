@@ -1,4 +1,6 @@
+import { ExtraReplyMessage } from 'telegraf/typings/telegram-types';
+
 export interface TemplateInterface {
-  content: string;
-  keyboard?: any;
+  text: string;
+  extra?: ExtraReplyMessage;
 }

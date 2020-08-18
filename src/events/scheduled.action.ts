@@ -1,25 +1,31 @@
+import { CronJob } from 'cron';
+
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { Injectable, Inject, Logger } from '@nestjs/common';
 
+import { NameService } from '../common/name.service';
 import { UtilService } from '../common/util.service';
 import { EventService } from '../common/event.service';
 import { ConfigService } from '../common/config.service';
 import { TemplateService } from '../common/template.service';
 import { TimeZoneService } from '../common/time-zone.service';
 import { DatabaseService } from '../database/database.service';
+import { TelegramService } from '../telegram/telegram.service';
 import { ExchangeService } from '../exchanges/exchange.service';
 
-import { ChatInterface } from '../database/interfaces/chat.interface';
-
-import { TelegrafContext as Context } from 'telegraf/typings/context';
-
 @Injectable()
-export class Action {
-  protected event: string;
+export class ScheduledAction {
+  private scheduler: SchedulerRegistry;
+
   protected logger: Logger;
+  protected jobName: string;
   protected util: UtilService;
+  protected jobInterval: string;
   protected config: ConfigService;
+  protected nameService: NameService;
   protected eventService: EventService;
   protected templateService: TemplateService;
+  protected telegramService: TelegramService;
   protected databaseService: DatabaseService;
   protected timeZoneService: TimeZoneService;
   protected exchangeService: ExchangeService;
@@ -27,10 +33,14 @@ export class Action {
   constructor(
     @Inject('ExchangeServiceInstance')
     exchangeService: ExchangeService,
+    @Inject('TelegramServiceInstance')
+    telegramService: TelegramService,
     timeZoneService: TimeZoneService,
     templateService: TemplateService,
     databaseService: DatabaseService,
+    scheduler: SchedulerRegistry,
     eventService: EventService,
+    nameService: NameService,
     config: ConfigService,
     util: UtilService,
     logger: Logger,
@@ -38,30 +48,35 @@ export class Action {
     this.util = util;
     this.config = config;
     this.logger = logger;
+    this.scheduler = scheduler;
     this.eventService = eventService;
+    this.nameService = nameService;
+    this.telegramService = telegramService;
     this.templateService = templateService;
     this.databaseService = databaseService;
     this.timeZoneService = timeZoneService;
     this.exchangeService = exchangeService;
 
-    this.setEvent();
-
-    this.logger.log(`subscribed on ${this.event} event`);
-    this.eventService.on(this.event, this.handleEvent.bind(this));
+    this.setJobName();
+    this.setJobInterval();
+    this.declareJob();
   }
 
-  protected setEvent(): void {
+  private declareJob(): void {
+    const job = new CronJob(this.jobInterval, () => this.doAction());
+    this.scheduler.addCronJob(this.jobName, job);
+    job.start();
+  }
+
+  protected setJobName(): void {
     throw new Error('not implemented');
   }
 
-  protected async doAction(ctx: Context, chat: ChatInterface): Promise<void> {
+  protected setJobInterval(): void {
     throw new Error('not implemented');
   }
 
-  private async handleEvent(ctx: Context): Promise<void> {
-    const chatData = this.util.getChatData(ctx);
-    const chat = await this.databaseService.ensureChat(chatData);
-
-    this.doAction(ctx, chat);
+  protected async doAction(): Promise<void> {
+    throw new Error('not implemented');
   }
 }

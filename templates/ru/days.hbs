@@ -1,0 +1,79 @@
+<content>
+  <strong>
+    Выберите дни недели
+  </strong>
+</content>
+
+<inline>
+  <line>
+    <key data="{{parent}}-{{toggle mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_day">
+      {{#if (switch mon)}}
+        пн ✅
+      {{else}}
+        пн ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key data="{{parent}}-{{mon}}-{{toggle tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_day">
+      {{#if (switch tue)}}
+        вт ✅
+      {{else}}
+        вт ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key data="{{parent}}-{{mon}}-{{tue}}-{{toggle wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_day">
+      {{#if (switch wed)}}
+        ср ✅
+      {{else}}
+        ср ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{toggle thu}}-{{fri}}-{{sat}}-{{sun}}_day">
+      {{#if (switch thu)}}
+        чт ✅
+      {{else}}
+        чт ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{toggle fri}}-{{sat}}-{{sun}}_day">
+      {{#if (switch fri)}}
+        пт ✅
+      {{else}}
+        пт ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{toggle sat}}-{{sun}}_day">
+      {{#if (switch sat)}}
+        сб ✅
+      {{else}}
+        сб ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{toggle sun}}_day">
+      {{#if (switch sun)}}
+        вс ✅
+      {{else}}
+        вс ❌
+      {{/if}}
+    </key>
+  </line>
+  <line>
+    <key data="{{parent}}_quote">
+      ◀️ Назад
+    </key>
+    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_time">
+      Дальше ▶️
+    </key>
+  </line>
+</inline>

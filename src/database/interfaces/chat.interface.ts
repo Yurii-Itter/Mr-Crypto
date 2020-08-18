@@ -11,7 +11,7 @@ export interface ChatInterface extends Document {
     {
       symbol: string;
       period: {
-        days: [number];
+        days: number[];
         hour: number;
         minute: number;
       };

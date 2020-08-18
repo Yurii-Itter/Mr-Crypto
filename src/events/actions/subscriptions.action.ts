@@ -1,8 +1,10 @@
-import { TelegrafContext as Context } from 'telegraf/typings/context';
-
 import { Injectable } from '@nestjs/common';
 
 import { Action } from '../action';
+
+import { ChatInterface } from '../../database/interfaces/chat.interface';
+
+import { TelegrafContext as Context } from 'telegraf/typings/context';
 
 @Injectable()
 export class SubscriptionsAction extends Action {
@@ -10,16 +12,21 @@ export class SubscriptionsAction extends Action {
     this.event = this.eventService.SUBSCRIPTIONS;
   }
 
-  protected async doAction(ctx: Context): Promise<void> {
+  protected async doAction(ctx: Context, chat: ChatInterface): Promise<void> {
     try {
-      // const { sub } = chat;
-      // return msg.withData({
-      //   sub: this.util.chunk(
-      //     sub.map(({ symbol }) =>
-      //       this.cryptocurrenciesService.getFormated(symbol),
-      //     ),
-      //   ),
-      // });
+      const { text, extra } = this.templateService.apply(
+        chat.language_code,
+        this.event,
+        {
+          subscriptions: this.util.chunk(
+            chat.subscriptions.map(({ symbol }) =>
+              this.exchangeService.getFormated(symbol),
+            ),
+          ),
+        },
+      );
+
+      await ctx.replyWithHTML(text, extra);
     } catch (error) {
       this.logger.error(error);
     }

@@ -23,17 +23,10 @@ export class DatabaseService {
     this.chatModel = chatModel;
   }
 
-  public async findChat(id: number): Promise<ChatInterface> {
+  public async ensureChat(chat: CreateChatDto): Promise<ChatInterface> {
     try {
-      return this.chatModel.findOne({ id });
-    } catch (error) {
-      this.logger.error(error);
-    }
-  }
-
-  public async createChat(chat: CreateChatDto): Promise<ChatInterface> {
-    try {
-      return this.chatModel.create(chat);
+      const existedChat = await this.chatModel.findOne({ id: chat.id });
+      return existedChat ? existedChat : this.chatModel.create(chat);
     } catch (error) {
       this.logger.error(error);
     }
@@ -42,37 +35,36 @@ export class DatabaseService {
   public async findSubscriptions(): Promise<SubscriptionsInterface[]> {
     try {
       return this.chatModel.aggregate([
-        { $unwind: '$sub' },
-        { $unwind: '$sub.period.days' },
-        {
-          $set: {
-            date: {
-              $toDate: {
-                $multiply: [
-                  1000,
-                  {
-                    $add: [
-                      moment()
-                        .utc()
-                        .unix(),
-                      {
-                        $add: ['$timeZone.dstOffset', '$timeZone.rawOffset'],
-                      },
-                    ],
-                  },
-                ],
-              },
-            },
-          },
-        },
+        { $unwind: '$subscriptions' },
+        { $unwind: '$subscriptions.period.days' },
         {
           $redact: {
             $cond: {
               if: {
                 $and: [
-                  { $eq: [{ $isoDayOfWeek: '$date' }, '$sub.period.days'] },
-                  { $eq: [{ $hour: '$date' }, '$sub.period.hour'] },
-                  { $eq: [{ $minute: '$date' }, '$sub.period.minute'] },
+                  {
+                    $eq: [
+                      {
+                        $isoDayOfWeek: {
+                          date: '$$NOW',
+                          timezone: '$timeZoneId',
+                        },
+                      },
+                      '$subscriptions.period.days',
+                    ],
+                  },
+                  {
+                    $eq: [
+                      { $hour: { date: '$$NOW', timezone: '$timeZoneId' } },
+                      '$subscriptions.period.hour',
+                    ],
+                  },
+                  {
+                    $eq: [
+                      { $minute: { date: '$$NOW', timezone: '$timeZoneId' } },
+                      '$subscriptions.period.minute',
+                    ],
+                  },
                 ],
               },
               then: '$$KEEP',
@@ -83,11 +75,9 @@ export class DatabaseService {
         {
           $replaceRoot: {
             newRoot: {
-              chatId: '$chatId',
-              symbol: '$sub.symbol',
-              lang: '$lang',
-              firstName: '$firstName',
-              lastName: '$lastName',
+              id: '$id',
+              language_code: '$language_code',
+              symbol: '$subscriptions.symbol',
             },
           },
         },

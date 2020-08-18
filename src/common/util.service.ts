@@ -1,7 +1,10 @@
 import { Message } from 'telegraf/typings/telegram-types';
-import { TelegrafContext as Context } from 'telegraf/typings/context';
 
 import { Injectable } from '@nestjs/common';
+
+import { CreateChatDto } from '../database/dto/create-chat.dto';
+
+import { TelegrafContext as Context } from 'telegraf/typings/context';
 
 @Injectable()
 export class UtilService {
@@ -48,6 +51,20 @@ export class UtilService {
   }
 
   public getData(ctx: Context): string {
-    return ctx.update.callback_query.data;
+    return ctx.update.message
+      ? ctx.update.message.text
+      : ctx.update.callback_query.data.split('_')[0];
+  }
+
+  public isCallback(ctx: Context): boolean {
+    return ctx.update.callback_query ? true : false;
+  }
+
+  public getChatData(ctx: Context): CreateChatDto {
+    const { from, chat } = this.getMessage(ctx);
+    const { first_name, last_name, language_code } = from;
+    const { id } = chat;
+
+    return { id, first_name, last_name, language_code };
   }
 }
