@@ -3,6 +3,6 @@ import * as mongoose from 'mongoose';
 import { PeriodSchema } from './period.schema';
 
 export const SubscribtionSchema = new mongoose.Schema({
-  symbol: { type: String },
+  symbol: { type: String, required: true, unique: true },
   period: PeriodSchema,
 });

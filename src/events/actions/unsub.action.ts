@@ -16,6 +16,9 @@ export class UnsubAction extends Action {
     try {
       const data = this.util.getData(ctx);
 
+      const { language_code } = chat;
+      const action = this.eventService.UNSUB;
+
       const symbol = data;
       const formated = this.exchangeService.getFormated(symbol);
 
@@ -24,8 +27,12 @@ export class UnsubAction extends Action {
       );
       await chat.save();
 
-      this.edit = true;
-      this.values = { formated };
+      const template = this.templateService.apply(language_code, action, {
+        formated,
+      });
+      const { text, extra } = template;
+
+      await ctx.editMessageText(text, extra);
     } catch (error) {
       this.logger.error(error);
     }

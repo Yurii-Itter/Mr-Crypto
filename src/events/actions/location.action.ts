@@ -16,6 +16,9 @@ export class LocationAction extends Action {
     try {
       const message = this.util.getMessage(ctx);
 
+      const { language_code } = chat;
+      const action = this.eventService.LOCATION;
+
       const { location } = message;
       const updated = chat.timeZoneId ? true : false;
       const { timeZoneId } = await this.timeZoneService.getTimezoe(location);
@@ -23,8 +26,12 @@ export class LocationAction extends Action {
       chat.timeZoneId = timeZoneId;
       await chat.save();
 
-      this.edit = false;
-      this.values = { updated };
+      const template = this.templateService.apply(language_code, action, {
+        updated,
+      });
+      const { text, extra } = template;
+
+      await ctx.reply(text, extra);
     } catch (error) {
       this.logger.error(error);
     }

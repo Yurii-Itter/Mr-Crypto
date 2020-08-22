@@ -13,17 +13,19 @@ import { DatabaseService } from '../database/database.service';
 import { TelegramService } from '../telegram/telegram.service';
 import { ExchangeService } from '../exchanges/exchange.service';
 
+import { Telegram } from 'telegraf/typings/telegram';
+
 @Injectable()
 export class ScheduledAction {
   protected logger: Logger;
   protected jobName: string;
   protected util: UtilService;
+  protected telegram: Telegram;
   protected jobInterval: string;
   protected config: ConfigService;
   protected nameService: NameService;
   protected eventService: EventService;
   protected templateService: TemplateService;
-  protected telegramService: TelegramService;
   protected databaseService: DatabaseService;
   protected timeZoneService: TimeZoneService;
   protected exchangeService: ExchangeService;
@@ -49,13 +51,13 @@ export class ScheduledAction {
     this.config = config;
     this.logger = logger;
     this.scheduler = scheduler;
-    this.eventService = eventService;
     this.nameService = nameService;
-    this.telegramService = telegramService;
+    this.eventService = eventService;
     this.templateService = templateService;
     this.databaseService = databaseService;
     this.timeZoneService = timeZoneService;
     this.exchangeService = exchangeService;
+    this.telegram = telegramService.telegram;
 
     this.setJobName();
     this.setJobInterval();

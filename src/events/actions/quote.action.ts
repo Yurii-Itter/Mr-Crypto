@@ -15,14 +15,26 @@ export class QuoteAction extends Action {
   protected async doAction(ctx: Context, chat: ChatInterface): Promise<void> {
     try {
       const data = this.util.getData(ctx);
+      const isCallback = this.util.isCallback(ctx);
 
-      const [base, symbol] = data.split('-');
-      const list = this.exchangeService.getList(symbol);
-      const formated = this.exchangeService.getFormated(symbol);
-      const subscribed = chat.subscriptions.map(s => s.symbol).includes(symbol);
+      const { language_code } = chat;
+      const action = this.eventService.QUOTE;
 
-      this.edit = true;
-      this.values = { list, subscribed, formated, symbol, base };
+      const chose = data;
+      const rawQuotes = this.exchangeService.getQuote(data);
+      const quotes = this.util.chunk(rawQuotes, 3);
+
+      const template = this.templateService.apply(language_code, action, {
+        chose,
+        quotes,
+      });
+      const { text, extra } = template;
+
+      if (isCallback) {
+        await ctx.editMessageText(text, extra);
+      } else {
+        await ctx.reply(text, extra);
+      }
     } catch (error) {
       this.logger.error(error);
     }

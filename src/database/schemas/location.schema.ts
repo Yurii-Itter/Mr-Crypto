@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
 export const LocationSchema = new mongoose.Schema({
-  latitude: { type: Number },
-  longitude: { type: Number },
+  latitude: { type: Number, required: true },
+  longitude: { type: Number, required: true },
 });

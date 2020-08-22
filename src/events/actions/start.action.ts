@@ -13,7 +13,12 @@ export class StartAction extends Action {
   }
 
   protected async doAction(ctx: Context, chat: ChatInterface): Promise<void> {
-    this.edit = false;
-    this.values = {};
+    const { language_code } = chat;
+    const action = this.eventService.START;
+
+    const template = this.templateService.apply(language_code, action, {});
+    const { text, extra } = template;
+
+    await ctx.reply(text, extra);
   }
 }

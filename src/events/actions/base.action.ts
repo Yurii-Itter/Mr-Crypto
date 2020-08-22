@@ -14,14 +14,18 @@ export class BaseAction extends Action {
 
   protected async doAction(ctx: Context, chat: ChatInterface): Promise<void> {
     try {
-      const data = this.util.getData(ctx);
-      const isCallback = this.util.isCallback(ctx);
+      const { language_code } = chat;
+      const action = this.eventService.BASE;
 
-      const chose = data;
-      const quotes = this.util.chunk(this.exchangeService.getQuote(data), 3);
+      const rawBases = this.exchangeService.getBase();
+      const bases = this.util.chunk(rawBases, 3);
 
-      this.edit = isCallback;
-      this.values = { quotes, chose };
+      const template = this.templateService.apply(language_code, action, {
+        bases,
+      });
+      const { text, extra } = template;
+
+      await ctx.reply(text, extra);
     } catch (error) {
       this.logger.error(error);
     }

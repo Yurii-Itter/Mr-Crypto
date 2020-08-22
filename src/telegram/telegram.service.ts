@@ -42,7 +42,7 @@ export class TelegramService {
             ? /true/.exec('true')
             : /true/.exec('false');
         },
-        async ctx => this.eventService.emit(eventService.BASE, ctx),
+        async ctx => this.eventService.emit(eventService.QUOTE, ctx),
       )
       .hears(
         (symbol: string) => {
@@ -65,24 +65,24 @@ export class TelegramService {
         this.eventService.emit(eventService.SUBSCRIPTIONS, ctx),
       )
       .hears(['Cryptocurrencies 💰', 'Криптовалюты 💰'], async ctx =>
-        this.eventService.emit(this.eventService.CRYPTOCURRENCIES, ctx),
+        this.eventService.emit(this.eventService.BASE, ctx),
       );
 
     this.bot
-      .action(/^.+_base$/, async ctx =>
-        this.eventService.emit(this.eventService.BASE, ctx),
-      )
       .action(/^.+_days$/, async ctx =>
         this.eventService.emit(this.eventService.DAYS, ctx),
       )
       .action(/^.+_time$/, async ctx =>
         this.eventService.emit(this.eventService.TIME, ctx),
       )
+      .action(/^.+_quote$/, async ctx =>
+        this.eventService.emit(this.eventService.QUOTE, ctx),
+      )
       .action(/^.+_unsub$/, async ctx =>
         this.eventService.emit(this.eventService.UNSUB, ctx),
       )
-      .action(/^.+_quote$/, async ctx =>
-        this.eventService.emit(this.eventService.QUOTE, ctx),
+      .action(/^.+_symbol$/, async ctx =>
+        this.eventService.emit(this.eventService.SYMBOL, ctx),
       )
       .action(/^.+_subscribe$/, async ctx =>
         this.eventService.emit(this.eventService.SUBSCRIBE, ctx),

@@ -1,9 +1,15 @@
 <content>
-    <strong>You chose this cryptocurrency as base: {{chose}}</strong>
-
-    Now let's select the quote one
+  <strong>Choose cryptocurrency:</strong>
 </content>
 
-<inline>
-    {{#quotes}}<line>{{#chunk}}<key data="{{../../chose}}-{{symbol}}_quote">{{quote}}</key>{{/chunk}}</line>{{/quotes}}
-</inline>
+<keyboard>
+  <line>
+    <key>◀️ Back</key>
+    <key>My Subscriptions ⭐️</key>
+  </line>
+  {{#bases}}
+    <line>
+      {{#each chunk}}<key>{{this}}</key>{{/each}}
+    </line>
+  {{/bases}}
+</keyboard>

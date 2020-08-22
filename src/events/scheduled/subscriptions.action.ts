@@ -16,20 +16,23 @@ export class SubscriptionsScheduledAction extends ScheduledAction {
   protected async doAction(): Promise<void> {
     try {
       const subscriptions = await this.databaseService.findSubscriptions();
-      subscriptions.forEach(subscription => {
+      subscriptions.forEach(async subscription => {
         const { id, language_code, symbol } = subscription;
-        const { text, extra } = this.templateService.apply(
-          language_code,
-          this.eventService.QUOTE,
-          {
-            list: this.exchangeService.getList(symbol),
-            subscribed: true,
-            formated: this.exchangeService.getFormated(symbol),
-            symbol,
-          },
-        );
 
-        this.telegramService.telegram.sendMessage(id, text, extra);
+        const action = this.eventService.SYMBOL;
+
+        const list = this.exchangeService.getList(symbol);
+        const formated = this.exchangeService.getFormated(symbol);
+
+        const template = this.templateService.apply(language_code, action, {
+          list,
+          symbol,
+          formated,
+          subscribed: true,
+        });
+        const { text, extra } = template;
+
+        await this.telegram.sendMessage(id, text, extra);
       });
     } catch (error) {
       this.logger.log(error);

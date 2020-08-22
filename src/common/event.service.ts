@@ -15,5 +15,4 @@ export class EventService extends EventEmitter {
   public readonly SETTINGS = 'settings';
   public readonly SUBSCRIBE = 'subscribe';
   public readonly SUBSCRIPTIONS = 'subscriptions';
-  public readonly CRYPTOCURRENCIES = 'cryptocurrencies';
 }

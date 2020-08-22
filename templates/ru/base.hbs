@@ -1,9 +1,15 @@
 <content>
-    <strong>Вы выбрали эту криптовалюту в качестве базовой: {{chose}}</strong>
-
-    Теперь выберете ту, цена базовой к которой вас интересует
+  <strong>Выберите криптовалюту:</strong>
 </content>
 
-<inline>
-    {{#quotes}}<line>{{#chunk}}<key data="{{../../chose}}-{{symbol}}_quote">{{quote}}</key>{{/chunk}}</line>{{/quotes}}
-</inline>
+<keyboard>
+  <line>
+    <key>◀️ Назад</key>
+    <key>Мои Подписки ⭐️</key>
+  </line>
+  {{#bases}}
+    <line>
+      {{#each chunk}}<key>{{this}}</key>{{/each}}
+    </line>
+  {{/bases}}
+</keyboard>

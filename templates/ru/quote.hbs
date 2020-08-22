@@ -1,38 +1,9 @@
 <content>
-  <strong>{{formated}}</strong>
-  
-  {{#list}}
+    <strong>Вы выбрали эту криптовалюту в качестве базовой: {{chose}}</strong>
 
-    <strong>
-      {{source}}:
-    </strong>
-    <code>
-      Последняя цена: {{last}}
-      Изменения за 24 часа: {{change}} ({{percent}}%)
-      Самая высокая цена за 24 часа: {{high}}
-      Самая низкая цена за 24 часа: {{low}}
-    </code>
-  {{/list}}
+    Теперь выберете ту, цена базовой к которой вас интересует
 </content>
 
-{{#if subscription}}
-{{else}}
 <inline>
-  <line>
-    {{#if base}}
-      <key data="{{base}}_base">
-        ◀️ Назад
-      </key>
-    {{/if}}
-    {{#if subscribed}}
-      <key data="{{symbol}}_unsub">
-        Отписаться 🔕
-      </key>
-    {{else}}
-      <key data="{{base}}-{{symbol}}_day">
-        Подписаться 🔔
-      </key>
-    {{/if}}
-  </line>
+    {{#quotes}}<line>{{#chunk}}<key data="{{../../chose}}-{{symbol}}_symbol">{{quote}}</key>{{/chunk}}</line>{{/quotes}}
 </inline>
-{{/if}}

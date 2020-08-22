@@ -15,14 +15,43 @@ export class SymbolAction extends Action {
   protected async doAction(ctx: Context, chat: ChatInterface): Promise<void> {
     try {
       const data = this.util.getData(ctx);
+      const isCallback = this.util.isCallback(ctx);
 
-      const formated = data;
-      const subscribed = true;
-      const symbol = data.replace('-', '');
-      const list = this.exchangeService.getList(symbol);
+      const { language_code, subscriptions } = chat;
+      const action = this.eventService.SYMBOL;
 
-      this.edit = false;
-      this.values = { list, subscribed, formated, symbol };
+      if (isCallback) {
+        const [base, symbol] = data.split('-');
+        const list = this.exchangeService.getList(symbol);
+        const formated = this.exchangeService.getFormated(symbol);
+        const subscribed = subscriptions.map(s => s.symbol).includes(symbol);
+
+        const template = this.templateService.apply(language_code, action, {
+          list,
+          base,
+          symbol,
+          formated,
+          subscribed,
+        });
+        const { text, extra } = template;
+
+        await ctx.editMessageText(text, extra);
+      } else {
+        const formated = data;
+        const symbol = data.replace('-', '');
+        const list = this.exchangeService.getList(symbol);
+        const subscribed = subscriptions.map(s => s.symbol).includes(symbol);
+
+        const template = this.templateService.apply(language_code, action, {
+          list,
+          symbol,
+          formated,
+          subscribed,
+        });
+        const { text, extra } = template;
+
+        await ctx.reply(text, extra);
+      }
     } catch (error) {
       this.logger.error(error);
     }

@@ -1,35 +1,9 @@
 <content>
-  <strong>{{formated}}</strong>
-  
-  {{#list}}
+    <strong>You chose this cryptocurrency as base: {{chose}}</strong>
 
-    <strong>
-      {{source}}:
-    </strong>
-    <code>
-      Last Price: {{last}}
-      24h Change: {{change}} ({{percent}}%)
-      24h High: {{high}}
-      24h Low: {{low}}
-    </code>
-  {{/list}}
+    Now let's select the quote one
 </content>
 
 <inline>
-  <line>
-    {{#if base}}
-      <key data="{{base}}_base">
-        ◀️ Back
-      </key>
-    {{/if}}
-    {{#if subscribed}}
-      <key data="{{symbol}}_unsub">
-        Unsubscribe 🔕
-      </key>
-    {{else}}
-      <key data="{{base}}-{{symbol}}_days">
-        Subscribe 🔔
-      </key>
-    {{/if}}
-  </line>
+    {{#quotes}}<line>{{#chunk}}<key data="{{../../chose}}-{{symbol}}_symbol">{{quote}}</key>{{/chunk}}</line>{{/quotes}}
 </inline>

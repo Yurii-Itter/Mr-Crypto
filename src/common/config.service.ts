@@ -9,6 +9,8 @@ export class ConfigService {
       TELEGRAM_BOT_TOKEN: str(),
       GOOGLE_KEY: str(),
       DATABASE_URL: str(),
+      ALLOWED_BASES: str(),
+      ALLOWED_QUOTES: str(),
     });
   }
 

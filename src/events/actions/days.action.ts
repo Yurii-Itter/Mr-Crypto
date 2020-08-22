@@ -7,19 +7,26 @@ import { ChatInterface } from '../../database/interfaces/chat.interface';
 import { TelegrafContext as Context } from 'telegraf/typings/context';
 
 @Injectable()
-export class DayAction extends Action {
+export class DaysAction extends Action {
   protected setEvent(): void {
     this.event = this.eventService.DAYS;
   }
 
   protected async doAction(ctx: Context, chat: ChatInterface): Promise<void> {
     try {
-      const { timeZoneId } = chat;
+      const data = this.util.getData(ctx);
+
+      const { timeZoneId, language_code } = chat;
 
       if (!timeZoneId) {
-        this.action = this.eventService.TIMEZONE;
+        const action = this.eventService.TIMEZONE;
+
+        const template = this.templateService.apply(language_code, action, {});
+        const { text, extra } = template;
+
+        await ctx.reply(text, extra);
       } else {
-        const data = this.util.getData(ctx);
+        const action = this.eventService.DAYS;
 
         const [parent] = data.match(/^(?:-?[^-]+){2}/);
         let days = data.replace(new RegExp(`${parent}-?`), '').split('-');
@@ -31,6 +38,7 @@ export class DayAction extends Action {
             days = days.map(day => (day === 'on' ? 'son' : day));
           }
         }
+
         if (days.every(day => day === 'off' || day === 'soff')) {
           const allowed = days.reduce(
             (accum: number[], day: string, index: number) => {
@@ -47,8 +55,7 @@ export class DayAction extends Action {
 
         const [mon, tue, wed, thu, fri, sat, sun] = days;
 
-        this.edit = true;
-        this.values = {
+        const template = this.templateService.apply(language_code, action, {
           parent,
           mon: mon ? mon : 'on',
           tue: tue ? tue : 'on',
@@ -57,7 +64,10 @@ export class DayAction extends Action {
           fri: fri ? fri : 'on',
           sat: sat ? sat : 'on',
           sun: sun ? sun : 'on',
-        };
+        });
+        const { text, extra } = template;
+
+        await ctx.editMessageText(text, extra);
       }
     } catch (error) {
       this.logger.error(error);

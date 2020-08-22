@@ -1,5 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
+import { UtilService } from '../common/util.service';
+import { ConfigService } from '../common/config.service';
 import { BinanceService } from './binance/binance.service';
 import { CoinbaseService } from './coinbase/coinbase.service';
 
@@ -9,20 +11,25 @@ import { SymbolValueInterface } from './interfaces/symbol-value.interface';
 
 @Injectable()
 export class ExchangeService {
-  private logger: Logger;
+  private util: UtilService;
+  private configService: ConfigService;
   private binanceService: BinanceService;
   private coinbaseService: CoinbaseService;
 
-  private available: string[];
+  private coinbaseAvailable: string[];
+  private binanceAvailable: string[];
+
   private symbols: SymbolInterface;
   private formated: FormatedInterface;
 
   constructor(
+    util: UtilService,
+    configService: ConfigService,
     binanceService: BinanceService,
     coinbaseService: CoinbaseService,
-    logger: Logger,
   ) {
-    this.logger = logger;
+    this.util = util;
+    this.configService = configService;
     this.binanceService = binanceService;
     this.coinbaseService = coinbaseService;
   }
@@ -31,9 +38,19 @@ export class ExchangeService {
     const coinbase = await this.coinbaseService.symbols();
     const binance = await this.binanceService.symbols();
 
-    this.available = coinbase.filter(symbol => binance.indexOf(symbol) !== -1);
+    const bases = this.configService.get('ALLOWED_BASES').split(' ');
+    const quotes = this.configService.get('ALLOWED_QUOTES').split(' ');
 
-    this.symbols = this.available.reduce((accum: SymbolInterface, symbol) => {
+    this.coinbaseAvailable = this.util.allowed(coinbase, bases, quotes);
+    this.binanceAvailable = this.util.allowed(binance, bases, quotes);
+
+    const mixed = this.util.sort(
+      [...new Set([...this.coinbaseAvailable, ...this.binanceAvailable])],
+      bases,
+      quotes,
+    );
+
+    this.symbols = mixed.reduce((accum: SymbolInterface, symbol) => {
       const [base, quote] = symbol.split('-');
 
       accum[base]
@@ -43,7 +60,7 @@ export class ExchangeService {
       return accum;
     }, {});
 
-    this.formated = this.available.reduce((accum, symbol) => {
+    this.formated = mixed.reduce((accum, symbol) => {
       const [base, quote] = symbol.split('-');
       accum[base + quote] = symbol;
       return accum;
@@ -52,8 +69,8 @@ export class ExchangeService {
 
   public async launch(): Promise<void> {
     await this.symbolsHandler();
-    await this.coinbaseService.streamHandler(this.available);
-    await this.binanceService.streamHandler(this.available);
+    await this.coinbaseService.streamHandler(this.coinbaseAvailable);
+    await this.binanceService.streamHandler(this.binanceAvailable);
   }
 
   public getBase(): string[] {
@@ -73,15 +90,22 @@ export class ExchangeService {
   }
 
   public getList(symbol: string): any[] {
-    return [
-      {
-        source: 'Coinbase',
-        ...this.coinbaseService.list[this.formated[symbol]],
-      },
-      {
+    const list = [];
+
+    if (Object.keys(this.coinbaseService.list).includes(symbol)) {
+      list.push({
+        source: 'Coinbase Pro',
+        ...this.coinbaseService.list[symbol],
+      });
+    }
+
+    if (Object.keys(this.binanceService.list).includes(symbol)) {
+      list.push({
         source: 'Binance',
         ...this.binanceService.list[symbol],
-      },
-    ];
+      });
+    }
+
+    return list;
   }
 }

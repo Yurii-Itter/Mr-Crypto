@@ -16,6 +16,9 @@ export class TimeAction extends Action {
     try {
       const data = this.util.getData(ctx);
 
+      const { language_code } = chat;
+      const action = this.eventService.TIME;
+
       const [parent] = data.match(/^(?:-?[^-]+){9}/);
       const rawTime = data.replace(new RegExp(`${parent}-?`), '');
       const time = rawTime.split('-').map(t => +t);
@@ -41,14 +44,16 @@ export class TimeAction extends Action {
         mm = 0;
       }
 
-      this.edit = true;
-      this.values = {
+      const template = this.templateService.apply(language_code, action, {
         parent,
         h: h ? h : 0,
         hh: hh ? hh : 0,
         m: m ? m : 0,
         mm: mm ? mm : 0,
-      };
+      });
+      const { text, extra } = template;
+
+      await ctx.editMessageText(text, extra);
     } catch (error) {
       this.logger.error(error);
     }

@@ -27,11 +27,12 @@ export class CoinbaseService extends BaseExchange {
     });
 
     this.stream.on('message', (msg: string) => {
-      const { product_id, price, high_24h, low_24h, open_24h } = JSON.parse(
-        msg,
-      );
-      if (product_id) {
-        this.list[product_id] = {
+      const parsed = JSON.parse(msg);
+      const { type } = parsed;
+
+      if (type === 'ticker') {
+        const { product_id, price, high_24h, low_24h, open_24h } = parsed;
+        this.list[product_id.replace('-', '')] = {
           last: this.utilService.cut(price),
           high: this.utilService.cut(high_24h),
           low: this.utilService.cut(low_24h),
@@ -41,11 +42,6 @@ export class CoinbaseService extends BaseExchange {
           percent: this.utilService.percent(price, open_24h),
         };
       }
-    });
-
-    this.stream.on('ping', () => {
-      this.logger.log('Coinbase pong was sent');
-      this.stream.pong('pong');
     });
 
     this.stream.on('close', () => {

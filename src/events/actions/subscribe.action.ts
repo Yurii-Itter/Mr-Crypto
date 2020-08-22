@@ -16,6 +16,9 @@ export class SubscribeAction extends Action {
     try {
       const data = this.util.getData(ctx);
 
+      const { language_code } = chat;
+      const action = this.eventService.SUBSCRIBE;
+
       const raw = data.split('-');
       const [, symbol, mon, tue, wed, thu, fri, sat, sun, h, hh, m, mm] = raw;
       const hour = +(h + hh);
@@ -35,8 +38,12 @@ export class SubscribeAction extends Action {
       chat.subscriptions.push({ symbol, period: { days, hour, minute } });
       await chat.save();
 
-      this.edit = true;
-      this.values = { formated };
+      const template = this.templateService.apply(language_code, action, {
+        formated,
+      });
+      const { text, extra } = template;
+
+      await ctx.editMessageText(text, extra);
     } catch (error) {
       this.logger.error(error);
     }
