@@ -12,6 +12,7 @@ import { QuoteAction } from './actions/quote.action';
 import { SymbolAction } from './actions/symbol.action';
 import { SettingsAction } from './actions/settings.action';
 import { LocationAction } from './actions/location.action';
+import { LanguageAction } from './actions/language.action';
 import { TimeZoneAction } from './actions/time-zone.action';
 import { SubscribeAction } from './actions/subscribe.action';
 import { SubscriptionsAction } from './actions/subscriptions.action';
@@ -45,6 +46,7 @@ import { DatabaseModule } from '../database/database.module';
     LocationAction,
     SettingsAction,
     TimeZoneAction,
+    LanguageAction,
     SubscribeAction,
     SubscriptionsAction,
     SubscriptionsScheduledAction,

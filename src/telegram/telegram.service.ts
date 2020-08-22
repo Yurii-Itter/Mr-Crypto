@@ -55,6 +55,12 @@ export class TelegramService {
       .hears(['◀️ Back', '◀️ Назад'], async ctx =>
         this.eventService.emit(this.eventService.MENU, ctx),
       )
+      .hears(['Time zone 🕙', 'Часовой пояс 🕙'], async ctx =>
+        this.eventService.emit(this.eventService.TIMEZONE, ctx),
+      )
+      .hears(['Language 🌍', 'Язык 🌍'], async ctx =>
+        this.eventService.emit(this.eventService.LANGUAGE, ctx),
+      )
       .hears(['Settings ⚙️', 'Настройки ⚙️'], async ctx =>
         this.eventService.emit(this.eventService.SETTINGS, ctx),
       )
@@ -83,6 +89,9 @@ export class TelegramService {
       )
       .action(/^.+_symbol$/, async ctx =>
         this.eventService.emit(this.eventService.SYMBOL, ctx),
+      )
+      .action(/^.+_language$/, async ctx =>
+        this.eventService.emit(this.eventService.LANGUAGE, ctx),
       )
       .action(/^.+_subscribe$/, async ctx =>
         this.eventService.emit(this.eventService.SUBSCRIBE, ctx),

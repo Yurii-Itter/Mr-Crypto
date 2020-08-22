@@ -11,8 +11,9 @@ export class EventService extends EventEmitter {
   public readonly START = 'start';
   public readonly SYMBOL = 'symbol';
   public readonly LOCATION = 'location';
-  public readonly TIMEZONE = 'time-zone';
   public readonly SETTINGS = 'settings';
+  public readonly LANGUAGE = 'language';
+  public readonly TIMEZONE = 'time-zone';
   public readonly SUBSCRIBE = 'subscribe';
   public readonly SUBSCRIPTIONS = 'subscriptions';
 }
