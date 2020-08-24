@@ -33,13 +33,12 @@ export class CoinbaseService extends BaseExchange {
       if (type === 'ticker') {
         const { product_id, price, high_24h, low_24h, open_24h } = parsed;
         this.list[product_id.replace('-', '')] = {
-          last: this.utilService.cut(price),
-          high: this.utilService.cut(high_24h),
-          low: this.utilService.cut(low_24h),
-          change: this.utilService.cut(
-            this.utilService.change(price, open_24h),
-          ),
-          percent: this.utilService.percent(price, open_24h),
+          last: this.util.cut(price),
+          high: this.util.cut(high_24h),
+          low: this.util.cut(low_24h),
+          change: this.util.cut(this.util.change(price, open_24h)),
+          percent: this.util.percent(price, open_24h),
+          direction: +this.util.cut(this.util.change(price, open_24h)) > 0,
         };
       }
     });

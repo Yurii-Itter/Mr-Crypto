@@ -4,11 +4,11 @@
 
     <strong>{{source}}:</strong>
     <pre>
-      Цена: {{last}}{{../sign}}
-      Изменеия за 24ч: {{change}}{{../sign}}
-      Изменеия в процентах: {{percent}}%
-      Максимум за 24ч: {{high}}{{../sign}}
-      Минимум за 24ч: {{low}}{{../sign}}
+      Price: {{last}}{{../sign}}
+      24h {{#if direction}}increase{{else}}decline{{/if}}: {{change}}{{../sign}}
+      As a percentage: {{percent}}%
+      24h High: {{high}}{{../sign}}
+      24h Low: {{low}}{{../sign}}
     </pre>
   {{/list}}
 </content>
@@ -18,12 +18,12 @@
   <inline>
     <line>
       {{#if base}}
-        <key data="{{base}}_quote">◀️ Назад</key>
+        <key data="{{base}}_quote">◀️ Back</key>
       {{/if}}
       {{#if subscribed}}
-        <key data="{{symbol}}_unsub">Отписаться 🔕</key>
+        <key data="{{symbol}}_unsub">Unsubscribe 🔕</key>
       {{else}}
-        <key data="{{base}}-{{symbol}}_days">Подписаться 🔔</key>
+        <key data="{{base}}-{{symbol}}_days">Subscribe 🔔</key>
       {{/if}}
     </line>
   </inline>

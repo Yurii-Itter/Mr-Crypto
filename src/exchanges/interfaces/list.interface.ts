@@ -5,5 +5,6 @@ export interface ListInterface {
     low: string;
     change: string;
     percent: string;
+    direction: boolean;
   };
 }

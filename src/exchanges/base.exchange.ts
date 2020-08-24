@@ -9,15 +9,15 @@ import { ListInterface } from './interfaces/list.interface';
 
 @Injectable()
 export class BaseExchange {
-  protected utilService: UtilService;
+  protected util: UtilService;
   protected logger: Logger;
 
   protected stream: any;
 
   public list: ListInterface = {};
 
-  constructor(utilService: UtilService, logger: Logger) {
-    this.utilService = utilService;
+  constructor(util: UtilService, logger: Logger) {
+    this.util = util;
     this.logger = logger;
   }
 

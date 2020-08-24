@@ -49,9 +49,13 @@ export class UtilService {
   }
 
   public cut(value: string): string {
-    return value.match(/-?[1-9]\d*\./)
-      ? value.replace(/(\.\d{2}).*/, '$1')
-      : value.replace(/0+$/, '');
+    const formated = value
+      .replace(/^(-?[1-9]\d*)$/, '$1' + '.00')
+      .replace(/^(-?[1-9]\d*\.\d)$/, '$1' + '0');
+
+    return formated.match(/^-?[1-9]\d*\./)
+      ? formated.replace(/(\.\d{2}).*/, '$1')
+      : formated.replace(/0+$/, '');
   }
 
   public change(last: string, open: string): string {
@@ -64,8 +68,7 @@ export class UtilService {
   public percent(last: string, open: string): string {
     return ((+this.change(last, open) * 100) / +open)
       .toString()
-      .substring(0, 4)
-      .replace(/0+$/, '');
+      .replace(/(\.\d{2}).*/, '$1')
   }
 
   public sort(symbols: string[], bases: string[], quotes: string[]): string[] {

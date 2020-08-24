@@ -42,11 +42,12 @@ export class BinanceService extends BaseExchange {
     this.stream.on('message', (msg: string) => {
       const { P, p, h, l, c, s } = JSON.parse(msg).data;
       this.list[s.replace('USDT', 'USD')] = {
-        last: this.utilService.cut(c),
-        high: this.utilService.cut(h),
-        low: this.utilService.cut(l),
-        change: this.utilService.cut(p),
+        last: this.util.cut(c),
+        high: this.util.cut(h),
+        low: this.util.cut(l),
+        change: this.util.cut(p),
         percent: P.replace(/(\.\d{2}).+/, '$1'),
+        direction: +this.util.cut(p) > 0,
       };
     });
 

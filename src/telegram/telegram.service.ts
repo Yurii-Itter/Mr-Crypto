@@ -64,7 +64,7 @@ export class TelegramService {
       .hears(['Settings ⚙️', 'Настройки ⚙️'], async ctx =>
         this.eventService.emit(this.eventService.SETTINGS, ctx),
       )
-      .hears(['About Service 🚀', 'О Сервисе 🚀'], async ctx =>
+      .hears(['About service 🚀', 'О сервисе 🚀'], async ctx =>
         this.eventService.emit(this.eventService.ABOUT, ctx),
       )
       .hears(['Subscriptions ⭐️', 'Подписки ⭐️'], async ctx =>

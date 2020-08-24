@@ -5,8 +5,8 @@
     <strong>{{source}}:</strong>
     <pre>
       Цена: {{last}}{{../sign}}
-      Изменеия за 24ч: {{change}}{{../sign}}
-      Изменеия в процентах: {{percent}}%
+      {{#if direction}}Рост{{else}}Спад{{/if}} за 24ч: {{change}}{{../sign}}
+      В процентах: {{percent}}%
       Максимум за 24ч: {{high}}{{../sign}}
       Минимум за 24ч: {{low}}{{../sign}}
     </pre>
