@@ -20,10 +20,12 @@ export class SubscriptionsAction extends Action {
       const unchunked = chat.subscriptions.map(subscription =>
         this.exchangeService.getFormated(subscription.symbol),
       );
-      const subscriptions = this.util.chunk(unchunked, 2);
+      const subscriptions = this.util.chunk(unchunked, 3);
+      const zero = subscriptions.length === 0 ? true : false;
 
       const template = this.templateService.apply(language_code, action, {
         subscriptions,
+        zero,
       });
       const { text, extra } = template;
 

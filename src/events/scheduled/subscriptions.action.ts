@@ -23,8 +23,13 @@ export class SubscriptionsScheduledAction extends ScheduledAction {
 
         const list = this.exchangeService.getList(symbol);
         const formated = this.exchangeService.getFormated(symbol);
+        const [, quote] = formated.split('-');
+        const sign = this.util.fiat(quote);
+        const hide = true;
 
         const template = this.templateService.apply(language_code, action, {
+          hide,
+          sign,
           list,
           symbol,
           formated,

@@ -20,12 +20,12 @@ export class QuoteAction extends Action {
       const { language_code } = chat;
       const action = this.eventService.QUOTE;
 
-      const chose = data;
+      const base = data;
       const rawQuotes = this.exchangeService.getQuote(data);
       const quotes = this.util.chunk(rawQuotes, 3);
 
       const template = this.templateService.apply(language_code, action, {
-        chose,
+        base,
         quotes,
       });
       const { text, extra } = template;

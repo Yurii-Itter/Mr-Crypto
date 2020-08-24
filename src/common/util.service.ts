@@ -99,4 +99,19 @@ export class UtilService {
       return bases.includes(base) && quotes.includes(quote);
     });
   }
+
+  public fiat(quote: string): string {
+    switch (quote) {
+      case 'USD':
+        return '$';
+      case 'EUR':
+        return '€';
+      case 'GBP':
+        return '£';
+      case 'RUB':
+        return '₽';
+      default:
+        return '';
+    }
+  }
 }

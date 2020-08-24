@@ -20,13 +20,19 @@ export class SymbolAction extends Action {
       const { language_code, subscriptions } = chat;
       const action = this.eventService.SYMBOL;
 
+      const hide = false;
+
       if (isCallback) {
         const [base, symbol] = data.split('-');
         const list = this.exchangeService.getList(symbol);
         const formated = this.exchangeService.getFormated(symbol);
+        const [, quote] = formated.split('-');
+        const sign = this.util.fiat(quote);
         const subscribed = subscriptions.map(s => s.symbol).includes(symbol);
 
         const template = this.templateService.apply(language_code, action, {
+          hide,
+          sign,
           list,
           base,
           symbol,
@@ -38,11 +44,15 @@ export class SymbolAction extends Action {
         await ctx.editMessageText(text, extra);
       } else {
         const formated = data;
+        const [, quote] = formated.split('-');
+        const sign = this.util.fiat(quote);
         const symbol = data.replace('-', '');
         const list = this.exchangeService.getList(symbol);
         const subscribed = subscriptions.map(s => s.symbol).includes(symbol);
 
         const template = this.templateService.apply(language_code, action, {
+          hide,
+          sign,
           list,
           symbol,
           formated,

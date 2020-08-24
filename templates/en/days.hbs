@@ -1,79 +1,73 @@
 <content>
-  <strong>
-    Select day of week
-  </strong>
+  <strong>Выберите дни недели, сэр 📅</strong>
 </content>
 
 <inline>
   <line>
     <key data="{{parent}}-{{toggle mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_days">
       {{#if (switch mon)}}
-        mon ✅
+        Понедельник ✅
       {{else}}
-        mon ❌
+        Понедельник ❌
       {{/if}}
     </key>
   </line>
   <line>
     <key data="{{parent}}-{{mon}}-{{toggle tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_days">
       {{#if (switch tue)}}
-        tue ✅
+        Вторник ✅
       {{else}}
-        tue ❌
+        Вторник ❌
       {{/if}}
     </key>
   </line>
   <line>
     <key data="{{parent}}-{{mon}}-{{tue}}-{{toggle wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_days">
       {{#if (switch wed)}}
-        wed ✅
+        Среда ✅
       {{else}}
-        wed ❌
+        Среда ❌
       {{/if}}
     </key>
   </line>
   <line>
     <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{toggle thu}}-{{fri}}-{{sat}}-{{sun}}_days">
       {{#if (switch thu)}}
-        thu ✅
+        Четверг ✅
       {{else}}
-        thu ❌
+        Четверг ❌
       {{/if}}
     </key>
   </line>
   <line>
     <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{toggle fri}}-{{sat}}-{{sun}}_days">
       {{#if (switch fri)}}
-        fri ✅
+        Пятница ✅
       {{else}}
-        fri ❌
+        Пятница ❌
       {{/if}}
     </key>
   </line>
   <line>
     <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{toggle sat}}-{{sun}}_days">
       {{#if (switch sat)}}
-        sat ✅
+        Суббота ✅
       {{else}}
-        sat ❌
+        Суббота ❌
       {{/if}}
     </key>
   </line>
   <line>
     <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{toggle sun}}_days">
       {{#if (switch sun)}}
-        sun ✅
+        Воскресенье ✅
       {{else}}
-        sun ❌
+        Воскресенье ❌
       {{/if}}
     </key>
   </line>
   <line>
-    <key data="{{parent}}_quote">
-      ◀️ Back
-    </key>
-    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_time">
-      Next Step ▶️
-    </key>
+    <key data="{{parent}}_symbol">◀️ Назад</key>
+    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_time">Дальше ▶️</key>
   </line>
 </inline>

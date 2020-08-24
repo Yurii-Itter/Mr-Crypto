@@ -32,6 +32,7 @@ export class UnsubAction extends Action {
         this.exchangeService.getFormated(subscription.symbol),
       );
       const subscriptions = this.util.chunk(unchunked, 2);
+      const zero = subscriptions.length === 0 ? true : false;
 
       const template = this.templateService.apply(language_code, action, {
         formated,
@@ -39,7 +40,8 @@ export class UnsubAction extends Action {
       const { text, extra } = template;
 
       const sTemplate = this.templateService.apply(language_code, sAction, {
-        subscriptions
+        subscriptions,
+        zero,
       });
       const { text: sText, extra: sExtra } = sTemplate;
 

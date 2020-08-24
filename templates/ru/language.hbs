@@ -1,16 +1,16 @@
 <content>
   {{#if updated}}
-    <code>Ваш язык был изменен на русский ✅</code>
+    <strong>Ваш язык был изменен на [Русский]</strong>
   {{else}}
-    <strong>Выберите язык:</strong>
+    <strong>Выберите один из доступных языков, сэр</strong>
   {{/if}}
 </content>
 
 {{#if updated}}
 {{else}}
-<inline>
-  <line>
-    <key data="en_language">English 🇺🇸</key>
-  </line>
-</inline>
+  <inline>
+    <line>
+      <key data="en_language">English 🇺🇸</key>
+    </line>
+  </inline>
 {{/if}}

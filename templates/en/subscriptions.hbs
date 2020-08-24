@@ -1,15 +1,23 @@
 <content>
-  <strong>Here you got your subscriptions</strong>
+  {{#if zero}}
+    <strong>Судя по всему ваши подписки пустуют</strong>
+
+    Сие безобразие вы можете исправить перейдя в раздел [Криптовалюты 💰]
+  {{else}}
+    <strong>Сдесь вы можете видеть ваши подписки, сэр ⭐️</strong>
+  {{/if}}
 </content>
 
 <keyboard>
   <line>
-    <key>◀️ Back</key>
-    <key>Cryptocurrencies 💰</key>
+    <key>◀️ Назад</key>
+    <key>Криптовалюты 💰</key>
   </line>
   {{#subscriptions}}
     <line>
-      {{#each chunk}}<key>{{this}}</key>{{/each}}
+      {{#each chunk}}
+        <key>{{this}}</key>
+      {{/each}}
     </line>
   {{/subscriptions}}
 </keyboard>

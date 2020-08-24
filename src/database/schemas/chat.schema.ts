@@ -1,6 +1,5 @@
 import * as mongoose from 'mongoose';
 
-import { LocationSchema } from './location.schema';
 import { SubscribtionSchema } from './subscription.schema';
 
 export const ChatSchema = new mongoose.Schema({
@@ -10,6 +9,5 @@ export const ChatSchema = new mongoose.Schema({
   language_code: { type: String, required: true },
 
   subscriptions: { type: [SubscribtionSchema], required: false },
-  location: { type: LocationSchema, required: false },
   timeZoneId: { type: String, required: false },
 });

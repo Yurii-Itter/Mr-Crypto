@@ -24,6 +24,7 @@ export class DaysAction extends Action {
         const template = this.templateService.apply(language_code, action, {});
         const { text, extra } = template;
 
+        await ctx.deleteMessage();
         await ctx.reply(text, extra);
       } else {
         const action = this.eventService.DAYS;

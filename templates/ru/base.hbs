@@ -1,15 +1,17 @@
 <content>
-  <strong>Выберите криптовалюту:</strong>
+  <strong>Выберите криптовалюту, сэр 💰</strong>
 </content>
 
 <keyboard>
   <line>
     <key>◀️ Назад</key>
-    <key>Мои Подписки ⭐️</key>
+    <key>Подписки ⭐️</key>
   </line>
   {{#bases}}
     <line>
-      {{#each chunk}}<key>{{this}}</key>{{/each}}
+      {{#each chunk}}
+        <key>{{this}}</key>
+      {{/each}}
     </line>
   {{/bases}}
 </keyboard>

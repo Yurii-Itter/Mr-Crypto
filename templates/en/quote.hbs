@@ -1,9 +1,15 @@
 <content>
-    <strong>You chose this cryptocurrency as base: {{chose}}</strong>
+  <strong>Достопочтенный выбрал [{{base}}] в качестве основы торговой пары</strong>
 
-    Now let's select the quote one
+  Теперь вам следует определить курс [{{base}}] к какой из доступных валют вас интересует:
 </content>
 
 <inline>
-    {{#quotes}}<line>{{#chunk}}<key data="{{../../chose}}-{{symbol}}_symbol">{{quote}}</key>{{/chunk}}</line>{{/quotes}}
+  {{#quotes}}
+    <line>
+      {{#chunk}}
+        <key data="{{../../base}}-{{symbol}}_symbol">{{quote}}</key>
+      {{/chunk}}
+    </line>
+  {{/quotes}}
 </inline>

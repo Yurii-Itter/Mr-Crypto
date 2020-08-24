@@ -37,18 +37,18 @@ export class TelegramService {
 
     this.bot
       .hears(
-        (base: string) => {
+        base => {
           return exchangeService.getBase().includes(base)
-            ? /true/.exec('true')
-            : /true/.exec('false');
+            ? ((true as unknown) as RegExpExecArray)
+            : ((false as unknown) as RegExpExecArray);
         },
         async ctx => this.eventService.emit(eventService.QUOTE, ctx),
       )
       .hears(
-        (symbol: string) => {
+        symbol => {
           return exchangeService.getSymbols().includes(symbol.replace('-', ''))
-            ? /true/.exec('true')
-            : /true/.exec('false');
+            ? ((true as unknown) as RegExpExecArray)
+            : ((false as unknown) as RegExpExecArray);
         },
         async ctx => this.eventService.emit(eventService.SYMBOL, ctx),
       )
@@ -67,7 +67,7 @@ export class TelegramService {
       .hears(['About Service 🚀', 'О Сервисе 🚀'], async ctx =>
         this.eventService.emit(this.eventService.ABOUT, ctx),
       )
-      .hears(['My Subscriptions ⭐️', 'Мои Подписки ⭐️'], async ctx =>
+      .hears(['Subscriptions ⭐️', 'Подписки ⭐️'], async ctx =>
         this.eventService.emit(eventService.SUBSCRIPTIONS, ctx),
       )
       .hears(['Cryptocurrencies 💰', 'Криптовалюты 💰'], async ctx =>

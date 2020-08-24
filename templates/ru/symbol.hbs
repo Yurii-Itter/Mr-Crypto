@@ -1,35 +1,30 @@
 <content>
   <strong>{{formated}}</strong>
-  
   {{#list}}
 
-    <strong>
-      {{source}}:
-    </strong>
-    <code>
-      Последняя цена: {{last}}
-      Изменения за 24 часа: {{change}} ({{percent}}%)
-      Самая высокая цена за 24 часа: {{high}}
-      Самая низкая цена за 24 часа: {{low}}
-    </code>
+    <strong>{{source}}:</strong>
+    <pre>
+      Цена: {{last}}{{../sign}}
+      Изменеия за 24ч: {{change}}{{../sign}}
+      Изменеия в процентах: {{percent}}%
+      Максимум за 24ч: {{high}}{{../sign}}
+      Минимум за 24ч: {{low}}{{../sign}}
+    </pre>
   {{/list}}
 </content>
 
-<inline>
-  <line>
-    {{#if base}}
-      <key data="{{base}}_quote">
-        ◀️ Назад
-      </key>
-    {{/if}}
-    {{#if subscribed}}
-      <key data="{{symbol}}_unsub">
-        Отписаться 🔕
-      </key>
-    {{else}}
-      <key data="{{base}}-{{symbol}}_day">
-        Подписаться 🔔
-      </key>
-    {{/if}}
-  </line>
-</inline>
+{{#if hide}}
+{{else}}
+  <inline>
+    <line>
+      {{#if base}}
+        <key data="{{base}}_quote">◀️ Назад</key>
+      {{/if}}
+      {{#if subscribed}}
+        <key data="{{symbol}}_unsub">Отписаться 🔕</key>
+      {{else}}
+        <key data="{{base}}-{{symbol}}_days">Подписаться 🔔</key>
+      {{/if}}
+    </line>
+  </inline>
+{{/if}}

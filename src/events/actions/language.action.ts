@@ -27,11 +27,15 @@ export class LanguageAction extends Action {
         await chat.save();
 
         const template = this.templateService.apply(language_code, action, {
-          updated: true
+          updated: true,
         });
         const { text, extra } = template;
 
-        const sTemplate = this.templateService.apply(language_code, sAction, {});
+        const sTemplate = this.templateService.apply(
+          language_code,
+          sAction,
+          {},
+        );
         const { text: sText, extra: sExtra } = sTemplate;
 
         await ctx.editMessageText(text, extra);
@@ -40,7 +44,7 @@ export class LanguageAction extends Action {
         const { language_code } = chat;
 
         const template = this.templateService.apply(language_code, action, {
-          updated: false
+          updated: false,
         });
         const { text, extra } = template;
 
