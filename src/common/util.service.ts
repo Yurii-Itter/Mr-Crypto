@@ -26,8 +26,13 @@ export class UtilService {
 
   public getChatData(ctx: Context): CreateChatDto {
     const { from, chat } = this.getMessage(ctx);
-    const { first_name, last_name, language_code } = from;
+    const { first_name, last_name } = from;
+    let { language_code } = from;
     const { id } = chat;
+
+    if (!language_code) {
+      language_code = 'en';
+    }
 
     return { id, first_name, last_name, language_code };
   }
