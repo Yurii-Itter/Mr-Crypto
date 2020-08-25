@@ -68,7 +68,7 @@ export class UtilService {
   public percent(last: string, open: string): string {
     return ((+this.change(last, open) * 100) / +open)
       .toString()
-      .replace(/(\.\d{2}).*/, '$1')
+      .replace(/(\.\d{2}).*/, '$1');
   }
 
   public sort(symbols: string[], bases: string[], quotes: string[]): string[] {
