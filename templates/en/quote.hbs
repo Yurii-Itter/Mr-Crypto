@@ -1,0 +1,15 @@
+<content>
+  <strong>Honorable sir chose [{{base}}] as trading pair base</strong>
+
+  Now you should determine to which of the available currencies rate you are interested in
+</content>
+
+<inline>
+  {{#quotes}}
+    <line>
+      {{#chunk}}
+        <key data="{{../../base}}-{{symbol}}_symbol">{{quote}}</key>
+      {{/chunk}}
+    </line>
+  {{/quotes}}
+</inline>

@@ -1,0 +1,15 @@
+<content>
+  <strong>Достопочтенный выбрал [{{base}}] в качестве основы торговой пары</strong>
+
+  Теперь вам следует определить курс к какой из доступных валют вас интересует
+</content>
+
+<inline>
+  {{#quotes}}
+    <line>
+      {{#chunk}}
+        <key data="{{../../base}}-{{symbol}}_symbol">{{quote}}</key>
+      {{/chunk}}
+    </line>
+  {{/quotes}}
+</inline>

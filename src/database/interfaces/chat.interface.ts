@@ -1,8 +1,12 @@
 import { Document } from 'mongoose';
 
+import { SymbolInterface } from './symbol.interface';
+
 export interface ChatInterface extends Document {
-  chatId: number;
-  fullName: string;
-  lang: string;
-  p: boolean;
+  id: number;
+  first_name: string;
+  last_name?: string;
+  language_code: string;
+  subscriptions?: SymbolInterface[];
+  timeZoneId?: string;
 }

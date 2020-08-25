@@ -1,0 +1,30 @@
+<content>
+  <strong>{{formated}}</strong>
+  {{#list}}
+
+    <strong>{{source}}:</strong>
+    <pre>
+      Price: {{last}}{{../sign}}
+      24h {{#if direction}}rise{{else}}drop{{/if}}: {{change}}{{../sign}}
+      As a percentage: {{percent}}%
+      24h high: {{high}}{{../sign}}
+      24h low: {{low}}{{../sign}}
+    </pre>
+  {{/list}}
+</content>
+
+{{#if hide}}
+{{else}}
+  <inline>
+    <line>
+      {{#if base}}
+        <key data="{{base}}_quote">◀️ Back</key>
+      {{/if}}
+      {{#if subscribed}}
+        <key data="{{symbol}}_unsub">Unsubscribe 🔕</key>
+      {{else}}
+        <key data="{{base}}-{{symbol}}_days">Subscribe 🔔</key>
+      {{/if}}
+    </line>
+  </inline>
+{{/if}}

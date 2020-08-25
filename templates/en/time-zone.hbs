@@ -1,0 +1,29 @@
+<content>
+  <strong>Time zone, sir 🕙</strong>
+
+  {{#if update}}
+    Is honorable sir decided to hide from Interpol and as a result went abroad?
+    
+    Well, I will help you as much as it possible for me by changing time zone for your subscriptions
+  {{else}}
+    As a well-mannered bot I cannot afford to myself to disturb you with my message at the wrong time
+
+    So, I have to ask you to provide me with information about your location in order to get the time zone and further work with subscriptions
+
+    Immediately after this action all information about your location will be permanently erased from my hard drive after which it will be lost forever
+  {{/if}}
+</content>
+
+<keyboard>
+  <line>
+    {{#if update}}
+      <key sub="location">Change my time zone 🕙</key> 
+    {{else}}
+      <key sub="location">Send my geolocation 🌐</key> 
+    {{/if}}
+  </line>
+  <line>
+    <key>Settings ⚙️</key>
+    <key>Cryptocurrencies 💰</key>
+  </line>
+</keyboard>

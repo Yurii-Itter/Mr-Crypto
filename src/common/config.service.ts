@@ -1,14 +1,16 @@
-import * as envalid from 'envalid';
-const { str, port } = envalid;
+import { port, str, cleanEnv } from 'envalid';
 
 export class ConfigService {
-  private readonly envConfig: Record<string, string>;
+  private envConfig: Record<string, string>;
 
   constructor() {
-    this.envConfig = envalid.cleanEnv(process.env, {
+    this.envConfig = cleanEnv(process.env, {
       APP_PORT: port({ default: 3000 }),
       TELEGRAM_BOT_TOKEN: str(),
+      GOOGLE_KEY: str(),
       DATABASE_URL: str(),
+      ALLOWED_BASES: str(),
+      ALLOWED_QUOTES: str(),
     });
   }
 

@@ -1,0 +1,17 @@
+<content>
+  <strong>Choose cryptocurrency, sir 💰</strong>
+</content>
+
+<keyboard>
+  <line>
+    <key>◀️ Back</key>
+    <key>Subscriptions ⭐️</key>
+  </line>
+  {{#bases}}
+    <line>
+      {{#each chunk}}
+        <key>{{this}}</key>
+      {{/each}}
+    </line>
+  {{/bases}}
+</keyboard>

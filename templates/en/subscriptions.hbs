@@ -1,0 +1,23 @@
+<content>
+  {{#if zero}}
+    <strong>It seems like your subscriptions is empty</strong>
+
+    You can fix this by going to the [Cryptocurrencies 💰] section
+  {{else}}
+    <strong>Here you can see your subscriptions, sir ⭐️</strong>
+  {{/if}}
+</content>
+
+<keyboard>
+  <line>
+    <key>◀️ Back</key>
+    <key>Cryptocurrencies 💰</key>
+  </line>
+  {{#subscriptions}}
+    <line>
+      {{#each chunk}}
+        <key>{{this}}</key>
+      {{/each}}
+    </line>
+  {{/subscriptions}}
+</keyboard>
