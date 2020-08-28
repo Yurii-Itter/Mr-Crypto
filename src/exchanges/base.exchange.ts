@@ -12,6 +12,7 @@ export class BaseExchange {
   protected util: UtilService;
   protected logger: Logger;
 
+  protected availableSymbols: string[];
   protected stream: any;
 
   public list: ListInterface = {};
@@ -37,11 +38,16 @@ export class BaseExchange {
     }
   }
 
+  protected async streamProcessor() {
+    throw new Error('not implemented');
+  }
+
   public async symbols(): Promise<string[]> {
     throw new Error('not implemented');
   }
 
   public async streamHandler(symbols: string[]): Promise<void> {
-    throw new Error('not implemented');
+    this.availableSymbols = symbols;
+    await this.streamProcessor();
   }
 }

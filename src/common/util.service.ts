@@ -122,4 +122,94 @@ export class UtilService {
         return '';
     }
   }
+
+  public num(days: string[]): number[] {
+    return days.reduce((accum: number[], day, index) => {
+      if (day.search('on') != -1) {
+        accum.push(index + 1);
+      }
+
+      return accum;
+    }, []);
+  }
+
+  public days(nums: number[], language_code: string): string {
+    let days = '';
+
+    nums.forEach(num => {
+      if (language_code === 'en') {
+        if (num === 1) {
+          days = days.concat('Monday ');
+        }
+
+        if (num === 2) {
+          days = days.concat('Tuesday ');
+        }
+
+        if (num === 3) {
+          days = days.concat('Wednesday ');
+        }
+
+        if (num === 4) {
+          days = days.concat('Thursday ');
+        }
+
+        if (num === 5) {
+          days = days.concat('Friday ');
+        }
+
+        if (num === 6) {
+          days = days.concat('Saturday ');
+        }
+
+        if (num === 7) {
+          days = days.concat('Sunday');
+        }
+      } else if (language_code === 'ru') {
+        if (num === 1) {
+          days = days.concat('Понедельник ');
+        }
+
+        if (num === 2) {
+          days = days.concat('Вторник ');
+        }
+
+        if (num === 3) {
+          days = days.concat('Среда ');
+        }
+
+        if (num === 4) {
+          days = days.concat('Четверг ');
+        }
+
+        if (num === 5) {
+          days = days.concat('Пятница ');
+        }
+
+        if (num === 6) {
+          days = days.concat('Суббота ');
+        }
+
+        if (num === 7) {
+          days = days.concat('Воскресенье');
+        }
+      }
+    });
+
+    return days
+      .replace(/\s$/, '')
+      .replace(/\s/g, ', ')
+      .replace(/^Saturday, Sunday$/, 'On weekends')
+      .replace(/^Суббота, Воскресенье$/, 'По выходным')
+      .replace(/^Понедельник, Вторник, Среда, Четверг, Пятница$/, 'По будним')
+      .replace(/^Monday, Tuesday, Wednesday, Thursday, Friday$/, 'On weekdays')
+      .replace(
+        /^Понедельник, Вторник, Среда, Четверг, Пятница, Суббота, Воскресенье$/,
+        'Каждый день',
+      )
+      .replace(
+        /^Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday$/,
+        'Every day',
+      );
+  }
 }

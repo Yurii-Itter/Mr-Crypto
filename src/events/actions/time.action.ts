@@ -20,6 +20,10 @@ export class TimeAction extends Action {
       const action = this.eventService.TIME;
 
       const [parent] = data.match(/^(?:-?[^-]+){9}/);
+      const [, , mon, tue, wed, thu, fri, sat, sun] = data.split('-');
+      const days = this.util.num([mon, tue, wed, thu, fri, sat, sun]);
+      const selDays = this.util.days(days, language_code);
+
       const rawTime = data.replace(new RegExp(`${parent}-?`), '');
       const time = rawTime.split('-').map(t => +t);
 
@@ -46,6 +50,7 @@ export class TimeAction extends Action {
 
       const template = this.templateService.apply(language_code, action, {
         parent,
+        selDays,
         h: h ? h : 0,
         hh: hh ? hh : 0,
         m: m ? m : 0,

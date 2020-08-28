@@ -28,10 +28,12 @@ export class UnsubAction extends Action {
       );
       await chat.save();
 
-      const unchunked = chat.subscriptions.map(subscription =>
-        this.exchangeService.getFormated(subscription.symbol),
-      );
-      const subscriptions = this.util.chunk(unchunked, 2);
+      const rawSubscriptions = chat.subscriptions
+        .map(subscription =>
+          this.exchangeService.getFormated(subscription.symbol),
+        )
+        .reverse();
+      const subscriptions = this.util.chunk(rawSubscriptions, 2);
       const zero = subscriptions.length === 0 ? true : false;
 
       const template = this.templateService.apply(language_code, action, {

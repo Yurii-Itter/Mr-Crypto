@@ -29,8 +29,12 @@ export class DaysAction extends Action {
       } else {
         const action = this.eventService.DAYS;
 
-        const [parent] = data.match(/^(?:-?[^-]+){2}/);
-        let days = data.replace(new RegExp(`${parent}-?`), '').split('-');
+        const [base, symbol] = data.split('-');
+        const options = base ? false : true;
+
+        let days = data
+          .replace(new RegExp(`${base}-${symbol}-?`), '')
+          .split('-');
 
         if (days.filter(day => day === 'on').length === 1) {
           if (days.filter(day => day === 'son').length === 1) {
@@ -57,7 +61,9 @@ export class DaysAction extends Action {
         const [mon, tue, wed, thu, fri, sat, sun] = days;
 
         const template = this.templateService.apply(language_code, action, {
-          parent,
+          base,
+          symbol,
+          options,
           mon: mon ? mon : 'on',
           tue: tue ? tue : 'on',
           wed: wed ? wed : 'on',

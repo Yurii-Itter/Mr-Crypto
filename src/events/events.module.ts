@@ -7,9 +7,9 @@ import { BaseAction } from './actions/base.action';
 import { MenuAction } from './actions/menu.action';
 import { UnsubAction } from './actions/unsub.action';
 import { StartAction } from './actions/start.action';
-import { AboutAction } from './actions/about.action';
 import { QuoteAction } from './actions/quote.action';
 import { SymbolAction } from './actions/symbol.action';
+import { OptionsAction } from './actions/options.action';
 import { SettingsAction } from './actions/settings.action';
 import { LocationAction } from './actions/location.action';
 import { LanguageAction } from './actions/language.action';
@@ -38,11 +38,11 @@ import { DatabaseModule } from '../database/database.module';
     MenuAction,
     TimeAction,
     BaseAction,
-    AboutAction,
     StartAction,
     QuoteAction,
     UnsubAction,
     SymbolAction,
+    OptionsAction,
     LocationAction,
     SettingsAction,
     TimeZoneAction,

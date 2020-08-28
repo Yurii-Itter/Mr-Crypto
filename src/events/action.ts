@@ -59,9 +59,18 @@ export class Action {
   }
 
   private async handleEvent(ctx: Context): Promise<void> {
-    const chatData = this.util.getChatData(ctx);
-    const chat = await this.databaseService.ensureChat(chatData);
+    try {
+      const chatData = this.util.getChatData(ctx);
+      const isCallback = this.util.isCallback(ctx);
+      const chat = await this.databaseService.ensureChat(chatData);
 
-    await this.doAction(ctx, chat);
+      if (isCallback) {
+        await ctx.answerCbQuery();
+      }
+
+      await this.doAction(ctx, chat);
+    } catch (error) {
+      this.logger.log(error);
+    }
   }
 }

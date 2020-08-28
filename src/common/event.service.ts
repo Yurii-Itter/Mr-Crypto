@@ -10,6 +10,7 @@ export class EventService extends EventEmitter {
   public readonly ABOUT = 'about';
   public readonly START = 'start';
   public readonly SYMBOL = 'symbol';
+  public readonly OPTIONS = 'options';
   public readonly LOCATION = 'location';
   public readonly SETTINGS = 'settings';
   public readonly LANGUAGE = 'language';

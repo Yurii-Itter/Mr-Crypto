@@ -15,9 +15,9 @@ export class BinanceService extends BaseExchange {
       );
   }
 
-  public async streamHandler(symbols: string[]): Promise<void> {
+  public async streamProcessor(): Promise<void> {
     this.stream = await this.getAllMarketTickersStream(
-      `wss://stream.binance.com:9443/stream?streams=${symbols.reduce(
+      `wss://stream.binance.com:9443/stream?streams=${this.availableSymbols.reduce(
         (accum: string, symbol, index: number, array: any[]) => {
           array.length - 1 === index
             ? (accum += `${symbol
@@ -55,8 +55,9 @@ export class BinanceService extends BaseExchange {
       this.stream.pong('pong');
     });
 
-    this.stream.on('close', () => {
+    this.stream.on('close', async () => {
       this.logger.log('Binance all market tickers stream was closed');
+      await this.streamProcessor();
     });
   }
 }

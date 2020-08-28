@@ -10,7 +10,7 @@ export class CoinbaseService extends BaseExchange {
     ).data.map(({ id }) => id);
   }
 
-  public async streamHandler(symbols: string[]): Promise<void> {
+  public async streamProcessor(): Promise<void> {
     this.stream = await this.getAllMarketTickersStream(
       'wss://ws-feed.pro.coinbase.com',
     );
@@ -20,7 +20,7 @@ export class CoinbaseService extends BaseExchange {
       this.stream.send(
         JSON.stringify({
           type: 'subscribe',
-          product_ids: symbols,
+          product_ids: this.availableSymbols,
           channels: ['ticker'],
         }),
       );
@@ -43,8 +43,9 @@ export class CoinbaseService extends BaseExchange {
       }
     });
 
-    this.stream.on('close', () => {
+    this.stream.on('close', async () => {
       this.logger.log('Coinbase all market tickers stream was closed');
+      await this.streamProcessor();
     });
   }
 }

@@ -4,7 +4,7 @@
 
 <inline>
   <line>
-    <key data="{{parent}}-{{toggle mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_days">
+    <key data="{{base}}-{{symbol}}-{{toggle mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_days">
       {{#if (switch mon)}}
         Понедельник ✅
       {{else}}
@@ -13,7 +13,7 @@
     </key>
   </line>
   <line>
-    <key data="{{parent}}-{{mon}}-{{toggle tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_days">
+    <key data="{{base}}-{{symbol}}-{{mon}}-{{toggle tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_days">
       {{#if (switch tue)}}
         Вторник ✅
       {{else}}
@@ -22,7 +22,7 @@
     </key>
   </line>
   <line>
-    <key data="{{parent}}-{{mon}}-{{tue}}-{{toggle wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_days">
+    <key data="{{base}}-{{symbol}}-{{mon}}-{{tue}}-{{toggle wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_days">
       {{#if (switch wed)}}
         Среда ✅
       {{else}}
@@ -31,7 +31,7 @@
     </key>
   </line>
   <line>
-    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{toggle thu}}-{{fri}}-{{sat}}-{{sun}}_days">
+    <key data="{{base}}-{{symbol}}-{{mon}}-{{tue}}-{{wed}}-{{toggle thu}}-{{fri}}-{{sat}}-{{sun}}_days">
       {{#if (switch thu)}}
         Четверг ✅
       {{else}}
@@ -40,7 +40,7 @@
     </key>
   </line>
   <line>
-    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{toggle fri}}-{{sat}}-{{sun}}_days">
+    <key data="{{base}}-{{symbol}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{toggle fri}}-{{sat}}-{{sun}}_days">
       {{#if (switch fri)}}
         Пятница ✅
       {{else}}
@@ -49,7 +49,7 @@
     </key>
   </line>
   <line>
-    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{toggle sat}}-{{sun}}_days">
+    <key data="{{base}}-{{symbol}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{toggle sat}}-{{sun}}_days">
       {{#if (switch sat)}}
         Суббота ✅
       {{else}}
@@ -58,7 +58,7 @@
     </key>
   </line>
   <line>
-    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{toggle sun}}_days">
+    <key data="{{base}}-{{symbol}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{toggle sun}}_days">
       {{#if (switch sun)}}
         Воскресенье ✅
       {{else}}
@@ -67,7 +67,11 @@
     </key>
   </line>
   <line>
-    <key data="{{parent}}_symbol">◀️ Назад</key>
-    <key data="{{parent}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_time">Дальше ▶️</key>
+    {{#if options}}
+      <key data="{{symbol}}_options">◀️ Назад</key>
+    {{else}}
+      <key data="{{base}}-{{symbol}}_symbol">◀️ Назад</key>
+    {{/if}}
+    <key data="{{base}}-{{symbol}}-{{mon}}-{{tue}}-{{wed}}-{{thu}}-{{fri}}-{{sat}}-{{sun}}_time">Дальше ▶️</key>
   </line>
 </inline>

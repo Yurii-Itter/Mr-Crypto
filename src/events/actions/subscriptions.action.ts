@@ -17,10 +17,12 @@ export class SubscriptionsAction extends Action {
       const { language_code } = chat;
       const action = this.eventService.SUBSCRIPTIONS;
 
-      const unchunked = chat.subscriptions.map(subscription =>
-        this.exchangeService.getFormated(subscription.symbol),
-      );
-      const subscriptions = this.util.chunk(unchunked, 3);
+      const rawSubscriptions = chat.subscriptions
+        .map(subscription =>
+          this.exchangeService.getFormated(subscription.symbol),
+        )
+        .reverse();
+      const subscriptions = this.util.chunk(rawSubscriptions, 2);
       const zero = subscriptions.length === 0 ? true : false;
 
       const template = this.templateService.apply(language_code, action, {

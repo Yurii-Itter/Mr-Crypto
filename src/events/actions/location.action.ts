@@ -31,6 +31,7 @@ export class LocationAction extends Action {
 
       const template = this.templateService.apply(language_code, action, {
         updated,
+        timeZoneId,
       });
       const { text, extra } = template;
 

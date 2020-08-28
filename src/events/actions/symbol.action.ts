@@ -23,7 +23,8 @@ export class SymbolAction extends Action {
       const hide = false;
 
       if (isCallback) {
-        const [base, symbol] = data.split('-');
+        const [rawBase, symbol] = data.split('-');
+        const base = rawBase === 'false' ? false : rawBase;
         const list = this.exchangeService.getList(symbol);
         const formated = this.exchangeService.getFormated(symbol);
         const [, quote] = formated.split('-');

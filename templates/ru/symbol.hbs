@@ -16,15 +16,20 @@
 {{#if hide}}
 {{else}}
   <inline>
-    <line>
-      {{#if base}}
-        <key data="{{base}}_quote">◀️ Назад</key>
-      {{/if}}
-      {{#if subscribed}}
-        <key data="{{symbol}}_unsub">Отписаться 🔕</key>
-      {{else}}
+    {{#if subscribed}}
+      <line>
+        {{#if base}}
+          <key data="{{base}}_quote">◀️ Назад</key>
+        {{/if}}
+        <key data="{{symbol}}_options">Параметры 🔧</key>
+      </line>
+    {{else}}
+      <line>
+        {{#if base}}
+          <key data="{{base}}_quote">◀️ Назад</key>
+        {{/if}}
         <key data="{{base}}-{{symbol}}_days">Подписаться 🔔</key>
-      {{/if}}
-    </line>
+      </line>
+    {{/if}}
   </inline>
 {{/if}}
