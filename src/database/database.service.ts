@@ -1,5 +1,4 @@
 import { Model } from 'mongoose';
-import * as moment from 'moment';
 
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable, Logger } from '@nestjs/common';
