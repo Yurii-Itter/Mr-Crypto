@@ -12,11 +12,11 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "node dist/main",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
-    "lint": "tslint -p tsconfig.json -c tslint.json"
+    "lint": "tslint -p tsconfig.json -c tslint.json",
+    "gcp-build": "npm run build"
   },
   "dependencies": {
     "@nestjs/common": "^6.7.2",
@@ -34,7 +34,8 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.6.2",
-    "telegraf": "^3.38.0"
+    "telegraf": "^3.38.0",
+    "ws": "^7.3.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.4.1",
